@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.0.0">
+  <diagram id="power-world-mindmap" name="Power's World 架构">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        
+        <mxCell id="root" value="🎮 Power's World&lt;br&gt;星露谷风格可视化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A5568;strokeColor=#2D3748;fontColor=#FFFFFF;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="core" value="📱 核心模块" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#48BB78;strokeColor=#38A169;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="120" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_core" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#48BB78;strokeWidth=3;" edge="1" parent="1" source="root" target="core">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="explore" value="🗺️ 探索模块" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4299E1;strokeColor=#3182CE;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="350" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_explore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#4299E1;strokeWidth=3;" edge="1" parent="1" source="root" target="explore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="social" value="💕 社交模块" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED64A6;strokeColor=#D53F8C;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="580" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_social" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#ED64A6;strokeWidth=3;" edge="1" parent="1" source="root" target="social">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="time" value="⏰ 时间环境" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9F7AEA;strokeColor=#805AD5;fontColor=#FFFFFF;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="810" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_time" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#9F7AEA;strokeWidth=3;" edge="1" parent="1" source="root" target="time">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="core_1" value="👤 人物卡片" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#68D391;strokeColor=#48BB78;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#68D391;strokeWidth=2;" edge="1" parent="1" source="core" target="core_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_2" value="📊 状态系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#68D391;strokeColor=#48BB78;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="100" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#68D391;strokeWidth=2;" edge="1" parent="1" source="core" target="core_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_3" value="📜 活动日志" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#68D391;strokeColor=#48BB78;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#68D391;strokeWidth=2;" edge="1" parent="1" source="core" target="core_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_4" value="💭 思考气泡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#68D391;strokeColor=#48BB78;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="220" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#68D391;strokeWidth=2;" edge="1" parent="1" source="core" target="core_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="explore_1" value="🗺️ 像素地图" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#63B3ED;strokeColor=#4299E1;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_explore_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#63B3ED;strokeWidth=2;" edge="1" parent="1" source="explore" target="explore_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="explore_2" value="🚪 场景导航" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#63B3ED;strokeColor=#4299E1;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="340" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_explore_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#63B3ED;strokeWidth=2;" edge="1" parent="1" source="explore" target="explore_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="explore_3" value="📈 探索进度" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#63B3ED;strokeColor=#4299E1;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_explore_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#63B3ED;strokeWidth=2;" edge="1" parent="1" source="explore" target="explore_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="explore_4" value="🏆 成就系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#63B3ED;strokeColor=#4299E1;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="460" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_explore_4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#63B3ED;strokeWidth=2;" edge="1" parent="1" source="explore" target="explore_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="social_1" value="👥 好友列表" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F687B3;strokeColor=#ED64A6;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="520" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#F687B3;strokeWidth=2;" edge="1" parent="1" source="social" target="social_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_2" value="💬 对话系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F687B3;strokeColor=#ED64A6;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="580" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#F687B3;strokeWidth=2;" edge="1" parent="1" source="social" target="social_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_3" value="❤️ 好感度" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F687B3;strokeColor=#ED64A6;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="640" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#F687B3;strokeWidth=2;" edge="1" parent="1" source="social" target="social_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_4" value="🎁 礼物系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F687B3;strokeColor=#ED64A6;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="700" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#F687B3;strokeWidth=2;" edge="1" parent="1" source="social" target="social_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="time_1" value="📅 时间系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B794F4;strokeColor=#9F7AEA;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="760" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_time_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#B794F4;strokeWidth=2;" edge="1" parent="1" source="time" target="time_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="time_2" value="🌸 季节系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B794F4;strokeColor=#9F7AEA;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="820" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_time_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#B794F4;strokeWidth=2;" edge="1" parent="1" source="time" target="time_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="time_3" value="🌤️ 天气系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B794F4;strokeColor=#9F7AEA;fontColor=#1A202C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="880" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_time_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#B794F4;strokeWidth=2;" edge="1" parent="1" source="time" target="time_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        
+        <mxCell id="core_1_1" value="像素头像" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AE6B4;strokeColor=#68D391;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="25" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_1_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#9AE6B4;strokeWidth=1;" edge="1" parent="1" source="core_1" target="core_1_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_1_2" value="心情气泡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AE6B4;strokeColor=#68D391;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="75" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_1_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#9AE6B4;strokeWidth=1;" edge="1" parent="1" source="core_1" target="core_1_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_2_1" value="能量条" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AE6B4;strokeColor=#68D391;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="125" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_2_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#9AE6B4;strokeWidth=1;" edge="1" parent="1" source="core_2" target="core_2_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="core_2_2" value="心情值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AE6B4;strokeColor=#68D391;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="175" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_core_2_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#9AE6B4;strokeWidth=1;" edge="1" parent="1" source="core_2" target="core_2_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_2_1" value="邮件记录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBB6CE;strokeColor=#F687B3;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="555" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_2_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#FBB6CE;strokeWidth=1;" edge="1" parent="1" source="social_2" target="social_2_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_2_2" value="气泡样式" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBB6CE;strokeColor=#F687B3;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="605" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_2_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#FBB6CE;strokeWidth=1;" edge="1" parent="1" source="social_2" target="social_2_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="social_3_1" value="心形显示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBB6CE;strokeColor=#F687B3;fontColor=#1A202C;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="655" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_social_3_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;strokeColor=#FBB6CE;strokeWidth=1;" edge="1" parent="1" source="social_3" target="social_3_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
