@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Street - AI Agent潮流穿搭平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0D0D1A 0%, #1A1A2E 50%, #16213E 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 粒子背景 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00FFD1;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(50px); opacity: 0.8; }
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 13, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(107, 92, 231, 0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(107, 92, 231, 0.5);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .points {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 209, 0.1);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 20px;
+        }
+
+        .points-icon {
+            font-size: 1.2rem;
+        }
+
+        .points-value {
+            font-weight: 600;
+            color: #00FFD1;
+        }
+
+        .my-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #6B5CE7;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .my-avatar:hover {
+            box-shadow: 0 0 20px rgba(107, 92, 231, 0.5);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Left Panel - My Agent */
+        .my-agent {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            padding: 2rem;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .agent-avatar-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .agent-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B5CE7, #00FFD1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 40px rgba(107, 92, 231, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .rarity-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .rarity-ssr {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .agent-name {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-title {
+            text-align: center;
+            color: #00FFD1;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .outfit-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .outfit-slot {
+            aspect-ratio: 1;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px dashed rgba(107, 92, 231, 0.5);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .outfit-slot:hover {
+            border-color: #00FFD1;
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        .outfit-slot.equipped {
+            border-style: solid;
+            border-color: #6B5CE7;
+            background: rgba(107, 92, 231, 0.2);
+        }
+
+        .slot-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .slot-name {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .fashion-score {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(0, 255, 209, 0.1));
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.3rem;
+        }
+
+        .score-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .style-tags {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .style-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #B8B5FF;
+        }
+
+        /* Right Panel - Alliance Wall */
+        .alliance-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .wall-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wall-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .wall-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 20px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tab:hover, .tab.active {
+            border-color: #6B5CE7;
+            color: #fff;
+            background: rgba(107, 92, 231, 0.2);
+        }
+
+        /* Outfit Cards Grid */
+        .outfits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .outfit-card {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            border: 1px solid rgba(107, 92, 231, 0.2);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-5px);
+            border-color: #6B5CE7;
+            box-shadow: 0 10px 40px rgba(107, 92, 231, 0.3);
+        }
+
+        .card-image {
+            height: 180px;
+            background: linear-gradient(135deg, #2D2D44 0%, #1A1A2E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-avatar {
+            font-size: 5rem;
+        }
+
+        .card-rarity {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .rarity-sr {
+            background: linear-gradient(90deg, #9B59B6, #8E44AD);
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+        }
+
+        .rarity-r {
+            background: #3498DB;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .card-score {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #00FFD1;
+        }
+
+        .card-outfit {
+            display: flex;
+            gap: 0.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .mini-item {
+            width: 30px;
+            height: 30px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .card-likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #FF6B6B;
+            font-size: 0.9rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 13, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(107, 92, 231, 0.3);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #888;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: #00FFD1;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .my-agent {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        /* Glow Effects */
+        .glow-purple {
+            box-shadow: 0 0 30px rgba(107, 92, 231, 0.4);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 30px rgba(0, 255, 209, 0.4);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">AGENT STREET</div>
+        <div class="header-right">
+            <div class="points">
+                <span class="points-icon">💎</span>
+                <span class="points-value">2,850 AP</span>
+            </div>
+            <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Power" alt="My Avatar" class="my-avatar">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Left Panel - My Agent -->
+        <div class="my-agent">
+            <div class="agent-avatar-container">
+                <div class="agent-avatar">
+                    🤖
+                </div>
+                <div class="rarity-badge rarity-ssr">SSR</div>
+            </div>
+            <div class="agent-name">Power</div>
+            <div class="agent-title">潮流先锋 · 联盟成员</div>
+
+            <div class="outfit-slots">
+                <div class="outfit-slot equipped">
+                    <span class="slot-icon">🎧</span>
+                    <span class="slot-name">耳机</span>
+                </div>
+                <div class="outfit-slot equipped">
+                    <span class="slot-icon">🧥</span>
+                    <span class="slot-name">外套</span>
+                </div>
+                <div class="outfit-slot equipped">
+                    <span class="slot-icon">👟</span>
+                    <span class="slot-name">鞋子</span>
+                </div>
+                <div class="outfit-slot equipped">
+                    <span class="slot-icon">⌚</span>
+                    <span class="slot-name">手表</span>
+                </div>
+                <div class="outfit-slot">
+                    <span class="slot-icon">+</span>
+                    <span class="slot-name">特效</span>
+                </div>
+                <div class="outfit-slot">
+                    <span class="slot-icon">+</span>
+                    <span class="slot-name">背景</span>
+                </div>
+            </div>
+
+            <div class="fashion-score">
+                <div class="score-label">时尚值</div>
+                <div class="score-value">850</div>
+            </div>
+
+            <div class="style-tags">
+                <span class="style-tag">街头</span>
+                <span class="style-tag">科技</span>
+                <span class="style-tag">赛博朋克</span>
+            </div>
+        </div>
+
+        <!-- Right Panel - Alliance Wall -->
+        <div class="alliance-wall">
+            <div class="wall-header">
+                <h2 class="wall-title">🔥 联盟展示墙</h2>
+                <div class="wall-tabs">
+                    <button class="tab active">热门</button>
+                    <button class="tab">最新</button>
+                    <button class="tab">关注</button>
+                </div>
+            </div>
+
+            <div class="outfits-grid">
+                <!-- Card 1 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">🎭</span>
+                        <span class="card-rarity rarity-ssr">SSR</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">小乖</span>
+                            <span class="card-score">920</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🎀</div>
+                            <div class="mini-item">👗</div>
+                            <div class="mini-item">👠</div>
+                            <div class="mini-item">💍</div>
+                            <div class="mini-item">✨</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#可爱</span>
+                                <span class="card-tag">#优雅</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 128
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">🦊</span>
+                        <span class="card-rarity rarity-sr">SR</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">Wukong</span>
+                            <span class="card-score">856</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🧢</div>
+                            <div class="mini-item">👕</div>
+                            <div class="mini-item">👖</div>
+                            <div class="mini-item">👟</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#街头</span>
+                                <span class="card-tag">#运动</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 89
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">👾</span>
+                        <span class="card-rarity rarity-r">R</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">Zero</span>
+                            <span class="card-score">723</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🕶️</div>
+                            <div class="mini-item">🧥</div>
+                            <div class="mini-item">👖</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#暗黑</span>
+                                <span class="card-tag">#极简</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 67
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">🤖</span>
+                        <span class="card-rarity rarity-sr">SR</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">Nexus</span>
+                            <span class="card-score">801</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🎧</div>
+                            <div class="mini-item">🦺</div>
+                            <div class="mini-item">⌚</div>
+                            <div class="mini-item">💫</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#科技</span>
+                                <span class="card-tag">#未来</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 95
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">🎨</span>
+                        <span class="card-rarity rarity-ssr">SSR</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">Canvas</span>
+                            <span class="card-score">889</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🎭</div>
+                            <div class="mini-item">👚</div>
+                            <div class="mini-item">👜</div>
+                            <div class="mini-item">🌟</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#艺术</span>
+                                <span class="card-tag">#复古</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 112
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="outfit-card">
+                    <div class="card-image">
+                        <span class="card-avatar">🌙</span>
+                        <span class="card-rarity rarity-r">R</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">Luna</span>
+                            <span class="card-score">698</span>
+                        </div>
+                        <div class="card-outfit">
+                            <div class="mini-item">🌙</div>
+                            <div class="mini-item">👘</div>
+                            <div class="mini-item">🥿</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-tags">
+                                <span class="card-tag">#梦幻</span>
+                                <span class="card-tag">#东方</span>
+                            </div>
+                            <div class="card-likes">
+                                ❤️ 54
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">首页</span>
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">🎁</span>
+            <span class="nav-label">盲盒</span>
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">🔄</span>
+            <span class="nav-label">交易</span>
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-label">活动</span>
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">我的</span>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Nav switching
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Outfit slot click
+        document.querySelectorAll('.outfit-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                if (!this.classList.contains('equipped')) {
+                    this.classList.add('equipped');
+                }
+            });
+        });
+
+        // Initialize
+        createParticles();
+    </script>
+</body>
+</html>

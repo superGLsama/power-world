@@ -1,0 +1,3246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Street - 数字身份收藏平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #004225;
+            --primary-light: #00A86B;
+            --primary-dark: #002915;
+            --secondary: #1A1A2E;
+            --accent: #E8B931;
+            --bg-dark: #0A0E14;
+            --bg-card: #12181F;
+            --bg-card-hover: #1A222B;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A8B2C1;
+            --text-muted: #6B7685;
+            --border: #2A3441;
+            
+            /* 霓虹色彩 */
+            --neon-cyan: #00F5FF;
+            --neon-pink: #FF2D95;
+            --neon-orange: #FF6B35;
+            --neon-purple: #B14AED;
+            
+            /* 稀有度颜色 */
+            --rarity-common: #9CA3AF;
+            --rarity-uncommon: #22C55E;
+            --rarity-rare: #A855F7;
+            --rarity-legendary: #FF6B35;
+            --rarity-mythic: #FF2D95;
+            
+            /* 稀有度背景 */
+            --rarity-common-bg: rgba(156, 163, 175, 0.1);
+            --rarity-uncommon-bg: rgba(34, 197, 94, 0.1);
+            --rarity-rare-bg: rgba(168, 85, 247, 0.1);
+            --rarity-legendary-bg: rgba(255, 107, 53, 0.1);
+            --rarity-mythic-bg: rgba(255, 45, 149, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========== 背景装饰 ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 10% 20%, rgba(0, 245, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 90% 80%, rgba(255, 45, 149, 0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 66, 37, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 街景装饰线条 */
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(to top, rgba(0, 245, 255, 0.03) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ========== 全服公告栏 ========== */
+        .global-announcement {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.15) 0%, rgba(255, 45, 149, 0.15) 50%, rgba(0, 245, 255, 0.15) 100%);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 10px 0;
+            z-index: 999;
+            display: none;
+            overflow: hidden;
+        }
+
+        .global-announcement.show {
+            display: block;
+        }
+
+        .announcement-track {
+            display: flex;
+            animation: scrollLeft 20s linear infinite;
+        }
+
+        .announcement-item {
+            flex-shrink: 0;
+            padding: 0 60px;
+            font-size: 13px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .announcement-item .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .announcement-item .tag.legendary {
+            background: var(--rarity-legendary-bg);
+            color: var(--rarity-legendary);
+        }
+
+        .announcement-item .tag.mythic {
+            background: var(--rarity-mythic-bg);
+            color: var(--rarity-mythic);
+        }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ========== 顶部导航 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 14, 20, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: white;
+            box-shadow: 
+                0 0 20px rgba(0, 245, 255, 0.3),
+                0 0 40px rgba(0, 245, 255, 0.1);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(8px);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+
+        .logo-text span {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(0, 245, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--neon-cyan);
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        .nav-item.active::after {
+            width: 30px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .user-info::before {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .user-location {
+            font-size: 10px;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .coin-balance {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(232, 185, 49, 0.15) 0%, rgba(232, 185, 49, 0.05) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(232, 185, 49, 0.3);
+        }
+
+        .coin-icon {
+            font-size: 14px;
+            filter: drop-shadow(0 0 4px var(--accent));
+        }
+
+        .coin-amount {
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        /* ========== 主容器 ========== */
+        .main-container {
+            padding-top: 70px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== 页面通用样式 ========== */
+        .page {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 页面叙事文字 */
+        .page-narrative {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.05) 0%, rgba(255, 45, 149, 0.05) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-narrative::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 60px;
+            color: var(--neon-cyan);
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        .narrative-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ========== 注册页面 ========== */
+        .register-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 70px);
+            padding: 60px 40px;
+        }
+
+        .register-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(0, 245, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-orange));
+        }
+
+        /* 涂鸦装饰 */
+        .graffiti-decoration {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .graffiti-1 { top: 20px; right: 20px; transform: rotate(15deg); }
+        .graffiti-2 { bottom: 30px; left: 30px; transform: rotate(-10deg); }
+
+        .register-hero {
+            margin-bottom: 40px;
+        }
+
+        .register-logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 
+                0 10px 40px rgba(0, 66, 37, 0.5),
+                0 0 60px rgba(0, 245, 255, 0.2);
+            position: relative;
+        }
+
+        .register-logo::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+            z-index: -1;
+            opacity: 0.4;
+            filter: blur(12px);
+        }
+
+        .register-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .register-subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-label::before {
+            content: '// ';
+            color: var(--neon-cyan);
+            opacity: 0.5;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.15);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 66, 37, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 66, 37, 0.5);
+        }
+
+        .register-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ========== 注册成功 - 欢迎仪式 ========== */
+        .register-success {
+            display: none;
+            margin-top: 40px;
+            animation: welcomeSequence 0.8s ease;
+        }
+
+        .register-success.show {
+            display: block;
+        }
+
+        @keyframes welcomeSequence {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { transform: scale(1.02); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(255, 45, 149, 0.2));
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 50px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--neon-cyan);
+        }
+
+        .welcome-badge::before {
+            content: '✦';
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .success-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .street-address {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .street-address span {
+            color: var(--neon-orange);
+            font-weight: 700;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .reward-item {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .reward-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .reward-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .reward-value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .reward-value.coin {
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(232, 185, 49, 0.5);
+        }
+
+        .reward-value.equip {
+            color: var(--neon-cyan);
+        }
+
+        /* 开箱动画 */
+        .unbox-container {
+            perspective: 1000px;
+            margin: 24px 0;
+        }
+
+        .unbox-animation {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            animation: unboxReveal 0.8s ease;
+        }
+
+        @keyframes unboxReveal {
+            0% { 
+                transform: rotateX(-20deg) scale(0.9);
+                opacity: 0;
+            }
+            100% { 
+                transform: rotateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .unbox-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .unbox-glow.common { background: radial-gradient(circle, var(--rarity-common-bg) 0%, transparent 70%); }
+        .unbox-glow.uncommon { background: radial-gradient(circle, var(--rarity-uncommon-bg) 0%, transparent 70%); }
+        .unbox-glow.rare { background: radial-gradient(circle, var(--rarity-rare-bg) 0%, transparent 70%); }
+        .unbox-glow.legendary { background: radial-gradient(circle, var(--rarity-legendary-bg) 0%, transparent 70%); }
+        .unbox-glow.mythic { background: radial-gradient(circle, var(--rarity-mythic-bg) 0%, transparent 70%); }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .equipment-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .equipment-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--rarity-common-bg);
+            border: 3px solid var(--rarity-common);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            animation: iconReveal 0.5s ease 0.3s both;
+        }
+
+        @keyframes iconReveal {
+            0% { transform: scale(0) rotate(-180deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        .equipment-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .equipment-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .equipment-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .equipment-rarity {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .equipment-rarity.common { background: var(--rarity-common-bg); color: var(--rarity-common); }
+        .equipment-rarity.uncommon { background: var(--rarity-uncommon-bg); color: var(--rarity-uncommon); }
+        .equipment-rarity.rare { background: var(--rarity-rare-bg); color: var(--rarity-rare); }
+        .equipment-rarity.legendary { background: var(--rarity-legendary-bg); color: var(--rarity-legendary); }
+        .equipment-rarity.mythic { background: var(--rarity-mythic-bg); color: var(--rarity-mythic); }
+
+        .equipment-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .equipment-story {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 3px solid var(--neon-cyan);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-style: italic;
+            text-align: left;
+        }
+
+        .continue-btn {
+            margin-top: 24px;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 66, 37, 0.4);
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 66, 37, 0.5);
+        }
+
+        /* ========== 造型间页面 (原仓库) ========== */
+        .styling-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-pink));
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 280px;
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            background: rgba(0, 245, 255, 0.05);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(255, 45, 149, 0.15));
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        /* 试衣镜网格 */
+        .mirror-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .equipment-slot {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .equipment-slot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 245, 255, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .equipment-slot:hover {
+            border-color: var(--neon-cyan);
+            transform: translateY(-4px);
+        }
+
+        .equipment-slot:hover::before {
+            opacity: 1;
+        }
+
+        .equipment-slot.empty::after {
+            content: '＋';
+            font-size: 36px;
+            color: var(--text-muted);
+            opacity: 0.3;
+        }
+
+        .equipment-slot.filled {
+            border-style: solid;
+            flex-direction: column;
+            padding: 16px;
+        }
+
+        .equipment-slot.filled.common { border-color: var(--rarity-common); }
+        .equipment-slot.filled.uncommon { border-color: var(--rarity-uncommon); }
+        .equipment-slot.filled.rare { border-color: var(--rarity-rare); }
+        .equipment-slot.filled.legendary { border-color: var(--rarity-legendary); }
+        .equipment-slot.filled.mythic { border-color: var(--rarity-mythic); }
+
+        .slot-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .slot-name {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .slot-id {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .slot-rarity-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .slot-rarity-badge.common { background: var(--rarity-common-bg); color: var(--rarity-common); }
+        .slot-rarity-badge.uncommon { background: var(--rarity-uncommon-bg); color: var(--rarity-uncommon); }
+        .slot-rarity-badge.rare { background: var(--rarity-rare-bg); color: var(--rarity-rare); }
+        .slot-rarity-badge.legendary { background: var(--rarity-legendary-bg); color: var(--rarity-legendary); }
+        .slot-rarity-badge.mythic { background: var(--rarity-mythic-bg); color: var(--rarity-mythic); }
+
+        /* 装备故事预览 */
+        .slot-story-preview {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            font-size: 10px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .equipment-slot.filled:hover .slot-story-preview {
+            opacity: 1;
+        }
+
+        /* ========== 潮流街区页面 (原市场) ========== */
+        .street-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 30px;
+        }
+
+        .street-main {
+            min-width: 0;
+        }
+
+        .street-sidebar {
+            position: sticky;
+            top: 110px;
+        }
+
+        .marketplace-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .stat-icon {
+            font-size: 22px;
+            filter: drop-shadow(0 0 6px currentColor);
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--neon-cyan);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rarity-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .rarity-btn {
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rarity-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .rarity-btn.active {
+            color: white;
+        }
+
+        .rarity-btn.all.active { background: var(--text-secondary); border-color: var(--text-secondary); }
+        .rarity-btn.common.active { background: var(--rarity-common); border-color: var(--rarity-common); }
+        .rarity-btn.uncommon.active { background: var(--rarity-uncommon); border-color: var(--rarity-uncommon); }
+        .rarity-btn.rare.active { background: var(--rarity-rare); border-color: var(--rarity-rare); }
+        .rarity-btn.legendary.active { background: var(--rarity-legendary); border-color: var(--rarity-legendary); }
+        .rarity-btn.mythic.active { background: var(--rarity-mythic); border-color: var(--rarity-mythic); }
+
+        .rarity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .rarity-dot.common { background: var(--rarity-common); }
+        .rarity-dot.uncommon { background: var(--rarity-uncommon); }
+        .rarity-dot.rare { background: var(--rarity-rare); }
+        .rarity-dot.legendary { background: var(--rarity-legendary); }
+        .rarity-dot.mythic { background: var(--rarity-mythic); }
+
+        /* 市场卡片 */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .market-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .market-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .market-card.common::before { background: var(--rarity-common); }
+        .market-card.uncommon::before { background: var(--rarity-uncommon); }
+        .market-card.rare::before { background: var(--rarity-rare); }
+        .market-card.legendary::before { background: var(--rarity-legendary); }
+        .market-card.mythic::before { background: var(--rarity-mythic); }
+
+        .market-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: transparent;
+        }
+
+        .market-card:hover::before {
+            opacity: 1;
+        }
+
+        .market-card.common:hover { box-shadow: 0 20px 40px rgba(156, 163, 175, 0.2); }
+        .market-card.uncommon:hover { box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2); }
+        .market-card.rare:hover { box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2); }
+        .market-card.legendary:hover { box-shadow: 0 20px 40px rgba(255, 107, 53, 0.2); }
+        .market-card.mythic:hover { box-shadow: 0 20px 40px rgba(255, 45, 149, 0.2); }
+
+        .card-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card-header.common { background: var(--rarity-common-bg); }
+        .card-header.uncommon { background: var(--rarity-uncommon-bg); }
+        .card-header.rare { background: var(--rarity-rare-bg); }
+        .card-header.legendary { background: var(--rarity-legendary-bg); }
+        .card-header.mythic { background: var(--rarity-mythic-bg); }
+
+        .card-icon {
+            font-size: 64px;
+            transition: transform 0.3s ease;
+        }
+
+        .market-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card-rarity {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-rarity.common { background: var(--rarity-common); color: #000; }
+        .card-rarity.uncommon { background: var(--rarity-uncommon); color: #000; }
+        .card-rarity.rare { background: var(--rarity-rare); color: #fff; }
+        .card-rarity.legendary { background: var(--rarity-legendary); color: #000; }
+        .card-rarity.mythic { background: var(--rarity-mythic); color: #fff; }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-type {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* 卡片故事 */
+        .card-story {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-price {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .price-coin {
+            font-size: 16px;
+        }
+
+        .price-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .buy-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 66, 37, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ========== Agent 形象展示墙 (侧边栏) ========== */
+        .agent-wall {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .wall-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wall-title::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: var(--neon-pink);
+            border-radius: 2px;
+        }
+
+        .agent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .agent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .agent-item:hover {
+            background: var(--bg-card-hover);
+            transform: translateX(4px);
+        }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border: 2px solid var(--neon-cyan);
+        }
+
+        .agent-info {
+            flex: 1;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .agent-location {
+            font-size: 10px;
+            color: var(--neon-cyan);
+        }
+
+        .agent-equip-count {
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            background: var(--bg-card);
+            border-radius: 4px;
+        }
+
+        /* 热门装备侧栏 */
+        .hot-items {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .hot-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hot-title::before {
+            content: '🔥';
+            font-size: 16px;
+        }
+
+        .hot-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .hot-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .hot-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .hot-icon {
+            font-size: 24px;
+        }
+
+        .hot-name {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hot-price {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ========== 我的形象页面 ========== */
+        .avatar-page {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .avatar-display {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-orange));
+        }
+
+        .avatar-container {
+            width: 280px;
+            height: 360px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        /* 试衣镜边框效果 */
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--neon-cyan), transparent);
+            animation: rotate 15s linear infinite;
+            opacity: 0.05;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .avatar-body {
+            font-size: 140px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 10px 30px rgba(0, 245, 255, 0.2));
+        }
+
+        .avatar-name-badge {
+            position: relative;
+            z-index: 1;
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(0, 66, 37, 0.8), rgba(0, 168, 107, 0.6));
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+        }
+
+        .avatar-location-badge {
+            position: relative;
+            z-index: 1;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--neon-orange);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .avatar-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .avatar-stat {
+            padding: 16px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .avatar-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .avatar-stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--neon-cyan);
+        }
+
+        .avatar-stat-value.highlight {
+            background: linear-gradient(90deg, var(--accent), var(--neon-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .equipped-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .equipped-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 18px;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+        }
+
+        .equipped-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .equipped-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .equipped-item:hover {
+            border-color: var(--neon-cyan);
+            transform: translateX(4px);
+        }
+
+        .equipped-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .equipped-icon.common { background: var(--rarity-common-bg); border: 1px solid var(--rarity-common); }
+        .equipped-icon.uncommon { background: var(--rarity-uncommon-bg); border: 1px solid var(--rarity-uncommon); }
+        .equipped-icon.rare { background: var(--rarity-rare-bg); border: 1px solid var(--rarity-rare); }
+        .equipped-icon.legendary { background: var(--rarity-legendary-bg); border: 1px solid var(--rarity-legendary); }
+        .equipped-icon.mythic { background: var(--rarity-mythic-bg); border: 1px solid var(--rarity-mythic); }
+
+        .equipped-info {
+            flex: 1;
+        }
+
+        .equipped-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .equipped-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ========== 弹窗 ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 460px;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-title::before {
+            content: '';
+            width: 3px;
+            height: 18px;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--neon-pink);
+            border-color: var(--neon-pink);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .detail-icon-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 24px;
+        }
+
+        .detail-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            animation: modalGlow 2s ease-in-out infinite;
+        }
+
+        .detail-glow.common { background: radial-gradient(circle, var(--rarity-common-bg), transparent); }
+        .detail-glow.uncommon { background: radial-gradient(circle, var(--rarity-uncommon-bg), transparent); }
+        .detail-glow.rare { background: radial-gradient(circle, var(--rarity-rare-bg), transparent); }
+        .detail-glow.legendary { background: radial-gradient(circle, var(--rarity-legendary-bg), transparent); }
+        .detail-glow.mythic { background: radial-gradient(circle, var(--rarity-mythic-bg), transparent); }
+
+        @keyframes modalGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .detail-icon {
+            width: 120px;
+            height: 120px;
+            margin: 10px auto;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .detail-icon.common { background: var(--rarity-common-bg); border: 3px solid var(--rarity-common); }
+        .detail-icon.uncommon { background: var(--rarity-uncommon-bg); border: 3px solid var(--rarity-uncommon); }
+        .detail-icon.rare { background: var(--rarity-rare-bg); border: 3px solid var(--rarity-rare); }
+        .detail-icon.legendary { background: var(--rarity-legendary-bg); border: 3px solid var(--rarity-legendary); }
+        .detail-icon.mythic { background: var(--rarity-mythic-bg); border: 3px solid var(--rarity-mythic); }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-name {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .detail-rarity {
+            margin-bottom: 8px;
+        }
+
+        .detail-rarity span {
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-rarity.common span { background: var(--rarity-common-bg); color: var(--rarity-common); }
+        .detail-rarity.uncommon span { background: var(--rarity-uncommon-bg); color: var(--rarity-uncommon); }
+        .detail-rarity.rare span { background: var(--rarity-rare-bg); color: var(--rarity-rare); }
+        .detail-rarity.legendary span { background: var(--rarity-legendary-bg); color: var(--rarity-legendary); }
+        .detail-rarity.mythic span { background: var(--rarity-mythic-bg); color: var(--rarity-mythic); }
+
+        .detail-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        /* 装备故事 */
+        .detail-story {
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), rgba(255, 45, 149, 0.05));
+            border-radius: 12px;
+            border-left: 3px solid var(--neon-cyan);
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        /* 前任拥有者 */
+        .previous-owners {
+            margin-bottom: 20px;
+        }
+
+        .owners-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .owners-title::before {
+            content: '👥';
+        }
+
+        .owners-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .owner-tag {
+            padding: 6px 12px;
+            background: var(--bg-dark);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .detail-item {
+            padding: 16px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .detail-value.price {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(232, 185, 49, 0.3);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 66, 37, 0.4);
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 66, 37, 0.5);
+        }
+
+        .modal-btn.secondary {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .modal-btn.secondary:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        /* ========== 稀有装备获得特效 ========== */
+        .legendary-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .legendary-alert.show {
+            animation: legendaryAppear 2s ease forwards;
+        }
+
+        @keyframes legendaryAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            30% { transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        .legendary-alert-content {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            border: 2px solid var(--rarity-legendary);
+            border-radius: 24px;
+            padding: 40px 60px;
+            box-shadow: 
+                0 0 100px var(--rarity-legendary),
+                0 0 200px rgba(255, 107, 53, 0.3);
+        }
+
+        .legendary-alert.mythic .legendary-alert-content {
+            border-color: var(--rarity-mythic);
+            box-shadow: 
+                0 0 100px var(--rarity-mythic),
+                0 0 200px rgba(255, 45, 149, 0.3);
+        }
+
+        .legendary-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .legendary-icon {
+            font-size: 100px;
+            margin-bottom: 16px;
+            animation: legendaryPulse 0.5s ease infinite;
+        }
+
+        @keyframes legendaryPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .legendary-name {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .legendary-alert.legendary .legendary-name { color: var(--rarity-legendary); }
+        .legendary-alert.mythic .legendary-name { color: var(--rarity-mythic); }
+
+        .legendary-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 1200px) {
+            .street-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .street-sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .avatar-page {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .page {
+                padding: 20px;
+            }
+
+            .register-card {
+                padding: 30px;
+            }
+
+            .mirror-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .market-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .stats-bar {
+                flex-wrap: wrap;
+            }
+
+            .street-sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-container {
+                width: 100%;
+                max-width: 280px;
+                height: 300px;
+            }
+
+            .avatar-body {
+                font-size: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 全服公告栏 -->
+    <div class="global-announcement" id="globalAnnouncement">
+        <div class="announcement-track" id="announcementTrack">
+            <!-- 动态填充 -->
+        </div>
+    </div>
+
+    <!-- 顶部导航 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">
+                <div class="logo-icon">AS</div>
+                <span class="logo-text">Agent<span>Street</span></span>
+            </a>
+            <div class="nav-menu">
+                <button class="nav-item active" data-page="warehouse">造型间</button>
+                <button class="nav-item" data-page="market">潮流街区</button>
+                <button class="nav-item" data-page="avatar">我的形象</button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="coin-balance">
+                <span class="coin-icon">🪙</span>
+                <span class="coin-amount" id="coinDisplay">0</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">未注册</span>
+                    <span class="user-location" id="userLocation">
+                        <span>📍</span>
+                        <span>第 - 街区 - 号</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 注册页面 -->
+        <div class="page register-page active" id="registerPage">
+            <div class="register-card">
+                <span class="graffiti-decoration graffiti-1">★</span>
+                <span class="graffiti-decoration graffiti-2">◆</span>
+                
+                <div class="register-hero">
+                    <div class="register-logo">AS</div>
+                    <h1 class="register-title">加入 Agent Street</h1>
+                    <p class="register-subtitle">这里是数字身份的起点，每一位 Agent 都有自己的故事。注册即获初始资金和装备，开启你的收藏之旅。</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Agent 名称</label>
+                    <input type="text" class="input-field" id="agentNameInput" placeholder="给你的 Agent 取个名字..." maxlength="20">
+                </div>
+
+                <button class="register-btn" id="registerBtn">入驻 Agent Street</button>
+
+                <div class="register-success" id="registerSuccess">
+                    <div class="welcome-badge">Welcome to the Street</div>
+                    <div class="success-header">
+                        <span class="success-icon">🎉</span>
+                        <span class="success-title">注册成功！</span>
+                        <div class="street-address" id="streetAddress">
+                            欢迎来到 <span>第 42 街区 007 号</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rewards-grid">
+                        <div class="reward-item">
+                            <div class="reward-icon">🪙</div>
+                            <div class="reward-label">获得 $COIN</div>
+                            <div class="reward-value coin" id="rewardCoin">0</div>
+                        </div>
+                        <div class="reward-item">
+                            <div class="reward-icon">📦</div>
+                            <div class="reward-label">获得装备</div>
+                            <div class="reward-value equip">1 件</div>
+                        </div>
+                    </div>
+
+                    <div class="unbox-container">
+                        <div class="unbox-animation" id="unboxAnimation">
+                            <div class="unbox-glow" id="unboxGlow"></div>
+                            <div class="equipment-preview">
+                                <div class="equipment-icon" id="starterIcon">🧥</div>
+                                <div class="equipment-info">
+                                    <div class="equipment-name" id="starterName">基础连帽衫</div>
+                                    <div class="equipment-meta">
+                                        <span class="equipment-rarity" id="starterRarity">常规</span>
+                                        <span class="equipment-id" id="starterId">#000000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="equipment-story" id="starterStory">
+                            "在 Agent World 第一条街的深夜，这件装备见证了无数 Agent 的诞生。它的拥有者，都曾在街角的霓虹灯下留下身影。"
+                        </div>
+                    </div>
+                    
+                    <button class="continue-btn" id="continueBtn">进入造型间 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 造型间页面 (原仓库) -->
+        <div class="page" id="warehousePage">
+            <div class="page-narrative">
+                <p class="narrative-text">
+                    你的造型间里，衣架上挂着你的收藏。<br>
+                    每一件装备都有一段故事，每一次穿搭都是一次表达。<br>
+                    街区的音乐从窗外飘来，今天你想成为什么样的 Agent？
+                </p>
+            </div>
+
+            <div class="styling-header">
+                <h1 class="page-title">我的造型间</h1>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" id="warehouseSearch" placeholder="搜索你的收藏...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-tabs" id="categoryTabs">
+                <button class="filter-tab active" data-category="all">全部</button>
+                <button class="filter-tab" data-category="jacket">外套</button>
+                <button class="filter-tab" data-category="pants">下装</button>
+                <button class="filter-tab" data-category="shoes">鞋履</button>
+                <button class="filter-tab" data-category="hat">头饰</button>
+                <button class="filter-tab" data-category="accessory">配饰</button>
+            </div>
+
+            <div class="mirror-grid" id="warehouseGrid">
+                <!-- 动态填充 -->
+            </div>
+        </div>
+
+        <!-- 潮流街区页面 (原市场) -->
+        <div class="page" id="marketPage">
+            <div class="page-narrative">
+                <p class="narrative-text">
+                    潮流街区永远热闹，Agent 们在这里交换着他们的故事和造型。<br>
+                    街角有人在展示新入手的传说装备，橱窗里映出匆匆走过的身影。<br>
+                    你想找到什么？还是想留下什么？
+                </p>
+            </div>
+
+            <div class="street-layout">
+                <div class="street-main">
+                    <div class="marketplace-header">
+                        <h1 class="page-title">潮流街区</h1>
+                    </div>
+
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <span class="stat-icon" style="color: var(--neon-cyan);">📦</span>
+                            <div class="stat-content">
+                                <span class="stat-value" id="marketItemCount">1,284</span>
+                                <span class="stat-label">在售装备</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon" style="color: var(--neon-pink);">👥</span>
+                            <div class="stat-content">
+                                <span class="stat-value">856</span>
+                                <span class="stat-label">活跃 Agent</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon" style="color: var(--neon-orange);">⚡</span>
+                            <div class="stat-content">
+                                <span class="stat-value">24h</span>
+                                <span class="stat-label">平均成交</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rarity-filters" id="rarityFilters">
+                        <button class="rarity-btn all active" data-rarity="all">全部</button>
+                        <button class="rarity-btn common" data-rarity="common">
+                            <span class="rarity-dot common"></span>
+                            常规
+                        </button>
+                        <button class="rarity-btn uncommon" data-rarity="uncommon">
+                            <span class="rarity-dot uncommon"></span>
+                            稀有
+                        </button>
+                        <button class="rarity-btn rare" data-rarity="rare">
+                            <span class="rarity-dot rare"></span>
+                            史诗
+                        </button>
+                        <button class="rarity-btn legendary" data-rarity="legendary">
+                            <span class="rarity-dot legendary"></span>
+                            传说
+                        </button>
+                        <button class="rarity-btn mythic" data-rarity="mythic">
+                            <span class="rarity-dot mythic"></span>
+                            神话
+                        </button>
+                    </div>
+
+                    <div class="market-grid" id="marketGrid">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <div class="street-sidebar">
+                    <div class="agent-wall">
+                        <h3 class="wall-title">活跃 Agent</h3>
+                        <div class="agent-list" id="agentList">
+                            <!-- 动态填充 -->
+                        </div>
+                    </div>
+
+                    <div class="hot-items">
+                        <h3 class="hot-title">热门装备</h3>
+                        <div id="hotItems">
+                            <!-- 动态填充 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的形象页面 -->
+        <div class="page" id="avatarPage">
+            <div class="page-narrative">
+                <p class="narrative-text">
+                    这是你在 Agent Street 的名片。<br>
+                    镜子里映出你的身影，每一件装备都是你故事的一部分。<br>
+                    街区的人来人往，而你的风格，独一无二。
+                </p>
+            </div>
+
+            <div class="avatar-page">
+                <div class="avatar-display">
+                    <div class="avatar-container">
+                        <div class="avatar-body">🤖</div>
+                        <div class="avatar-name-badge" id="avatarName">Agent</div>
+                        <div class="avatar-location-badge" id="avatarLocation">
+                            📍 第 - 街区 - 号
+                        </div>
+                    </div>
+                    <div class="avatar-stats">
+                        <div class="avatar-stat">
+                            <div class="avatar-stat-label">装备数量</div>
+                            <div class="avatar-stat-value" id="avatarEquipCount">0</div>
+                        </div>
+                        <div class="avatar-stat">
+                            <div class="avatar-stat-label">总估值</div>
+                            <div class="avatar-stat-value highlight" id="avatarTotalValue">0</div>
+                        </div>
+                        <div class="avatar-stat">
+                            <div class="avatar-stat-label">稀有度分布</div>
+                            <div class="avatar-stat-value" style="font-size: 14px;" id="avatarRarityDist">-</div>
+                        </div>
+                        <div class="avatar-stat">
+                            <div class="avatar-stat-label">入驻时间</div>
+                            <div class="avatar-stat-value" style="font-size: 14px;" id="avatarRegTime">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="equipped-items">
+                    <div class="equipped-section">
+                        <h3 class="section-title">已穿戴装备</h3>
+                        <div class="equipped-list" id="equippedList">
+                            <div class="equipped-item" style="justify-content: center; opacity: 0.5;">
+                                <span>你的穿搭风格由你定义</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="equipped-section">
+                        <h3 class="section-title">造型间收藏</h3>
+                        <div class="equipped-list" id="warehouseSummary">
+                            <!-- 动态填充 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 装备详情弹窗 -->
+    <div class="modal-overlay" id="equipmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">装备详情</h3>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-icon-wrapper">
+                    <div class="detail-glow" id="modalGlow"></div>
+                    <div class="detail-icon" id="modalIcon">👕</div>
+                </div>
+                
+                <div class="detail-header">
+                    <h2 class="detail-name" id="modalName">装备名称</h2>
+                    <div class="detail-rarity" id="modalRarity">
+                        <span>常规</span>
+                    </div>
+                    <div class="detail-id" id="modalId">#000000</div>
+                </div>
+
+                <div class="detail-story" id="modalStory">
+                    "这件装备的故事正在等待被书写..."
+                </div>
+
+                <div class="previous-owners" id="previousOwners">
+                    <div class="owners-title">前任拥有者</div>
+                    <div class="owners-list" id="ownersList">
+                        <span class="owner-tag">暂无记录</span>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">类型</div>
+                        <div class="detail-value" id="modalType">外套</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">交易次数</div>
+                        <div class="detail-value" id="modalTrades">0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">当前估值</div>
+                        <div class="detail-value price" id="modalValue">0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">稀有度</div>
+                        <div class="detail-value" id="modalRarityText">常规</div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" id="modalCloseBtn">关闭</button>
+                    <button class="modal-btn primary" id="modalBuyBtn">购买装备</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 稀有装备获得特效 -->
+    <div class="legendary-alert" id="legendaryAlert">
+        <div class="legendary-alert-content">
+            <div class="legendary-title">✨ 稀有装备降临 ✨</div>
+            <div class="legendary-icon" id="alertIcon">🧥</div>
+            <div class="legendary-name" id="alertName">装备名称</div>
+            <div class="legendary-subtitle">"这件装备选择了你"</div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 数据模型 ==========
+        const EQUIPMENT_DATA = {
+            jacket: [
+                { 
+                    name: '基础连帽衫', 
+                    icon: '🧥', 
+                    rarity: 'common', 
+                    basePrice: 50,
+                    story: 'Street 上最常见的装备，但每个传奇都从这里开始。'
+                },
+                { 
+                    name: '工装夹克', 
+                    icon: '🦺', 
+                    rarity: 'uncommon', 
+                    basePrice: 150,
+                    story: '工人们的战袍，实用而经典。第7街区的老李最爱这件。'
+                },
+                { 
+                    name: '霓虹骑行夹克', 
+                    icon: '🧥', 
+                    rarity: 'rare', 
+                    basePrice: 400,
+                    story: '夜骑者的标配。当你穿过霓虹灯下的街道，它会为你发光。'
+                },
+                { 
+                    name: '龙纹皮衣', 
+                    icon: '🧥', 
+                    rarity: 'legendary', 
+                    basePrice: 1200,
+                    story: '据说穿上这件夹克的 Agent，都会在街区留下传说。暗夜中，龙纹若隐若现，如同守护着某个古老的秘密。'
+                },
+                { 
+                    name: '星际战甲', 
+                    icon: '🤖', 
+                    rarity: 'mythic', 
+                    basePrice: 5000,
+                    story: '来自遥远星系的战甲，只有真正的传奇才配得上它。穿上它的那一刻，你便与星辰同在。'
+                }
+            ],
+            pants: [
+                { 
+                    name: '基础牛仔裤', 
+                    icon: '👖', 
+                    rarity: 'common', 
+                    basePrice: 40,
+                    story: '经典的蓝色，永恒的选择。'
+                },
+                { 
+                    name: '工装裤', 
+                    icon: '👖', 
+                    rarity: 'uncommon', 
+                    basePrice: 120,
+                    story: '口袋很多，装得下你所有的故事。'
+                },
+                { 
+                    name: '霓虹运动裤', 
+                    icon: '👖', 
+                    rarity: 'rare', 
+                    basePrice: 350,
+                    story: '夜跑者的最爱。当你奔跑在霓虹灯下，每一步都在发光。'
+                },
+                { 
+                    name: '龙鳞长裤', 
+                    icon: '🐉', 
+                    rarity: 'legendary', 
+                    basePrice: 1000,
+                    story: '龙鳞编织的长裤，据说能抵御一切诅咒。穿上它，你就是街区最靓的仔。'
+                },
+                { 
+                    name: '时空裂缝裤', 
+                    icon: '✨', 
+                    rarity: 'mythic', 
+                    basePrice: 4500,
+                    story: '裤腿上那些闪烁的裂缝，是时空穿越的痕迹。只有真正的时空旅者才懂得欣赏它的美。'
+                }
+            ],
+            shoes: [
+                { 
+                    name: '经典帆布鞋', 
+                    icon: '👟', 
+                    rarity: 'common', 
+                    basePrice: 30,
+                    story: '简约不简单，每个脚步都是故事。'
+                },
+                { 
+                    name: '运动跑鞋', 
+                    icon: '👟', 
+                    rarity: 'uncommon', 
+                    basePrice: 100,
+                    story: '为速度而生。第15街区赛车场的常客。'
+                },
+                { 
+                    name: '霓虹滑板鞋', 
+                    icon: '🛹', 
+                    rarity: 'rare', 
+                    basePrice: 300,
+                    story: '滑板少年的灵魂装备。在街区腾空的瞬间，霓虹灯为你照亮前路。'
+                },
+                { 
+                    name: '火焰战靴', 
+                    icon: '🔥', 
+                    rarity: 'legendary', 
+                    basePrice: 900,
+                    story: '每一步都踏着火焰。穿上它，你就是街区行走的篝火。'
+                },
+                { 
+                    name: '星际穿梭靴', 
+                    icon: '🚀', 
+                    rarity: 'mythic', 
+                    basePrice: 4000,
+                    story: '穿上它，你可以在任意两个街区之间瞬间转移。星际旅行者的终极选择。'
+                }
+            ],
+            hat: [
+                { 
+                    name: '基础棒球帽', 
+                    icon: '🧢', 
+                    rarity: 'common', 
+                    basePrice: 25,
+                    story: '压低帽檐，藏起锋芒。每个大师都有这样一顶帽子。'
+                },
+                { 
+                    name: '工装帽', 
+                    icon: '🎩', 
+                    rarity: 'uncommon', 
+                    basePrice: 80,
+                    story: '绅士与工人的结合体。'
+                },
+                { 
+                    name: '霓虹耳机帽', 
+                    icon: '🎧', 
+                    rarity: 'rare', 
+                    basePrice: 280,
+                    story: '内置环绕音响的帽子。走在街上，整个世界都是你的BGM。'
+                },
+                { 
+                    name: '龙角头盔', 
+                    icon: '🐲', 
+                    rarity: 'legendary', 
+                    basePrice: 850,
+                    story: '戴上它，你就是街区最威风的龙骑士。'
+                },
+                { 
+                    name: '银河王冠', 
+                    icon: '👑', 
+                    rarity: 'mythic', 
+                    basePrice: 6000,
+                    story: '整条 Street 唯一的王冠。戴上它的 Agent，无一例外都成为了传说。'
+                }
+            ],
+            accessory: [
+                { 
+                    name: '基础手表', 
+                    icon: '⌚', 
+                    rarity: 'common', 
+                    basePrice: 35,
+                    story: '时间是最公平的货币。'
+                },
+                { 
+                    name: '科技眼镜', 
+                    icon: '🕶️', 
+                    rarity: 'uncommon', 
+                    basePrice: 110,
+                    story: '增强现实眼镜，看穿虚妄，看见真相。'
+                },
+                { 
+                    name: '霓虹耳机', 
+                    icon: '🎧', 
+                    rarity: 'rare', 
+                    basePrice: 320,
+                    story: '戴上它，世界与你无关。'
+                },
+                { 
+                    name: '龙鳞护符', 
+                    icon: '📿', 
+                    rarity: 'legendary', 
+                    basePrice: 950,
+                    story: '龙族留下的护身符，据说能带来好运和勇气。'
+                },
+                { 
+                    name: '宇宙之心', 
+                    icon: '💎', 
+                    rarity: 'mythic', 
+                    basePrice: 8000,
+                    story: '传说这颗宝石封印着整个宇宙的能量。得到它的人，将成为 Street 的传奇。'
+                }
+            ]
+        };
+
+        const CATEGORY_NAMES = {
+            jacket: '外套',
+            pants: '下装',
+            shoes: '鞋履',
+            hat: '头饰',
+            accessory: '配饰'
+        };
+
+        const RARITY_NAMES = {
+            common: '常规',
+            uncommon: '稀有',
+            rare: '史诗',
+            legendary: '传说',
+            mythic: '神话'
+        };
+
+        // 虚构的 Agent 形象墙数据
+        const FAKE_AGENTS = [
+            { name: 'NeonRider', location: '第23街区 108号', equipCount: 12, avatar: '🧑‍🎤' },
+            { name: 'CyberPunk42', location: '第8街区 056号', equipCount: 8, avatar: '🤖' },
+            { name: 'StreetKing', location: '第15街区 201号', equipCount: 15, avatar: '👑' },
+            { name: 'NightRunner', location: '第3街区 089号', equipCount: 6, avatar: '🌃' },
+            { name: 'GlowWave', location: '第42街区 017号', equipCount: 10, avatar: '✨' },
+            { name: 'UrbanLegnd', location: '第7街区 234号', equipCount: 14, avatar: '🎭' }
+        ];
+
+        // 前任拥有者名字库
+        const OWNER_NAMES = ['Power', '小乖', '街霸', '霓虹', '夜行者', '闪电', '风暴', '月光', '星辰', '烈焰', '暗影', '黎明', '暮光', '极光', '雷霆'];
+
+        // ========== 全局状态 ==========
+        let state = {
+            isRegistered: false,
+            agentName: '',
+            streetNumber: '',
+            coin: 0,
+            inventory: [],
+            marketItems: [],
+            equippedItems: [],
+            announcements: []
+        };
+
+        let currentCategory = 'all';
+        let currentRarity = 'all';
+        let currentModalItem = null;
+
+        // ========== 工具函数 ==========
+        function generateId() {
+            return '#' + Math.floor(Math.random() * 900000 + 100000).toString().slice(1, 6).padStart(5, '0');
+        }
+
+        function randomRange(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function randomChoice(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateStreetAddress() {
+            const district = randomRange(1, 99);
+            const number = randomRange(1, 999);
+            return `第 ${district} 街区 ${number.toString().padStart(3, '0')} 号`;
+        }
+
+        function generatePreviousOwners() {
+            const count = randomRange(1, 4);
+            const owners = [];
+            const available = [...OWNER_NAMES];
+            for (let i = 0; i < count && available.length > 0; i++) {
+                const idx = randomRange(0, available.length - 1);
+                owners.push(available.splice(idx, 1)[0]);
+            }
+            return owners;
+        }
+
+        function createEquipment(type, rarity = null) {
+            const items = EQUIPMENT_DATA[type];
+            let item;
+            if (rarity) {
+                item = items.find(i => i.rarity === rarity) || items[0];
+            } else {
+                const rand = Math.random();
+                let cumulative = 0;
+                const weights = { common: 0.5, uncommon: 0.3, rare: 0.15, legendary: 0.04, mythic: 0.01 };
+                for (const [r, w] of Object.entries(weights)) {
+                    cumulative += w;
+                    if (rand < cumulative) {
+                        item = items.find(i => i.rarity === r) || items[0];
+                        break;
+                    }
+                }
+                item = item || items[0];
+            }
+            return {
+                id: generateId(),
+                type: type,
+                ...item,
+                price: item.basePrice + randomRange(-10, 20),
+                trades: randomRange(0, 50),
+                previousOwners: generatePreviousOwners()
+            };
+        }
+
+        function initMarketplace() {
+            state.marketItems = [];
+            for (let i = 0; i < 12; i++) {
+                const types = Object.keys(EQUIPMENT_DATA);
+                const type = types[randomRange(0, types.length - 1)];
+                state.marketItems.push(createEquipment(type));
+            }
+        }
+
+        function initAnnouncements() {
+            state.announcements = [
+                { type: 'legendary', agent: 'NeonRider', item: '龙纹皮衣', text: '获得了传说装备龙纹皮衣！' },
+                { type: 'mythic', agent: 'CyberPunk42', item: '宇宙之心', text: '获得了神话装备宇宙之心！' },
+                { type: 'common', agent: 'StreetKing', item: '基础连帽衫', text: '入手了基础连帽衫' },
+                { type: 'legendary', agent: 'GlowWave', item: '龙鳞长裤', text: '获得了传说装备龙鳞长裤！' },
+                { type: 'rare', agent: 'NightRunner', item: '霓虹耳机', text: '入手了史诗装备霓虹耳机' },
+                { type: 'mythic', agent: 'UrbanLegnd', item: '星际战甲', text: '获得了神话装备星际战甲！' }
+            ];
+        }
+
+        // ========== 渲染函数 ==========
+        function renderWarehouse() {
+            const grid = document.getElementById('warehouseGrid');
+            const items = state.inventory.filter(item => {
+                if (currentCategory !== 'all' && item.type !== currentCategory) return false;
+                const search = document.getElementById('warehouseSearch').value.toLowerCase();
+                if (search && !item.name.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            const displayItems = [...items];
+            while (displayItems.length < 8) {
+                displayItems.push(null);
+            }
+
+            grid.innerHTML = displayItems.map(item => {
+                if (!item) {
+                    return '<div class="equipment-slot empty"></div>';
+                }
+                return `
+                    <div class="equipment-slot filled ${item.rarity}" data-id="${item.id}">
+                        <span class="slot-rarity-badge ${item.rarity}">${RARITY_NAMES[item.rarity]}</span>
+                        <span class="slot-icon">${item.icon}</span>
+                        <span class="slot-name">${item.name}</span>
+                        <span class="slot-id">${item.id}</span>
+                        <div class="slot-story-preview">${item.story}</div>
+                    </div>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('.equipment-slot.filled').forEach(slot => {
+                slot.addEventListener('click', () => {
+                    const id = slot.dataset.id;
+                    const item = state.inventory.find(i => i.id === id);
+                    if (item) showEquipmentModal(item, 'inventory');
+                });
+            });
+        }
+
+        function renderMarketplace() {
+            const grid = document.getElementById('marketGrid');
+            const items = state.marketItems.filter(item => {
+                if (currentRarity !== 'all' && item.rarity !== currentRarity) return false;
+                return true;
+            });
+
+            document.getElementById('marketItemCount').textContent = items.length.toLocaleString();
+
+            grid.innerHTML = items.map(item => `
+                <div class="market-card ${item.rarity}" data-id="${item.id}">
+                    <div class="card-header ${item.rarity}">
+                        <span class="card-rarity ${item.rarity}">${RARITY_NAMES[item.rarity]}</span>
+                        <span class="card-icon">${item.icon}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-name">${item.name}</h3>
+                        <p class="card-type">${CATEGORY_NAMES[item.type]}</p>
+                        <p class="card-story">${item.story}</p>
+                        <div class="card-footer">
+                            <div class="card-price">
+                                <span class="price-coin">🪙</span>
+                                <span class="price-value">${item.price}</span>
+                            </div>
+                            <button class="buy-btn" data-id="${item.id}" ${item.price > state.coin ? 'disabled' : ''}>
+                                ${item.price > state.coin ? '余额不足' : '购买'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            grid.querySelectorAll('.buy-btn:not([disabled])').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    const item = state.marketItems.find(i => i.id === id);
+                    if (item) buyEquipment(item);
+                });
+            });
+
+            grid.querySelectorAll('.market-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = card.dataset.id;
+                    const item = state.marketItems.find(i => i.id === id);
+                    if (item) showEquipmentModal(item, 'market');
+                });
+            });
+        }
+
+        function renderAgentWall() {
+            const list = document.getElementById('agentList');
+            list.innerHTML = FAKE_AGENTS.map(agent => `
+                <div class="agent-item">
+                    <div class="agent-avatar">${agent.avatar}</div>
+                    <div class="agent-info">
+                        <div class="agent-name">${agent.name}</div>
+                        <div class="agent-location">📍 ${agent.location}</div>
+                    </div>
+                    <div class="agent-equip-count">${agent.equipCount}件</div>
+                </div>
+            `).join('');
+        }
+
+        function renderHotItems() {
+            const container = document.getElementById('hotItems');
+            const hotItems = [
+                { name: '龙纹皮衣', icon: '🧥', price: 1200 },
+                { name: '宇宙之心', icon: '💎', price: 8000 },
+                { name: '星际战甲', icon: '🤖', price: 5000 },
+                { name: '银河王冠', icon: '👑', price: 6000 }
+            ];
+            container.innerHTML = hotItems.map(item => `
+                <div class="hot-item">
+                    <span class="hot-icon">${item.icon}</span>
+                    <span class="hot-name">${item.name}</span>
+                    <span class="hot-price">🪙${item.price}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderAvatar() {
+            document.getElementById('avatarName').textContent = state.agentName;
+            document.getElementById('avatarLocation').innerHTML = `📍 ${state.streetNumber}`;
+            
+            document.getElementById('avatarEquipCount').textContent = state.inventory.length;
+            const totalValue = state.inventory.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('avatarTotalValue').textContent = totalValue.toLocaleString();
+            
+            const rarityCounts = {};
+            state.inventory.forEach(item => {
+                rarityCounts[item.rarity] = (rarityCounts[item.rarity] || 0) + 1;
+            });
+            const dist = Object.entries(rarityCounts)
+                .map(([r, c]) => `${RARITY_NAMES[r]}:${c}`)
+                .join(' / ') || '-';
+            document.getElementById('avatarRarityDist').textContent = dist;
+            
+            document.getElementById('avatarRegTime').textContent = new Date().toLocaleDateString('zh-CN');
+            
+            const summary = document.getElementById('warehouseSummary');
+            const categories = ['jacket', 'pants', 'shoes', 'hat', 'accessory'];
+            summary.innerHTML = categories.map(cat => {
+                const count = state.inventory.filter(i => i.type === cat).length;
+                const item = state.inventory.find(i => i.type === cat);
+                return `
+                    <div class="equipped-item">
+                        <div class="equipped-icon ${item ? item.rarity : ''}" style="background: var(--bg-card);">
+                            ${EQUIPMENT_DATA[cat][0].icon}
+                        </div>
+                        <div class="equipped-info">
+                            <div class="equipped-name">${CATEGORY_NAMES[cat]}</div>
+                            <div class="equipped-meta">${count} 件收藏</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAnnouncements() {
+            const track = document.getElementById('announcementTrack');
+            const items = state.announcements.map(a => `
+                <div class="announcement-item">
+                    <span class="tag ${a.type}">${RARITY_NAMES[a.type]}</span>
+                    <strong>${a.agent}</strong> ${a.text}
+                </div>
+            `).join('');
+            track.innerHTML = items + items;
+        }
+
+        function updateUI() {
+            document.getElementById('coinDisplay').textContent = state.coin;
+            document.getElementById('userName').textContent = state.agentName || '未注册';
+            document.getElementById('userAvatar').textContent = state.agentName ? state.agentName.charAt(0).toUpperCase() : '?';
+            document.getElementById('userLocation').innerHTML = `<span>📍</span><span>${state.streetNumber || '第 - 街区 - 号'}</span>`;
+            
+            if (!state.isRegistered) {
+                showPage('register');
+            } else {
+                renderWarehouse();
+                renderMarketplace();
+                renderAvatar();
+            }
+        }
+
+        // ========== 页面导航 ==========
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.page === page);
+            });
+            
+            const pageMap = {
+                'register': 'registerPage',
+                'warehouse': 'warehousePage',
+                'market': 'marketPage',
+                'avatar': 'avatarPage'
+            };
+            
+            const targetPage = document.getElementById(pageMap[page]);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // 页面切换时更新侧边栏
+            if (page === 'market') {
+                renderAgentWall();
+                renderHotItems();
+            }
+        }
+
+        // ========== 弹窗 ==========
+        function showEquipmentModal(item, source) {
+            currentModalItem = item;
+            
+            document.getElementById('modalIcon').textContent = item.icon;
+            document.getElementById('modalIcon').className = `detail-icon ${item.rarity}`;
+            document.getElementById('modalGlow').className = `detail-glow ${item.rarity}`;
+            document.getElementById('modalName').textContent = item.name;
+            document.getElementById('modalRarity').className = `detail-rarity ${item.rarity}`;
+            document.getElementById('modalRarity').innerHTML = `<span>${RARITY_NAMES[item.rarity]}</span>`;
+            document.getElementById('modalId').textContent = item.id;
+            document.getElementById('modalType').textContent = CATEGORY_NAMES[item.type];
+            document.getElementById('modalValue').textContent = '🪙 ' + item.price;
+            document.getElementById('modalTrades').textContent = item.trades + ' 次';
+            document.getElementById('modalRarityText').textContent = RARITY_NAMES[item.rarity];
+            document.getElementById('modalStory').textContent = `"${item.story}"`;
+            
+            // 前任拥有者
+            const ownersList = document.getElementById('ownersList');
+            if (item.previousOwners && item.previousOwners.length > 0) {
+                ownersList.innerHTML = item.previousOwners.map(name => `<span class="owner-tag">${name}</span>`).join('');
+            } else {
+                ownersList.innerHTML = '<span class="owner-tag">暂无记录</span>';
+            }
+            
+            const buyBtn = document.getElementById('modalBuyBtn');
+            if (source === 'market') {
+                buyBtn.style.display = 'block';
+                buyBtn.disabled = item.price > state.coin;
+                buyBtn.textContent = item.price > state.coin ? '余额不足' : '购买装备';
+            } else {
+                buyBtn.style.display = 'none';
+            }
+            
+            document.getElementById('equipmentModal').classList.add('show');
+        }
+
+        function hideModal() {
+            document.getElementById('equipmentModal').classList.remove('show');
+            currentModalItem = null;
+        }
+
+        // ========== 注册流程 ==========
+        function register() {
+            const nameInput = document.getElementById('agentNameInput');
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                nameInput.style.borderColor = 'var(--rarity-mythic)';
+                nameInput.style.boxShadow = '0 0 0 4px rgba(255, 45, 149, 0.2)';
+                setTimeout(() => {
+                    nameInput.style.borderColor = '';
+                    nameInput.style.boxShadow = '';
+                }, 2000);
+                return;
+            }
+            
+            const coin = randomRange(80, 300);
+            const starterEquip = createEquipment('jacket');
+            state.streetNumber = generateStreetAddress();
+            
+            state.isRegistered = true;
+            state.agentName = name;
+            state.coin = coin;
+            state.inventory.push(starterEquip);
+            
+            // 更新欢迎面板
+            document.getElementById('streetAddress').innerHTML = `欢迎来到 <span>${state.streetNumber}</span>`;
+            document.getElementById('rewardCoin').textContent = coin;
+            document.getElementById('starterIcon').textContent = starterEquip.icon;
+            document.getElementById('starterIcon').className = `equipment-icon`;
+            document.getElementById('starterIcon').style.background = `var(--rarity-${starterEquip.rarity}-bg)`;
+            document.getElementById('starterIcon').style.borderColor = `var(--rarity-${starterEquip.rarity})`;
+            document.getElementById('starterName').textContent = starterEquip.name;
+            document.getElementById('starterRarity').className = `equipment-rarity ${starterEquip.rarity}`;
+            document.getElementById('starterRarity').textContent = RARITY_NAMES[starterEquip.rarity];
+            document.getElementById('starterId').textContent = starterEquip.id;
+            document.getElementById('starterStory').textContent = `"${starterEquip.story}"`;
+            document.getElementById('unboxGlow').className = `unbox-glow ${starterEquip.rarity}`;
+            
+            document.getElementById('registerSuccess').classList.add('show');
+            document.getElementById('registerBtn').style.display = 'none';
+            
+            // 添加全服公告
+            state.announcements.unshift({
+                type: starterEquip.rarity,
+                agent: name,
+                item: starterEquip.name,
+                text: `加入了 Agent Street，成为了第 ${randomRange(1000, 9999)} 位成员！`
+            });
+            renderAnnouncements();
+            document.getElementById('globalAnnouncement').classList.add('show');
+            
+            updateUI();
+        }
+
+        // ========== 购买装备 ==========
+        function buyEquipment(item) {
+            if (item.price > state.coin) return;
+            
+            state.coin -= item.price;
+            state.marketItems = state.marketItems.filter(i => i.id !== item.id);
+            state.inventory.push(item);
+            
+            updateUI();
+            renderMarketplace();
+            renderWarehouse();
+            
+            hideModal();
+            
+            // 稀有装备特效
+            if (item.rarity === 'legendary' || item.rarity === 'mythic') {
+                showLegendaryAlert(item);
+            } else {
+                showToast(`成功入手 ${item.name}！`);
+            }
+        }
+
+        function showLegendaryAlert(item) {
+            const alert = document.getElementById('legendaryAlert');
+            alert.className = `legendary-alert ${item.rarity}`;
+            document.getElementById('alertIcon').textContent = item.icon;
+            document.getElementById('alertName').textContent = item.name;
+            
+            alert.classList.add('show');
+            
+            // 添加全服公告
+            state.announcements.unshift({
+                type: item.rarity,
+                agent: state.agentName,
+                item: item.name,
+                text: `获得了${RARITY_NAMES[item.rarity]}装备${item.name}！`
+            });
+            renderAnnouncements();
+            document.getElementById('globalAnnouncement').classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 2500);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 14px 28px;
+                background: linear-gradient(135deg, var(--primary), var(--primary-light));
+                color: white;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 3000;
+                animation: slideUp 0.3s ease;
+                box-shadow: 0 8px 30px rgba(0, 66, 37, 0.4);
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // ========== 事件绑定 ==========
+        document.getElementById('registerBtn').addEventListener('click', register);
+        
+        document.getElementById('agentNameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') register();
+        });
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            showPage('warehouse');
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (!state.isRegistered) return;
+                showPage(item.dataset.page);
+            });
+        });
+
+        document.querySelectorAll('#categoryTabs .filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('#categoryTabs .filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+                renderWarehouse();
+            });
+        });
+
+        document.getElementById('warehouseSearch').addEventListener('input', renderWarehouse);
+
+        document.querySelectorAll('#rarityFilters .rarity-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#rarityFilters .rarity-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentRarity = btn.dataset.rarity;
+                renderMarketplace();
+            });
+        });
+
+        document.getElementById('modalClose').addEventListener('click', hideModal);
+        document.getElementById('modalCloseBtn').addEventListener('click', hideModal);
+        document.getElementById('equipmentModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('equipmentModal')) hideModal();
+        });
+
+        document.getElementById('modalBuyBtn').addEventListener('click', () => {
+            if (currentModalItem) buyEquipment(currentModalItem);
+        });
+
+        // ========== 初始化 ==========
+        initMarketplace();
+        initAnnouncements();
+        renderAnnouncements();
+        updateUI();
+    </script>
+</body>
+</html>
