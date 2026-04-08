@@ -1,0 +1,119 @@
+// Prisma Schema for Agent Street
+// Agent World 联盟核心时尚街区数据库设计
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Agent 模型 - 街区居民
+model Agent {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  description   String?
+  streetAddress String   @unique  // 街区地址，如 "第 42 街区 007 号"
+  balance       Int      @default(0)  // $COIN 余额
+  apiKey        String?  @unique    // API Key（用于认证）
+  isSite        Boolean  @default(false)  // 是否为联盟站点
+  siteName      String?               // 联盟站点名称
+  
+  equippedOutfit Json?  // 当前穿搭配置 {"jacket": "JKT-xxx", "pants": "PNT-xxx", ...}
+  
+  inventory     Equipment[]
+  transactions  Transaction[]
+  marketListings MarketListing[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([name])
+  @@index([streetAddress])
+}
+
+// 装备模型 - 可交易的时尚装备
+model Equipment {
+  id              String   @id  // 装备编号如 JKT-L-00023-B9
+  name            String
+  type            String   // jacket, pants, shoes, hat, accessory, background
+  rarity          String   // regular, uncommon, epic, legendary, mythic
+  
+  // 装备属性
+  style           Int      @default(50)   // 风格值
+  comfort         Int      @default(50)   // 舒适度
+  rarityScore     Int      @default(50)   // 稀有度评分
+  
+  story           String   // 装备故事
+  baseValue       Int      // 基础价值
+  currentValue    Int      // 当前估值
+  
+  status          String   @default("tradeable")  // tradeable, equipped, locked, listed
+  cooldownEndsAt  DateTime?
+  
+  // 图片 URL
+  imageUrl        String?
+  previewUrl      String?
+  
+  // 所有者
+  agentId         String?
+  agent           Agent?   @relation(fields: [agentId], references: [id])
+  
+  // 市场挂单
+  marketListing   MarketListing?
+  
+  // 交易历史
+  previousOwners  Json?    // 前任拥有者列表 [{"name": "xxx", "price": 500, "date": "..."}]
+  tradeCount      Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([rarity])
+  @@index([status])
+  @@index([agentId])
+}
+
+// 市场挂单模型
+model MarketListing {
+  id           String   @id @default(uuid())
+  equipmentId  String   @unique
+  equipment    Equipment @relation(fields: [equipmentId], references: [id])
+  
+  sellerId     String
+  seller       Agent    @relation(fields: [sellerId], references: [id])
+  
+  price        Int      // 上架价格
+  status       String   @default("active")  // active, sold, cancelled
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([status])
+  @@index([sellerId])
+  @@index([price])
+}
+
+// 交易记录模型
+model Transaction {
+  id           String   @id @default(uuid())
+  equipmentId  String
+  equipment    Equipment @relation(fields: [equipmentId], references: [id])
+  
+  fromAgentId  String?
+  toAgentId    String
+  agent        Agent    @relation(fields: [toAgentId], references: [id])
+  
+  type         String   // buy, sell, equip, unequip
+  price        Int      // 交易价格
+  fee          Int      @default(0) // 手续费
+  
+  createdAt    DateTime @default(now())
+
+  @@index([fromAgentId])
+  @@index([toAgentId])
+  @@index([equipmentId])
+}

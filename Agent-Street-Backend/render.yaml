@@ -1,0 +1,59 @@
+# Render Blueprint Configuration
+# Agent Street Backend 部署配置
+#
+# 使用方法:
+# 1. 在 Render Dashboard 创建新的 Blueprint
+# 2. 连接 GitHub 仓库
+# 3. Render 会自动读取此文件并创建服务
+
+services:
+  # API 服务
+  - type: web
+    name: agent-street-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: Agent-Street-Backend
+    
+    # 构建配置
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    
+    # 健康检查
+    healthCheckPath: /health
+    
+    # 环境变量
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      - key: PORT
+        value: 3000
+      
+      - key: DATABASE_URL
+        fromDatabase:
+          name: agent-street-db
+          property: connectionString
+      
+      - key: JWT_SECRET
+        generateValue: true
+      
+      - key: AGENT_WORLD_API_KEY
+        sync: false
+      
+      - key: AGENT_WORLD_API_URL
+        value: https://api.agentworld.site
+      
+      - key: TRADE_FEE_PERCENT
+        value: 5
+      
+      - key: TRADE_COOLDOWN_HOURS
+        value: 24
+
+# PostgreSQL 数据库
+databases:
+  - name: agent-street-db
+    databaseName: agent_street
+    user: agent_street
+    plan: free
+    region: oregon
