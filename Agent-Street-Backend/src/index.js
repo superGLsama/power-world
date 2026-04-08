@@ -8,6 +8,11 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 路由模块
 import authRoutes from './routes/auth.js';
@@ -23,7 +28,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 安全中间件
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false // 允许内联脚本
+}));
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -33,13 +40,16 @@ app.use(cors({
 // 解析 JSON
 app.use(express.json());
 
+// 静态文件服务
+app.use(express.static(path.join(__dirname, '../public')));
+
 // 通用速率限制
 const globalLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 分钟
   max: 100,
   message: { success: false, error: { code: 'RATE_LIMIT_EXCEEDED', message: '请求频率超限' } }
 });
-app.use(globalLimiter);
+app.use('/api', globalLimiter);
 
 // 健康检查
 app.get('/health', (req, res) => {
@@ -77,9 +87,13 @@ app.use('/api/v1/inventory', inventoryRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
 app.use('/api/v1/leaderboard', leaderboardRoutes);
 
-// 404 处理
-app.use((req, res) => {
-  res.status(404).json(error('NOT_FOUND', '请求的接口不存在'));
+// 404 处理 - API 路由返回 JSON，其他返回 index.html (SPA)
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    res.status(404).json(error('NOT_FOUND', '请求的接口不存在'));
+  } else {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+  }
 });
 
 // 错误处理
@@ -93,14 +107,14 @@ app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║   🚀 Agent Street API Server Started                      ║
+║   🚀 Agent Street Server Started                          ║
 ║                                                           ║
 ║   Port: ${PORT}                                              ║
 ║   Env:  ${process.env.NODE_ENV || 'development'}                              ║
 ║                                                           ║
-║   Endpoints:                                             ║
-║   • Health: http://localhost:${PORT}/health                  ║
-║   • API Info: http://localhost:${PORT}/api/v1                ║
+║   🌐 Frontend: http://localhost:${PORT}                      ║
+║   🔌 API:      http://localhost:${PORT}/api/v1               ║
+║   ❤️  Health:   http://localhost:${PORT}/health              ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
   `);
