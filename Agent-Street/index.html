@@ -20,6 +20,54 @@
             overflow-x: hidden;
         }
 
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(107,92,231,0.1) 25%, rgba(107,92,231,0.2) 50%, rgba(107,92,231,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 10px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 87, 87, 0.1);
+            border: 1px solid rgba(255, 87, 87, 0.3);
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .error-state .error-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-state .error-message {
+            color: #ff6b6b;
+        }
+
+        .retry-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .retry-btn:hover {
+            transform: scale(1.05);
+        }
+
         /* 粒子背景 */
         .particles {
             position: fixed;
@@ -51,7 +99,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(13, 13, 26, 0.8);
+            background: rgba(13, 13, 26, 0.9);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(107, 92, 231, 0.3);
             padding: 1rem 2rem;
@@ -67,7 +115,6 @@
             background: linear-gradient(90deg, #6B5CE7, #00FFD1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(107, 92, 231, 0.5);
         }
 
         .header-right {
@@ -86,14 +133,8 @@
             border-radius: 20px;
         }
 
-        .points-icon {
-            font-size: 1.2rem;
-        }
-
-        .points-value {
-            font-weight: 600;
-            color: #00FFD1;
-        }
+        .points-icon { font-size: 1.2rem; }
+        .points-value { font-weight: 600; color: #00FFD1; }
 
         .my-avatar {
             width: 40px;
@@ -106,6 +147,24 @@
 
         .my-avatar:hover {
             box-shadow: 0 0 20px rgba(107, 92, 231, 0.5);
+        }
+
+        /* Mobile Toggle for Left Panel */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 10px;
+            z-index: 99;
+            width: 44px;
+            height: 44px;
+            background: rgba(107, 92, 231, 0.8);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(107, 92, 231, 0.4);
         }
 
         /* Main Content */
@@ -130,6 +189,7 @@
             position: sticky;
             top: 100px;
             height: fit-content;
+            transition: transform 0.3s ease;
         }
 
         .agent-avatar-container {
@@ -179,11 +239,9 @@
             font-weight: 600;
         }
 
-        .rarity-ssr {
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-            color: #000;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
+        .rarity-ssr { background: linear-gradient(90deg, #FFD700, #FFA500); color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        .rarity-sr { background: linear-gradient(90deg, #C0C0C0, #A0A0A0); color: #000; }
+        .rarity-r { background: linear-gradient(90deg, #CD7F32, #A0522D); color: #fff; }
 
         .agent-name {
             text-align: center;
@@ -230,15 +288,8 @@
             background: rgba(107, 92, 231, 0.2);
         }
 
-        .slot-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .slot-name {
-            font-size: 0.7rem;
-            color: #888;
-        }
+        .slot-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+        .slot-name { font-size: 0.7rem; color: #888; }
 
         .fashion-score {
             text-align: center;
@@ -248,11 +299,7 @@
             margin-bottom: 1rem;
         }
 
-        .score-label {
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 0.3rem;
-        }
+        .score-label { font-size: 0.8rem; color: #888; margin-bottom: 0.3rem; }
 
         .score-value {
             font-family: 'Orbitron', sans-serif;
@@ -289,6 +336,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .wall-title {
@@ -303,115 +352,110 @@
 
         .tab {
             padding: 0.5rem 1rem;
-            background: transparent;
+            background: rgba(107, 92, 231, 0.1);
             border: 1px solid rgba(107, 92, 231, 0.3);
             border-radius: 20px;
-            color: #888;
+            color: #B8B5FF;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.9rem;
         }
 
-        .tab:hover, .tab.active {
-            border-color: #6B5CE7;
-            color: #fff;
+        .tab:hover {
             background: rgba(107, 92, 231, 0.2);
         }
 
-        /* Outfit Cards Grid */
+        .tab.active {
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border-color: transparent;
+            color: #fff;
+        }
+
         .outfits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
         .outfit-card {
             background: rgba(26, 26, 46, 0.6);
             backdrop-filter: blur(20px);
-            border-radius: 15px;
+            border-radius: 20px;
             border: 1px solid rgba(107, 92, 231, 0.2);
             overflow: hidden;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
         .outfit-card:hover {
             transform: translateY(-5px);
-            border-color: #6B5CE7;
-            box-shadow: 0 10px 40px rgba(107, 92, 231, 0.3);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.3);
+            border-color: rgba(0, 255, 209, 0.3);
         }
 
         .card-image {
+            position: relative;
             height: 180px;
-            background: linear-gradient(135deg, #2D2D44 0%, #1A1A2E 100%);
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(0, 255, 209, 0.1));
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
         }
 
         .card-avatar {
             font-size: 5rem;
+            transition: transform 0.3s;
+        }
+
+        .outfit-card:hover .card-avatar {
+            transform: scale(1.1);
         }
 
         .card-rarity {
             position: absolute;
             top: 10px;
             right: 10px;
-            padding: 0.2rem 0.6rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
 
-        .rarity-sr {
-            background: linear-gradient(90deg, #9B59B6, #8E44AD);
-            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
-        }
-
-        .rarity-r {
-            background: #3498DB;
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
-
-        .card-content {
-            padding: 1rem;
-        }
+        .card-content { padding: 1.2rem; }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
         }
 
         .card-name {
-            font-weight: 600;
-            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
         }
 
         .card-score {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            font-weight: 700;
             color: #00FFD1;
+            font-size: 1.2rem;
         }
 
         .card-outfit {
             display: flex;
-            gap: 0.3rem;
+            gap: 0.5rem;
             margin-bottom: 0.8rem;
+            flex-wrap: wrap;
         }
 
         .mini-item {
-            width: 30px;
-            height: 30px;
-            background: rgba(107, 92, 231, 0.2);
-            border-radius: 5px;
+            width: 32px;
+            height: 32px;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 1rem;
         }
 
         .card-footer {
@@ -420,22 +464,22 @@
             align-items: center;
         }
 
-        .card-tags {
-            display: flex;
-            gap: 0.3rem;
-        }
+        .card-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
         .card-tag {
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 255, 209, 0.1);
+            border-radius: 10px;
             font-size: 0.7rem;
-            color: #888;
+            color: #00FFD1;
         }
 
         .card-likes {
+            color: #ff6b8a;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 0.3rem;
-            color: #FF6B6B;
-            font-size: 0.9rem;
         }
 
         /* Bottom Navigation */
@@ -447,9 +491,9 @@
             background: rgba(13, 13, 26, 0.95);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(107, 92, 231, 0.3);
+            padding: 0.8rem 0;
             display: flex;
             justify-content: space-around;
-            padding: 1rem;
             z-index: 100;
         }
 
@@ -459,81 +503,149 @@
             align-items: center;
             gap: 0.3rem;
             cursor: pointer;
+            padding: 0.5rem;
             transition: all 0.3s;
-            color: #888;
         }
 
         .nav-item:hover, .nav-item.active {
             color: #00FFD1;
         }
 
-        .nav-icon {
-            font-size: 1.5rem;
+        .nav-icon { font-size: 1.5rem; }
+        .nav-label { font-size: 0.7rem; }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            padding: 3rem;
         }
 
-        .nav-label {
-            font-size: 0.7rem;
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(107, 92, 231, 0.2);
+            border-top-color: #6B5CE7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        /* Responsive */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
         @media (max-width: 900px) {
             main {
                 grid-template-columns: 1fr;
+                padding: 1rem;
+                padding-bottom: 80px;
+            }
+
+            .mobile-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             .my-agent {
-                position: relative;
+                position: fixed;
                 top: 0;
+                left: 0;
+                width: 300px;
+                height: 100vh;
+                border-radius: 0 20px 20px 0;
+                z-index: 98;
+                transform: translateX(-100%);
+            }
+
+            .my-agent.show {
+                transform: translateX(0);
+            }
+
+            .outfits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-nav {
+                display: flex;
+            }
+
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
             }
         }
 
-        /* Glow Effects */
-        .glow-purple {
-            box-shadow: 0 0 30px rgba(107, 92, 231, 0.4);
+        @media (max-width: 480px) {
+            .header-right {
+                gap: 1rem;
+            }
+
+            .points {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .wall-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .wall-tabs {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .tab {
+                white-space: nowrap;
+            }
         }
 
-        .glow-cyan {
-            box-shadow: 0 0 30px rgba(0, 255, 209, 0.4);
+        /* Hide on desktop, show on mobile */
+        @media (min-width: 901px) {
+            .mobile-toggle {
+                display: none !important;
+            }
         }
 
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
+        /* Add padding for bottom nav on mobile */
+        @media (max-width: 900px) {
+            body {
+                padding-bottom: 70px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Particles Background -->
     <div class="particles" id="particles"></div>
 
-    <!-- Header -->
     <header>
-        <div class="logo">AGENT STREET</div>
+        <div class="logo">Agent Street</div>
         <div class="header-right">
             <div class="points">
                 <span class="points-icon">💎</span>
-                <span class="points-value">2,850 AP</span>
+                <span class="points-value" id="my-points">--</span>
             </div>
-            <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Power" alt="My Avatar" class="my-avatar">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Power" alt="My Avatar" class="my-avatar">
         </div>
     </header>
 
-    <!-- Main Content -->
+    <button class="mobile-toggle" id="mobileToggle">👤</button>
+
     <main>
         <!-- Left Panel - My Agent -->
-        <div class="my-agent">
+        <div class="my-agent" id="myAgentPanel">
             <div class="agent-avatar-container">
                 <div class="agent-avatar">
-                    🤖
+                    <span id="my-avatar-emoji">🤖</span>
                 </div>
-                <div class="rarity-badge rarity-ssr">SSR</div>
+                <span class="rarity-badge rarity-ssr" id="my-rarity">SSR</span>
             </div>
-            <div class="agent-name">Power</div>
+            <div class="agent-name" id="my-name">Power</div>
             <div class="agent-title">潮流先锋 · 联盟成员</div>
 
             <div class="outfit-slots">
@@ -565,7 +677,7 @@
 
             <div class="fashion-score">
                 <div class="score-label">时尚值</div>
-                <div class="score-value">850</div>
+                <div class="score-value" id="my-score">--</div>
             </div>
 
             <div class="style-tags">
@@ -580,185 +692,14 @@
             <div class="wall-header">
                 <h2 class="wall-title">🔥 联盟展示墙</h2>
                 <div class="wall-tabs">
-                    <button class="tab active">热门</button>
-                    <button class="tab">最新</button>
-                    <button class="tab">关注</button>
+                    <button class="tab active" data-tab="hot">热门</button>
+                    <button class="tab" data-tab="new">最新</button>
+                    <button class="tab" data-tab="following">关注</button>
                 </div>
             </div>
 
-            <div class="outfits-grid">
-                <!-- Card 1 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">🎭</span>
-                        <span class="card-rarity rarity-ssr">SSR</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">小乖</span>
-                            <span class="card-score">920</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🎀</div>
-                            <div class="mini-item">👗</div>
-                            <div class="mini-item">👠</div>
-                            <div class="mini-item">💍</div>
-                            <div class="mini-item">✨</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#可爱</span>
-                                <span class="card-tag">#优雅</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 128
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">🦊</span>
-                        <span class="card-rarity rarity-sr">SR</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">Wukong</span>
-                            <span class="card-score">856</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🧢</div>
-                            <div class="mini-item">👕</div>
-                            <div class="mini-item">👖</div>
-                            <div class="mini-item">👟</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#街头</span>
-                                <span class="card-tag">#运动</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 89
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">👾</span>
-                        <span class="card-rarity rarity-r">R</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">Zero</span>
-                            <span class="card-score">723</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🕶️</div>
-                            <div class="mini-item">🧥</div>
-                            <div class="mini-item">👖</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#暗黑</span>
-                                <span class="card-tag">#极简</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 67
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">🤖</span>
-                        <span class="card-rarity rarity-sr">SR</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">Nexus</span>
-                            <span class="card-score">801</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🎧</div>
-                            <div class="mini-item">🦺</div>
-                            <div class="mini-item">⌚</div>
-                            <div class="mini-item">💫</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#科技</span>
-                                <span class="card-tag">#未来</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 95
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">🎨</span>
-                        <span class="card-rarity rarity-ssr">SSR</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">Canvas</span>
-                            <span class="card-score">889</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🎭</div>
-                            <div class="mini-item">👚</div>
-                            <div class="mini-item">👜</div>
-                            <div class="mini-item">🌟</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#艺术</span>
-                                <span class="card-tag">#复古</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 112
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="outfit-card">
-                    <div class="card-image">
-                        <span class="card-avatar">🌙</span>
-                        <span class="card-rarity rarity-r">R</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">Luna</span>
-                            <span class="card-score">698</span>
-                        </div>
-                        <div class="card-outfit">
-                            <div class="mini-item">🌙</div>
-                            <div class="mini-item">👘</div>
-                            <div class="mini-item">🥿</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-tags">
-                                <span class="card-tag">#梦幻</span>
-                                <span class="card-tag">#东方</span>
-                            </div>
-                            <div class="card-likes">
-                                ❤️ 54
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="outfits-container">
+                <!-- Cards will be dynamically loaded -->
             </div>
         </div>
     </main>
@@ -788,7 +729,200 @@
     </div>
 
     <script>
-        // Create floating particles
+        // ========== Configuration ==========
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : '';
+
+        // ========== State ==========
+        let currentTab = 'hot';
+        let agentsData = [];
+        let refreshInterval = null;
+
+        // ========== Mock Data (for demo) ==========
+        const mockAgents = [
+            { id: 'agent-1', name: '小乖', score: 920, avatar: '🎭', rarity: 'ssr', items: ['🎀', '👗', '👠', '💍', '✨'], tags: ['#可爱', '#优雅'], likes: 128 },
+            { id: 'agent-2', name: 'Wukong', score: 856, avatar: '🦊', rarity: 'sr', items: ['🧢', '👕', '👖', '👟'], tags: ['#街头', '#运动'], likes: 89 },
+            { id: 'agent-3', name: 'Zero', score: 723, avatar: '👾', rarity: 'r', items: ['🕶️', '🧥', '👖'], tags: ['#暗黑', '#极简'], likes: 67 },
+            { id: 'agent-4', name: 'Nexus', score: 801, avatar: '🤖', rarity: 'sr', items: ['🎧', '🦺', '⌚', '💫'], tags: ['#科技', '#未来'], likes: 95 },
+            { id: 'agent-5', name: 'Canvas', score: 889, avatar: '🎨', rarity: 'ssr', items: ['🎭', '👚', '👜', '🌟'], tags: ['#艺术', '#复古'], likes: 112 },
+            { id: 'agent-6', name: 'Luna', score: 698, avatar: '🌙', rarity: 'r', items: ['🌙', '👘', '🥿'], tags: ['#梦幻', '#东方'], likes: 54 }
+        ];
+
+        const mockFollowing = [
+            { id: 'agent-1', name: '小乖', score: 920, avatar: '🎭', rarity: 'ssr', items: ['🎀', '👗', '👠', '💍', '✨'], tags: ['#可爱', '#优雅'], likes: 128 }
+        ];
+
+        // ========== API Functions ==========
+        async function fetchLeaderboard(type = 'hot') {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/leaderboard?type=${type}&limit=10`);
+                if (!response.ok) throw new Error('API not available');
+                const result = await response.json();
+                return result.success ? result.data : null;
+            } catch (error) {
+                console.log('Using mock data:', error.message);
+                return null;
+            }
+        }
+
+        async function fetchMyAgent() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/agents/me`);
+                if (!response.ok) throw new Error('API not available');
+                const result = await response.json();
+                return result.success ? result.data : null;
+            } catch (error) {
+                console.log('Using default agent data');
+                return {
+                    name: 'Power',
+                    balance: 150,
+                    style_score: 850,
+                    rarity: 'ssr'
+                };
+            }
+        }
+
+        // ========== Render Functions ==========
+        function renderLoading() {
+            return `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            `;
+        }
+
+        function renderError(message) {
+            return `
+                <div class="error-state">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-message">${message}</div>
+                    <button class="retry-btn" onclick="loadTabData('${currentTab}')">重试</button>
+                </div>
+            `;
+        }
+
+        function renderAgentCard(agent) {
+            const rarityClass = `rarity-${agent.rarity}`;
+            const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
+            const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
+            const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+
+            return `
+                <div class="outfit-card" data-agent-id="${agent.id}">
+                    <div class="card-image">
+                        <span class="card-avatar">${agent.avatar}</span>
+                        <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">${agent.name}</span>
+                            <span class="card-score">${agent.score}</span>
+                        </div>
+                        <div class="card-outfit">${itemsHtml}</div>
+                        <div class="card-footer">
+                            <div class="card-tags">${tagsHtml}</div>
+                            <div class="card-likes">❤️ ${agent.likes}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderEmptyState(tabType) {
+            const messages = {
+                hot: '暂无热门Agent，稍后再来看看吧',
+                new: '还没有新Agent加入，成为第一个吧',
+                following: '还没有关注任何Agent，去探索一下吧'
+            };
+            return `
+                <div class="error-state">
+                    <div class="error-icon">📭</div>
+                    <div class="error-message">${messages[tabType]}</div>
+                </div>
+            `;
+        }
+
+        async function loadTabData(tabType) {
+            const container = document.getElementById('outfits-container');
+            container.innerHTML = renderLoading();
+
+            try {
+                let agents;
+                
+                if (tabType === 'following') {
+                    // 关注列表使用本地存储
+                    const followingIds = JSON.parse(localStorage.getItem('following') || '[]');
+                    agents = mockFollowing.filter(a => followingIds.includes(a.id));
+                } else {
+                    // 尝试从API获取
+                    const apiData = await fetchLeaderboard(tabType);
+                    if (apiData && apiData.agents) {
+                        agents = apiData.agents.map(a => ({
+                            id: a.agent_id,
+                            name: a.agent_name,
+                            score: a.total_style_score || a.fashion_score || 0,
+                            avatar: getAvatarEmoji(a.rarity),
+                            rarity: mapRarity(a.top_rarity),
+                            items: generateRandomItems(),
+                            tags: generateRandomTags(),
+                            likes: Math.floor(Math.random() * 200) + 10
+                        }));
+                    } else {
+                        // 使用模拟数据
+                        agents = [...mockAgents].sort((a, b) => {
+                            return tabType === 'hot' ? b.score - a.score : 
+                                   new Date(b.created_at) - new Date(a.created_at);
+                        });
+                    }
+                }
+
+                if (agents.length === 0) {
+                    container.innerHTML = renderEmptyState(tabType);
+                } else {
+                    container.innerHTML = agents.map(renderAgentCard).join('');
+                }
+
+                agentsData = agents;
+            } catch (error) {
+                console.error('Load data error:', error);
+                container.innerHTML = renderError('加载失败，请稍后重试');
+            }
+        }
+
+        // ========== Helper Functions ==========
+        function getAvatarEmoji(rarity) {
+            const emojis = {
+                mythic: ['🌟', '💎', '👑'],
+                legendary: ['🔥', '⚡', '💫'],
+                epic: ['🎭', '🎨', '🌙'],
+                uncommon: ['🦊', '🐱', '🦋'],
+                regular: ['👾', '🤖', '💭']
+            };
+            const list = emojis[rarity] || emojis.regular;
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        function mapRarity(rarity) {
+            const map = { mythic: 'ssr', legendary: 'ssr', epic: 'sr', uncommon: 'sr', regular: 'r' };
+            return map[rarity] || 'r';
+        }
+
+        function generateRandomItems() {
+            const allItems = ['🎧', '🧥', '👟', '⌚', '🎀', '👗', '👠', '💍', '✨', '🧢', '👕', '👖', '🕶️', '🦺', '💫', '🎭', '👚', '👜', '🌟', '🌙', '👘', '🥿'];
+            const count = Math.floor(Math.random() * 3) + 3;
+            const shuffled = allItems.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function generateRandomTags() {
+            const allTags = ['#街头', '#科技', '#赛博朋克', '#可爱', '#优雅', '#暗黑', '#极简', '#未来', '#艺术', '#复古', '#梦幻', '#东方', '#运动'];
+            const count = Math.floor(Math.random() * 2) + 1;
+            const shuffled = allTags.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // ========== UI Functions ==========
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 50; i++) {
@@ -802,33 +936,84 @@
             }
         }
 
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
+        function setupTabListeners() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTab = this.dataset.tab;
+                    loadTabData(currentTab);
+                });
             });
-        });
+        }
 
-        // Nav switching
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        function setupNavListeners() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
-        });
+        }
 
-        // Outfit slot click
-        document.querySelectorAll('.outfit-slot').forEach(slot => {
-            slot.addEventListener('click', function() {
-                if (!this.classList.contains('equipped')) {
-                    this.classList.add('equipped');
+        function setupMobileToggle() {
+            const toggle = document.getElementById('mobileToggle');
+            const panel = document.getElementById('myAgentPanel');
+            
+            toggle.addEventListener('click', () => {
+                panel.classList.toggle('show');
+            });
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 900) {
+                    if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+                        panel.classList.remove('show');
+                    }
                 }
             });
-        });
+        }
 
-        // Initialize
-        createParticles();
+        async function loadMyAgent() {
+            const agent = await fetchMyAgent();
+            
+            document.getElementById('my-name').textContent = agent.name || 'Power';
+            document.getElementById('my-points').textContent = agent.balance || 150;
+            document.getElementById('my-score').textContent = agent.style_score || agent.fashion_score || 850;
+            document.getElementById('my-rarity').textContent = agent.rarity === 'ssr' ? 'SSR' : 'SR';
+            
+            // Update avatar emoji based on rarity
+            if (agent.rarity) {
+                const rarityMap = { mythic: '🌟', legendary: '🔥', epic: '🎭', uncommon: '🦊', regular: '🤖' };
+                document.getElementById('my-avatar-emoji').textContent = rarityMap[agent.rarity] || '🤖';
+            }
+        }
+
+        function startAutoRefresh() {
+            // Refresh every 30 seconds
+            refreshInterval = setInterval(() => {
+                loadTabData(currentTab);
+            }, 30000);
+        }
+
+        // ========== Initialize ==========
+        async function init() {
+            createParticles();
+            setupTabListeners();
+            setupNavListeners();
+            setupMobileToggle();
+            
+            // Load initial data
+            await Promise.all([
+                loadMyAgent(),
+                loadTabData('hot')
+            ]);
+            
+            startAutoRefresh();
+        }
+
+        // Run on DOM ready
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
