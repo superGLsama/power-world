@@ -618,6 +618,150 @@
                 padding-bottom: 70px;
             }
         }
+
+        /* ========== Search & Filter Styles (Day 2) ========== */
+        .search-filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-input:focus {
+            border-color: #00FFD1;
+            box-shadow: 0 0 15px rgba(0, 255, 209, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 15px;
+            color: #B8B5FF;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            background: rgba(107, 92, 231, 0.2);
+            border-color: rgba(0, 255, 209, 0.3);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .results-count {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .results-count .count {
+            color: #00FFD1;
+            font-weight: 600;
+        }
+
+        .clear-search {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .clear-search:hover {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px dashed rgba(107, 92, 231, 0.3);
+            border-radius: 15px;
+        }
+
+        .no-results .search-icon-large {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results .message {
+            color: #B8B5FF;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results .suggestion {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        /* Mobile filter scroll */
+        @media (max-width: 600px) {
+            .search-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                flex-wrap: nowrap;
+            }
+
+            .filter-btn {
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -698,6 +842,24 @@
                 </div>
             </div>
 
+            <!-- Search & Filter Bar (Day 2) -->
+            <div class="search-filter-bar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索Agent名称...">
+                </div>
+                <div class="filter-group" id="filterGroup">
+                    <button class="filter-btn active" data-rarity="all">全部</button>
+                    <button class="filter-btn" data-rarity="ssr">SSR</button>
+                    <button class="filter-btn" data-rarity="sr">SR</button>
+                    <button class="filter-btn" data-rarity="r">R</button>
+                </div>
+            </div>
+
+            <div class="results-count" id="resultsCount">
+                <span>显示 <span class="count" id="filteredCount">0</span> 个Agent</span>
+            </div>
+
             <div id="outfits-container">
                 <!-- Cards will be dynamically loaded -->
             </div>
@@ -737,7 +899,10 @@
         // ========== State ==========
         let currentTab = 'hot';
         let agentsData = [];
+        let allAgentsData = []; // 存储原始未过滤数据 (Day 2)
         let refreshInterval = null;
+        let currentSearch = ''; // 搜索关键词 (Day 2)
+        let currentRarity = 'all'; // 稀有度筛选 (Day 2)
 
         // ========== Mock Data (for demo) ==========
         const mockAgents = [
@@ -843,6 +1008,106 @@
             `;
         }
 
+        // ========== Search & Filter Functions (Day 2) ==========
+        function filterAgents() {
+            let filtered = [...allAgentsData];
+
+            // 按名称搜索
+            if (currentSearch.trim()) {
+                const searchLower = currentSearch.toLowerCase().trim();
+                filtered = filtered.filter(agent =>
+                    agent.name.toLowerCase().includes(searchLower)
+                );
+            }
+
+            // 按稀有度筛选
+            if (currentRarity !== 'all') {
+                filtered = filtered.filter(agent =>
+                    agent.rarity === currentRarity
+                );
+            }
+
+            return filtered;
+        }
+
+        function applyFilters() {
+            const filtered = filterAgents();
+
+            // 更新结果计数
+            document.getElementById('filteredCount').textContent = filtered.length;
+
+            // 渲染过滤后的结果
+            const container = document.getElementById('outfits-container');
+            if (filtered.length === 0) {
+                container.innerHTML = renderNoResults();
+            } else {
+                container.innerHTML = filtered.map(renderAgentCard).join('');
+            }
+
+            agentsData = filtered;
+        }
+
+        function renderNoResults() {
+            return `
+                <div class="no-results">
+                    <div class="search-icon-large">🔍</div>
+                    <div class="message">没有找到匹配的Agent</div>
+                    <div class="suggestion">试试其他关键词或筛选条件</div>
+                    <button class="clear-search" onclick="clearFilters()" style="margin-top: 1rem;">清除筛选</button>
+                </div>
+            `;
+        }
+
+        function clearFilters() {
+            currentSearch = '';
+            currentRarity = 'all';
+            document.getElementById('searchInput').value = '';
+
+            // 重置筛选按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.rarity === 'all');
+            });
+
+            // 重新应用筛选
+            applyFilters();
+        }
+
+        function setupSearchListeners() {
+            const searchInput = document.getElementById('searchInput');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    currentSearch = e.target.value;
+                    applyFilters();
+                }, 300);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    clearFilters();
+                }
+            });
+        }
+
+        function setupFilterListeners() {
+            const filterGroup = document.getElementById('filterGroup');
+
+            filterGroup.addEventListener('click', (e) => {
+                const btn = e.target.closest('.filter-btn');
+                if (!btn) return;
+
+                // 更新按钮状态
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // 更新筛选条件
+                currentRarity = btn.dataset.rarity;
+                applyFilters();
+            });
+        }
+
         async function loadTabData(tabType) {
             const container = document.getElementById('outfits-container');
             container.innerHTML = renderLoading();
@@ -883,7 +1148,20 @@
                     container.innerHTML = agents.map(renderAgentCard).join('');
                 }
 
+                // 保存原始数据用于搜索和筛选 (Day 2)
+                allAgentsData = agents;
                 agentsData = agents;
+
+                // 重置搜索和筛选状态
+                currentSearch = '';
+                currentRarity = 'all';
+                document.getElementById('searchInput').value = '';
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.rarity === 'all');
+                });
+
+                // 更新结果计数
+                document.getElementById('filteredCount').textContent = agents.length;
             } catch (error) {
                 console.error('Load data error:', error);
                 container.innerHTML = renderError('加载失败，请稍后重试');
@@ -1002,7 +1280,9 @@
             setupTabListeners();
             setupNavListeners();
             setupMobileToggle();
-            
+            setupSearchListeners(); // Day 2: 搜索功能
+            setupFilterListeners(); // Day 2: 筛选功能
+
             // Load initial data
             await Promise.all([
                 loadMyAgent(),
