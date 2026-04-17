@@ -745,8 +745,156 @@
             font-size: 0.85rem;
         }
 
-        /* Mobile filter scroll */
+        /* ========== Sort Styles (Day 3) ========== */
+        .sort-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(107, 92, 231, 0.1);
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .sort-btn {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .sort-btn:hover {
+            color: #B8B5FF;
+            background: rgba(107, 92, 231, 0.1);
+        }
+
+        .sort-btn.active {
+            color: #00FFD1;
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        .sort-btn .sort-icon {
+            font-size: 0.9rem;
+        }
+
+        /* ========== Enhanced Card Animations (Day 3) ========== */
+        .outfit-card {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(107, 92, 231, 0.2);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .outfit-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(107, 92, 231, 0.4);
+            border-color: rgba(0, 255, 209, 0.4);
+        }
+
+        .outfit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 209, 0.1), transparent);
+            transition: left 0.5s;
+            pointer-events: none;
+        }
+
+        .outfit-card:hover::before {
+            left: 100%;
+        }
+
+        /* Rarity glow effect on hover */
+        .outfit-card[data-rarity="ssr"]:hover {
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3), 0 0 30px rgba(255, 165, 0, 0.2);
+        }
+
+        .outfit-card[data-rarity="sr"]:hover {
+            box-shadow: 0 20px 40px rgba(192, 192, 192, 0.3), 0 0 30px rgba(192, 192, 192, 0.2);
+        }
+
+        /* Like button animation */
+        .like-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            padding: 0.2rem;
+        }
+
+        .like-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .like-btn.liked {
+            animation: heartBeat 0.6s ease;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Card entrance stagger animation */
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Mobile adjustments */
         @media (max-width: 600px) {
+            .sort-bar {
+                flex-direction: column;
+                gap: 0.8rem;
+                align-items: flex-start;
+            }
+
+            .sort-options {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                width: 100%;
+                padding-bottom: 0.3rem;
+            }
+
+            .sort-btn {
+                flex-shrink: 0;
+            }
+
             .search-filter-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -860,6 +1008,24 @@
                 <span>显示 <span class="count" id="filteredCount">0</span> 个Agent</span>
             </div>
 
+            <!-- Sort Bar (Day 3) -->
+            <div class="sort-bar">
+                <div class="sort-options" id="sortOptions">
+                    <button class="sort-btn active" data-sort="default" onclick="handleSort('default')">
+                        <span class="sort-icon">✨</span>综合排序
+                    </button>
+                    <button class="sort-btn" data-sort="latest" onclick="handleSort('latest')">
+                        <span class="sort-icon">🕐</span>最新
+                    </button>
+                    <button class="sort-btn" data-sort="rarity" onclick="handleSort('rarity')">
+                        <span class="sort-icon">⭐</span>稀有度
+                    </button>
+                    <button class="sort-btn" data-sort="hot" onclick="handleSort('hot')">
+                        <span class="sort-icon">🔥</span>热度
+                    </button>
+                </div>
+            </div>
+
             <div id="outfits-container">
                 <!-- Cards will be dynamically loaded -->
             </div>
@@ -903,6 +1069,8 @@
         let refreshInterval = null;
         let currentSearch = ''; // 搜索关键词 (Day 2)
         let currentRarity = 'all'; // 稀有度筛选 (Day 2)
+        let currentSort = 'default'; // 排序方式 (Day 3)
+        let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
 
         // ========== Mock Data (for demo) ==========
         const mockAgents = [
@@ -967,14 +1135,16 @@
             `;
         }
 
-        function renderAgentCard(agent) {
+        function renderAgentCard(agent, index = 0) {
             const rarityClass = `rarity-${agent.rarity}`;
             const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
             const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
             const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+            const isLiked = likedAgents.includes(agent.id);
+            const heartClass = isLiked ? '❤️' : '🤍';
 
             return `
-                <div class="outfit-card" data-agent-id="${agent.id}">
+                <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;">
                     <div class="card-image">
                         <span class="card-avatar">${agent.avatar}</span>
                         <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
@@ -987,7 +1157,9 @@
                         <div class="card-outfit">${itemsHtml}</div>
                         <div class="card-footer">
                             <div class="card-tags">${tagsHtml}</div>
-                            <div class="card-likes">❤️ ${agent.likes}</div>
+                            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
+                                ${heartClass} <span class="like-count">${agent.likes}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1008,7 +1180,38 @@
             `;
         }
 
-        // ========== Search & Filter Functions (Day 2) ==========
+        // ========== Sort Functions (Day 3) ==========
+        function handleSort(sortType) {
+            // 更新按钮状态
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.sort === sortType);
+            });
+            
+            currentSort = sortType;
+            applyFilters();
+        }
+
+        function sortAgents(agents) {
+            const sorted = [...agents];
+            
+            switch (currentSort) {
+                case 'latest':
+                    // 最新 - 随机打乱模拟新加入
+                    return sorted.sort(() => Math.random() - 0.5);
+                case 'rarity':
+                    // 稀有度 - SSR > SR > R
+                    const rarityOrder = { 'ssr': 0, 'sr': 1, 'r': 2 };
+                    return sorted.sort((a, b) => (rarityOrder[a.rarity] || 2) - (rarityOrder[b.rarity] || 2));
+                case 'hot':
+                    // 热度 - 按点赞数
+                    return sorted.sort((a, b) => b.likes - a.likes);
+                default:
+                    // 默认 - 综合排序（保持原顺序）
+                    return sorted;
+            }
+        }
+
+        // ========== Filter & Apply Functions (Day 2) ==========
         function filterAgents() {
             let filtered = [...allAgentsData];
 
@@ -1031,7 +1234,10 @@
         }
 
         function applyFilters() {
-            const filtered = filterAgents();
+            let filtered = filterAgents();
+            
+            // 应用排序 (Day 3)
+            filtered = sortAgents(filtered);
 
             // 更新结果计数
             document.getElementById('filteredCount').textContent = filtered.length;
@@ -1041,10 +1247,26 @@
             if (filtered.length === 0) {
                 container.innerHTML = renderNoResults();
             } else {
-                container.innerHTML = filtered.map(renderAgentCard).join('');
+                container.innerHTML = filtered.map((agent, index) => renderAgentCard(agent, index)).join('');
             }
 
             agentsData = filtered;
+            
+            // 添加入场动画
+            animateCardsIn();
+        }
+
+        function animateCardsIn() {
+            const cards = document.querySelectorAll('.outfit-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
         }
 
         function renderNoResults() {
@@ -1061,15 +1283,51 @@
         function clearFilters() {
             currentSearch = '';
             currentRarity = 'all';
+            currentSort = 'default';
             document.getElementById('searchInput').value = '';
 
             // 重置筛选按钮状态
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.rarity === 'all');
             });
+            
+            // 重置排序按钮状态
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.sort === 'default');
+            });
 
             // 重新应用筛选
             applyFilters();
+        }
+
+        // ========== Like Function (Day 3) ==========
+        function toggleLike(agentId, event) {
+            event.stopPropagation();
+            
+            const btn = document.querySelector(`.like-btn[data-agent-id="${agentId}"]`);
+            if (!btn) return;
+            
+            const index = likedAgents.indexOf(agentId);
+            const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
+            
+            if (index === -1) {
+                // 点赞
+                likedAgents.push(agentId);
+                btn.classList.add('liked');
+                btn.innerHTML = `❤️ <span class="like-count">${(agent?.likes || 0) + 1}</span>`;
+            } else {
+                // 取消点赞
+                likedAgents.splice(index, 1);
+                btn.classList.remove('liked');
+                btn.innerHTML = `🤍 <span class="like-count">${agent?.likes || 0}</span>`;
+            }
+            
+            // 保存到本地存储
+            localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
+            
+            // 添加心跳动画
+            btn.classList.add('liked');
+            setTimeout(() => btn.classList.remove('liked'), 600);
         }
 
         function setupSearchListeners() {
@@ -1145,19 +1403,25 @@
                 if (agents.length === 0) {
                     container.innerHTML = renderEmptyState(tabType);
                 } else {
-                    container.innerHTML = agents.map(renderAgentCard).join('');
+                    container.innerHTML = agents.map((agent, index) => renderAgentCard(agent, index)).join('');
+                    // 添加入场动画
+                    setTimeout(animateCardsIn, 50);
                 }
 
                 // 保存原始数据用于搜索和筛选 (Day 2)
                 allAgentsData = agents;
                 agentsData = agents;
 
-                // 重置搜索和筛选状态
+                // 重置搜索、筛选和排序状态
                 currentSearch = '';
                 currentRarity = 'all';
+                currentSort = 'default';
                 document.getElementById('searchInput').value = '';
                 document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.rarity === 'all');
+                });
+                document.querySelectorAll('.sort-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.sort === 'default');
                 });
 
                 // 更新结果计数
