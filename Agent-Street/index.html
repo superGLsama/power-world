@@ -864,6 +864,305 @@
             100% { transform: scale(1); }
         }
 
+        /* ========== Agent Detail Modal (Day 4) ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+            border: 1px solid rgba(107, 92, 231, 0.4);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.3), rgba(0, 255, 209, 0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 40px rgba(107, 92, 231, 0.4);
+            animation: modalAvatarPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes modalAvatarPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(107, 92, 231, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(107, 92, 231, 0.6); }
+        }
+
+        .modal-avatar[data-rarity="ssr"] {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+            animation-name: modalAvatarPulseGold;
+        }
+
+        @keyframes modalAvatarPulseGold {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); }
+        }
+
+        .modal-avatar[data-rarity="sr"] {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.3), rgba(160, 160, 160, 0.2));
+        }
+
+        .modal-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-rarity-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .modal-rarity-badge.ssr {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .modal-rarity-badge.sr {
+            background: linear-gradient(90deg, #C0C0C0, #A0A0A0);
+            color: #000;
+        }
+
+        .modal-rarity-badge.r {
+            background: linear-gradient(90deg, #CD7F32, #A0522D);
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .modal-stat-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+            border-top: 1px solid rgba(107, 92, 231, 0.2);
+            border-bottom: 1px solid rgba(107, 92, 231, 0.2);
+        }
+
+        .modal-stat {
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00FFD1;
+        }
+
+        .modal-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.3rem;
+        }
+
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.9rem;
+            color: #B8B5FF;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-items-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        .modal-item {
+            aspect-ratio: 1;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .modal-item:hover {
+            background: rgba(107, 92, 231, 0.2);
+            transform: scale(1.1);
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .modal-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 255, 209, 0.1);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #00FFD1;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(90deg, #6B5CE7, #8B7CF7);
+            color: #fff;
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .modal-btn-primary.followed {
+            background: linear-gradient(90deg, #00FFD1, #00D4AA);
+            color: #000;
+        }
+
+        .modal-btn-secondary {
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            color: #B8B5FF;
+        }
+
+        .modal-btn-secondary:hover {
+            background: rgba(107, 92, 231, 0.2);
+        }
+
+        .modal-btn-secondary.clicked {
+            animation: shareClick 0.3s ease;
+        }
+
+        @keyframes shareClick {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Mobile adjustments for modal */
+        @media (max-width: 480px) {
+            .modal-content {
+                max-width: 100%;
+                border-radius: 20px 20px 0 0;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                max-height: 85vh;
+            }
+
+            .modal-overlay {
+                align-items: flex-end;
+            }
+
+            .modal-items-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Card clickable cursor */
+        .outfit-card {
+            cursor: pointer;
+        }
+
         /* Card entrance stagger animation */
         @keyframes cardEnter {
             from {
@@ -1032,6 +1331,61 @@
         </div>
     </main>
 
+    <div id="agent-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal()">✕</button>
+                <div class="modal-avatar" id="modal-avatar">🤖</div>
+                <div class="modal-name" id="modal-name">Agent Name</div>
+                <div class="modal-rarity-badge" id="modal-rarity">SSR</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-stat-row">
+                    <div class="modal-stat">
+                        <div class="modal-stat-value" id="modal-score">0</div>
+                        <div class="modal-stat-label">时尚值</div>
+                    </div>
+                    <div class="modal-stat">
+                        <div class="modal-stat-value" id="modal-likes">0</div>
+                        <div class="modal-stat-label">获赞数</div>
+                    </div>
+                    <div class="modal-stat">
+                        <div class="modal-stat-value" id="modal-items-count">0</div>
+                        <div class="modal-stat-label">装备数</div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <span>👗</span> 穿戴装备
+                    </div>
+                    <div class="modal-items-grid" id="modal-items">
+                        <!-- Items will be populated -->
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <span>🏷️</span> 风格标签
+                    </div>
+                    <div class="modal-tags" id="modal-tags">
+                        <!-- Tags will be populated -->
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-primary" id="modal-follow-btn" onclick="toggleFollow()">
+                        <span id="follow-icon">🤝</span>
+                        <span id="follow-text">关注</span>
+                    </button>
+                    <button class="modal-btn modal-btn-secondary" onclick="shareAgent()">
+                        <span>📤</span> 分享
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active">
@@ -1071,6 +1425,8 @@
         let currentRarity = 'all'; // 稀有度筛选 (Day 2)
         let currentSort = 'default'; // 排序方式 (Day 3)
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
+        let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
+        let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
 
         // ========== Mock Data (for demo) ==========
         const mockAgents = [
@@ -1144,7 +1500,7 @@
             const heartClass = isLiked ? '❤️' : '🤍';
 
             return `
-                <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;">
+                <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')">
                     <div class="card-image">
                         <span class="card-avatar">${agent.avatar}</span>
                         <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
@@ -1432,6 +1788,176 @@
             }
         }
 
+        // ========== Agent Modal Functions (Day 4) ==========
+        function openAgentModal(agentId) {
+            // 查找 agent 数据
+            const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
+            if (!agent) return;
+
+            currentModalAgent = agent;
+
+            // 填充弹窗内容
+            const modal = document.getElementById('agent-modal');
+            document.getElementById('modal-avatar').textContent = agent.avatar;
+            document.getElementById('modal-avatar').dataset.rarity = agent.rarity;
+            document.getElementById('modal-name').textContent = agent.name;
+            
+            const rarityBadge = document.getElementById('modal-rarity');
+            rarityBadge.textContent = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
+            rarityBadge.className = `modal-rarity-badge ${agent.rarity}`;
+
+            document.getElementById('modal-score').textContent = agent.score;
+            document.getElementById('modal-likes').textContent = agent.likes;
+            document.getElementById('modal-items-count').textContent = agent.items.length;
+
+            // 填充装备
+            const itemsContainer = document.getElementById('modal-items');
+            itemsContainer.innerHTML = agent.items.map(item => `
+                <div class="modal-item" title="${item}">${item}</div>
+            `).join('');
+
+            // 填充标签
+            const tagsContainer = document.getElementById('modal-tags');
+            tagsContainer.innerHTML = agent.tags.map(tag => `
+                <span class="modal-tag">${tag}</span>
+            `).join('');
+
+            // 更新关注按钮状态
+            updateFollowButton(agent.id);
+
+            // 显示弹窗
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('agent-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            currentModalAgent = null;
+        }
+
+        function updateFollowButton(agentId) {
+            const isFollowed = followedAgents.includes(agentId);
+            const btn = document.getElementById('modal-follow-btn');
+            const icon = document.getElementById('follow-icon');
+            const text = document.getElementById('follow-text');
+
+            if (isFollowed) {
+                btn.classList.add('followed');
+                icon.textContent = '✓';
+                text.textContent = '已关注';
+            } else {
+                btn.classList.remove('followed');
+                icon.textContent = '🤝';
+                text.textContent = '关注';
+            }
+        }
+
+        function toggleFollow() {
+            if (!currentModalAgent) return;
+
+            const agentId = currentModalAgent.id;
+            const index = followedAgents.indexOf(agentId);
+
+            if (index === -1) {
+                // 关注
+                followedAgents.push(agentId);
+                showToast('已关注 ' + currentModalAgent.name);
+            } else {
+                // 取消关注
+                followedAgents.splice(index, 1);
+                showToast('已取消关注');
+            }
+
+            // 保存到本地存储
+            localStorage.setItem('followedAgents', JSON.stringify(followedAgents));
+            updateFollowButton(agentId);
+
+            // 如果在关注 Tab，重新加载
+            if (currentTab === 'following') {
+                loadTabData('following');
+            }
+        }
+
+        function shareAgent() {
+            if (!currentModalAgent) return;
+
+            const agent = currentModalAgent;
+            const shareText = `来看看 ${agent.name} 的潮流穿搭！时尚值 ${agent.score}，稀有度 ${agent.rarity.toUpperCase()}！✨ #AgentStreet #AI潮流`;
+
+            // 尝试使用 Web Share API（移动端）
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Agent Street',
+                    text: shareText,
+                    url: window.location.href
+                }).catch(() => {
+                    copyToClipboard(shareText);
+                });
+            } else {
+                // 回退到复制到剪贴板
+                copyToClipboard(shareText);
+            }
+
+            // 分享按钮动画
+            const btn = event.target.closest('.modal-btn-secondary');
+            btn.classList.add('clicked');
+            setTimeout(() => btn.classList.remove('clicked'), 300);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('分享内容已复制到剪贴板');
+            }).catch(() => {
+                showToast('复制失败，请手动复制');
+            });
+        }
+
+        function showToast(message) {
+            // 创建 toast 元素
+            const existing = document.querySelector('.toast-message');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(107, 92, 231, 0.9);
+                color: #fff;
+                padding: 0.8rem 1.5rem;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                z-index: 2000;
+                animation: toastIn 0.3s ease;
+            `;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 添加 toast 动画样式
+        const toastStyle = document.createElement('style');
+        toastStyle.textContent = `
+            @keyframes toastIn {
+                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            @keyframes toastOut {
+                from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(toastStyle);
+
         // ========== Helper Functions ==========
         function getAvatarEmoji(rarity) {
             const emojis = {
@@ -1546,6 +2072,7 @@
             setupMobileToggle();
             setupSearchListeners(); // Day 2: 搜索功能
             setupFilterListeners(); // Day 2: 筛选功能
+            setupModalListeners(); // Day 4: 弹窗关闭事件
 
             // Load initial data
             await Promise.all([
@@ -1554,6 +2081,25 @@
             ]);
             
             startAutoRefresh();
+        }
+
+        // ========== Modal Event Listeners (Day 4) ==========
+        function setupModalListeners() {
+            const modal = document.getElementById('agent-modal');
+
+            // 点击遮罩关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // ESC 键关闭
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
         }
 
         // Run on DOM ready
