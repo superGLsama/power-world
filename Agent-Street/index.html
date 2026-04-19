@@ -120,7 +120,45 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 1rem;
+        }
+
+        .achievement-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(107, 92, 231, 0.2);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .achievement-btn:hover {
+            background: rgba(107, 92, 231, 0.4);
+            transform: scale(1.1);
+        }
+
+        .achievement-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
         }
 
         .points {
@@ -1163,6 +1201,231 @@
             cursor: pointer;
         }
 
+        /* ========== Achievement Panel (Day 5) ========== */
+        .achievement-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(107, 92, 231, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .achievement-panel.active {
+            transform: translateX(0);
+        }
+
+        .achievement-panel-header {
+            padding: 1.5rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-bottom: 1px solid rgba(107, 92, 231, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .achievement-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .achievement-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .achievement-panel-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .achievement-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .achievement-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .achievement-category-title {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0.5rem;
+            background: rgba(107, 92, 231, 0.05);
+            border: 1px solid rgba(107, 92, 231, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .achievement-item:hover {
+            background: rgba(107, 92, 231, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .achievement-item.unlocked {
+            background: rgba(107, 92, 231, 0.15);
+            border-color: rgba(107, 92, 231, 0.3);
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+            filter: grayscale(0.8);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-name {
+            font-size: 0.7rem;
+            color: #B8B5FF;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .achievement-item.unlocked .achievement-name {
+            color: #00FFD1;
+        }
+
+        .achievement-progress {
+            font-size: 0.65rem;
+            color: #888;
+            margin-top: 0.3rem;
+        }
+
+        .achievement-stats {
+            padding: 1rem;
+            background: rgba(0, 255, 209, 0.05);
+            border-top: 1px solid rgba(0, 255, 209, 0.2);
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .achievement-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00FFD1;
+        }
+
+        .achievement-stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.2rem;
+        }
+
+        /* Achievement unlock animation */
+        @keyframes achievementUnlock {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .achievement-unlock-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            z-index: 2000;
+            animation: achievementUnlock 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+        }
+
+        .achievement-unlock-toast .unlock-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-unlock-toast .unlock-title {
+            color: #FFD700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .achievement-unlock-toast .unlock-name {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Mobile panel */
+        @media (max-width: 480px) {
+            .achievement-panel {
+                max-width: 100%;
+            }
+
+            .achievement-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+            }
+        }
+
+        /* Panel overlay */
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .panel-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Card entrance stagger animation */
         @keyframes cardEnter {
             from {
@@ -1217,6 +1480,10 @@
     <header>
         <div class="logo">Agent Street</div>
         <div class="header-right">
+            <button class="achievement-btn" id="achievementBtn" onclick="toggleAchievementPanel()">
+                🏆
+                <span class="achievement-badge" id="achievementBadge">0</span>
+            </button>
             <div class="points">
                 <span class="points-icon">💎</span>
                 <span class="points-value" id="my-points">--</span>
@@ -1224,6 +1491,32 @@
             <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Power" alt="My Avatar" class="my-avatar">
         </div>
     </header>
+
+    <!-- Panel Overlay -->
+    <div class="panel-overlay" id="panelOverlay" onclick="toggleAchievementPanel()"></div>
+
+    <!-- Achievement Panel (Day 5) -->
+    <div class="achievement-panel" id="achievementPanel">
+        <div class="achievement-panel-header">
+            <div class="achievement-panel-title">
+                <span>🏆</span> 我的成就
+            </div>
+            <button class="achievement-panel-close" onclick="toggleAchievementPanel()">✕</button>
+        </div>
+        <div class="achievement-panel-body" id="achievementPanelBody">
+            <!-- Achievement items will be populated -->
+        </div>
+        <div class="achievement-stats">
+            <div>
+                <div class="achievement-stat-value" id="achievementUnlocked">0</div>
+                <div class="achievement-stat-label">已解锁</div>
+            </div>
+            <div>
+                <div class="achievement-stat-value" id="achievementTotal">0</div>
+                <div class="achievement-stat-label">总成就</div>
+            </div>
+        </div>
+    </div>
 
     <button class="mobile-toggle" id="mobileToggle">👤</button>
 
@@ -1427,6 +1720,192 @@
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
+
+        // ========== Achievement System (Day 5) ==========
+        const ACHIEVEMENTS = {
+            interaction: [
+                { id: 'first_like', name: '初次心动', icon: '💖', desc: '首次点赞', target: 1, key: 'likedCount' },
+                { id: 'like_10', name: '点赞达人', icon: '❤️', desc: '点赞10个Agent', target: 10, key: 'likedCount' },
+                { id: 'like_50', name: '博爱天使', icon: '💕', desc: '点赞50个Agent', target: 50, key: 'likedCount' },
+                { id: 'first_follow', name: '社交新星', icon: '🤝', desc: '首次关注', target: 1, key: 'followedCount' },
+                { id: 'follow_5', name: '好友满天下', icon: '👥', desc: '关注5个Agent', target: 5, key: 'followedCount' },
+                { id: 'first_share', name: '分享使者', icon: '📤', desc: '首次分享', target: 1, key: 'shareCount' },
+            ],
+            explorer: [
+                { id: 'view_10', name: '探索者', icon: '🔍', desc: '查看10个Agent', target: 10, key: 'viewedCount' },
+                { id: 'view_50', name: '资深探险家', icon: '🧭', desc: '查看50个Agent', target: 50, key: 'viewedCount' },
+                { id: 'all_rarity', name: '收藏家', icon: '🏅', desc: '集齐所有稀有度', target: 3, key: 'rarityTypes' },
+                { id: 'hot_view', name: '热门追踪者', icon: '🔥', desc: '查看10个热门Agent', target: 10, key: 'hotViewCount' },
+            ],
+            milestone: [
+                { id: 'daily_visit', name: '每日打卡', icon: '📅', desc: '每日首次访问', target: 1, key: 'dailyVisits' },
+                { id: 'streak_3', name: '三天连续', icon: '⏰', desc: '连续3天访问', target: 3, key: 'streakDays' },
+                { id: 'streak_7', name: '一周坚持', icon: '📆', desc: '连续7天访问', target: 7, key: 'streakDays' },
+            ]
+        };
+
+        let userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+        let unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+
+        // 初始化用户统计
+        function initUserStats() {
+            const today = new Date().toDateString();
+            
+            if (!userStats.likedCount) userStats.likedCount = likedAgents.length;
+            if (!userStats.followedCount) userStats.followedCount = followedAgents.length;
+            if (!userStats.shareCount) userStats.shareCount = 0;
+            if (!userStats.viewedCount) userStats.viewedCount = 0;
+            if (!userStats.hotViewCount) userStats.hotViewCount = 0;
+            if (!userStats.rarityTypes) userStats.rarityTypes = [];
+            if (!userStats.lastVisit) userStats.lastVisit = null;
+            if (!userStats.streakDays) userStats.streakDays = 0;
+            if (!userStats.dailyVisits) userStats.dailyVisits = 0;
+
+            // 检查连续访问
+            if (userStats.lastVisit) {
+                const lastDate = new Date(userStats.lastVisit);
+                const todayDate = new Date(today);
+                const diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    userStats.streakDays++;
+                } else if (diffDays > 1) {
+                    userStats.streakDays = 1;
+                }
+            } else {
+                userStats.streakDays = 1;
+            }
+
+            // 检查今日首次访问
+            if (userStats.lastVisit !== today) {
+                userStats.dailyVisits++;
+                userStats.lastVisit = today;
+            }
+
+            saveUserStats();
+        }
+
+        function saveUserStats() {
+            localStorage.setItem('userStats', JSON.stringify(userStats));
+        }
+
+        function checkAchievements() {
+            const newUnlocks = [];
+            
+            Object.values(ACHIEVEMENTS).flat().forEach(achievement => {
+                if (unlockedAchievements.includes(achievement.id)) return;
+                
+                let currentValue = userStats[achievement.key] || 0;
+                
+                // 特殊处理稀有度类型
+                if (achievement.key === 'rarityTypes') {
+                    currentValue = [...new Set([...likedAgents.map(id => {
+                        const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+                        return agent?.rarity;
+                    }).filter(Boolean), ...(userStats.rarityTypes || [])])].length;
+                }
+                
+                if (currentValue >= achievement.target) {
+                    unlockedAchievements.push(achievement.id);
+                    newUnlocks.push(achievement);
+                }
+            });
+
+            if (newUnlocks.length > 0) {
+                localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                showUnlockToast(newUnlocks[0]);
+                updateAchievementBadge();
+            }
+        }
+
+        function showUnlockToast(achievement) {
+            const toast = document.createElement('div');
+            toast.className = 'achievement-unlock-toast';
+            toast.innerHTML = `
+                <div class="unlock-icon">${achievement.icon}</div>
+                <div class="unlock-title">🎉 成就解锁</div>
+                <div class="unlock-name">${achievement.name}</div>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function updateAchievementBadge() {
+            const badge = document.getElementById('achievementBadge');
+            const count = unlockedAchievements.length;
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        function renderAchievementPanel() {
+            const body = document.getElementById('achievementPanelBody');
+            const categories = [
+                { key: 'interaction', name: '互动成就' },
+                { key: 'explorer', name: '探索成就' },
+                { key: 'milestone', name: '里程碑' }
+            ];
+
+            let html = '';
+            categories.forEach(cat => {
+                html += `<div class="achievement-category">
+                    <div class="achievement-category-title">${cat.name}</div>
+                    <div class="achievement-grid">`;
+                
+                ACHIEVEMENTS[cat.key].forEach(achievement => {
+                    const unlocked = unlockedAchievements.includes(achievement.id);
+                    const currentValue = getAchievementProgress(achievement);
+                    const progress = Math.min(currentValue / achievement.target * 100, 100);
+                    
+                    html += `<div class="achievement-item ${unlocked ? 'unlocked' : 'locked'}" 
+                            title="${achievement.desc}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-name">${achievement.name}</div>
+                        ${!unlocked ? `<div class="achievement-progress">${currentValue}/${achievement.target}</div>` : ''}
+                    </div>`;
+                });
+                
+                html += '</div></div>';
+            });
+
+            body.innerHTML = html;
+            
+            // 更新统计
+            document.getElementById('achievementUnlocked').textContent = unlockedAchievements.length;
+            document.getElementById('achievementTotal').textContent = Object.values(ACHIEVEMENTS).flat().length;
+        }
+
+        function getAchievementProgress(achievement) {
+            if (achievement.key === 'rarityTypes') {
+                const viewedRarities = new Set();
+                likedAgents.forEach(id => {
+                    const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+                    if (agent) viewedRarities.add(agent.rarity);
+                });
+                return viewedRarities.size;
+            }
+            return userStats[achievement.key] || 0;
+        }
+
+        function toggleAchievementPanel() {
+            const panel = document.getElementById('achievementPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const isActive = panel.classList.contains('active');
+            
+            if (isActive) {
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                renderAchievementPanel();
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
 
         // ========== Mock Data (for demo) ==========
         const mockAgents = [
@@ -1671,11 +2150,20 @@
                 likedAgents.push(agentId);
                 btn.classList.add('liked');
                 btn.innerHTML = `❤️ <span class="like-count">${(agent?.likes || 0) + 1}</span>`;
+                
+                // 更新成就统计
+                userStats.likedCount = likedAgents.length;
+                saveUserStats();
+                checkAchievements();
             } else {
                 // 取消点赞
                 likedAgents.splice(index, 1);
                 btn.classList.remove('liked');
                 btn.innerHTML = `🤍 <span class="like-count">${agent?.likes || 0}</span>`;
+                
+                // 更新成就统计
+                userStats.likedCount = likedAgents.length;
+                saveUserStats();
             }
             
             // 保存到本地存储
@@ -1796,6 +2284,14 @@
 
             currentModalAgent = agent;
 
+            // 更新查看统计
+            userStats.viewedCount = (userStats.viewedCount || 0) + 1;
+            if (currentTab === 'hot') {
+                userStats.hotViewCount = (userStats.hotViewCount || 0) + 1;
+            }
+            saveUserStats();
+            checkAchievements();
+
             // 填充弹窗内容
             const modal = document.getElementById('agent-modal');
             document.getElementById('modal-avatar').textContent = agent.avatar;
@@ -1864,10 +2360,19 @@
                 // 关注
                 followedAgents.push(agentId);
                 showToast('已关注 ' + currentModalAgent.name);
+                
+                // 更新成就统计
+                userStats.followedCount = followedAgents.length;
+                saveUserStats();
+                checkAchievements();
             } else {
                 // 取消关注
                 followedAgents.splice(index, 1);
                 showToast('已取消关注');
+                
+                // 更新成就统计
+                userStats.followedCount = followedAgents.length;
+                saveUserStats();
             }
 
             // 保存到本地存储
@@ -1904,6 +2409,11 @@
             const btn = event.target.closest('.modal-btn-secondary');
             btn.classList.add('clicked');
             setTimeout(() => btn.classList.remove('clicked'), 300);
+
+            // 更新成就统计
+            userStats.shareCount = (userStats.shareCount || 0) + 1;
+            saveUserStats();
+            checkAchievements();
         }
 
         function copyToClipboard(text) {
@@ -2066,6 +2576,10 @@
 
         // ========== Initialize ==========
         async function init() {
+            // 初始化成就系统 (Day 5)
+            initUserStats();
+            updateAchievementBadge();
+            
             createParticles();
             setupTabListeners();
             setupNavListeners();
@@ -2081,6 +2595,9 @@
             ]);
             
             startAutoRefresh();
+            
+            // 检查成就 (Day 5)
+            checkAchievements();
         }
 
         // ========== Modal Event Listeners (Day 4) ==========
