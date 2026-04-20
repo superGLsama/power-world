@@ -272,6 +272,24 @@
             margin: 0 0.2rem;
         }
 
+        /* Search Highlight (Day 7) */
+        .search-highlight {
+            background: rgba(0, 255, 209, 0.25);
+            color: #00FFD1;
+            border-radius: 3px;
+            padding: 0 2px;
+            font-weight: 600;
+        }
+
+        /* Filtered Count Animation (Day 7) */
+        .filtered-count {
+            transition: transform 0.2s ease;
+        }
+        .filtered-count.updating {
+            transform: scale(1.2);
+            color: #00FFD1;
+        }
+
         .keyboard-hint .hint-title {
             color: #00FFD1;
             margin-bottom: 0.5rem;
@@ -1991,7 +2009,7 @@
             </div>
 
             <div class="results-count" id="resultsCount">
-                <span>显示 <span class="count" id="filteredCount">0</span> 个Agent</span>
+                <span>显示 <span class="count filtered-count" id="filteredCount">0</span> 个Agent</span>
             </div>
 
             <!-- Sort Bar (Day 3) -->
@@ -2102,6 +2120,50 @@
     </div>
 
     <script>
+        // ========== Utility Functions (Day 7) ==========
+        /**
+         * 防抖函数 - 将高频触发合并为最后一次执行
+         * 学习来源：Day 2 JavaScript 性能优化
+         */
+        function debounce(fn, delay) {
+            let timer = null;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        /**
+         * 高亮搜索关键词 - 在文本中标记匹配部分
+         * 学习来源：Day 2 字符串处理与 DOM 操作
+         */
+        function highlightText(text, keyword) {
+            if (!keyword || !keyword.trim()) return text;
+            const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escaped})`, 'gi');
+            return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+        }
+
+        /**
+         * 数字动画 - 数值变化时平滑过渡
+         * 学习来源：Day 2 交互动画
+         */
+        function animateNumber(element, targetValue, duration = 400) {
+            const startValue = parseInt(element.textContent) || 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.round(startValue + (targetValue - startValue) * easeOut);
+                element.textContent = currentValue;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+        }
+
         // ========== Configuration ==========
         const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:3000'
@@ -2525,6 +2587,8 @@
             const heartClass = isLiked ? '❤️' : '🤍';
             const isFavorited = favoriteAgents.includes(agent.id);
             const starClass = isFavorited ? '⭐' : '☆';
+            // Day 7: 高亮搜索关键词
+            const displayName = highlightText(agent.name, currentSearch);
 
             return `
                 <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')">
@@ -2534,7 +2598,7 @@
                     </div>
                     <div class="card-content">
                         <div class="card-header">
-                            <span class="card-name">${agent.name}</span>
+                            <span class="card-name">${displayName}</span>
                             <span class="card-score">${agent.score}</span>
                         </div>
                         <div class="card-outfit">${itemsHtml}</div>
@@ -2627,8 +2691,15 @@
             // 应用排序 (Day 3)
             filtered = sortAgents(filtered);
 
-            // 更新结果计数
-            document.getElementById('filteredCount').textContent = filtered.length;
+            // Day 7: 结果计数带动画更新
+            const countEl = document.getElementById('filteredCount');
+            const prevCount = parseInt(countEl.textContent) || 0;
+            countEl.classList.add('updating');
+            setTimeout(() => {
+                countEl.textContent = filtered.length;
+                animateNumber(countEl, filtered.length, 300);
+                countEl.classList.remove('updating');
+            }, 50);
 
             // 渲染过滤后的结果
             const container = document.getElementById('outfits-container');
@@ -2658,12 +2729,15 @@
         }
 
         function renderNoResults() {
+            const searchTip = currentSearch
+                ? `没有找到包含 "<strong>${currentSearch}</strong>" 的Agent`
+                : '没有找到匹配的Agent';
             return `
                 <div class="no-results">
                     <div class="search-icon-large">🔍</div>
-                    <div class="message">没有找到匹配的Agent</div>
-                    <div class="suggestion">试试其他关键词或筛选条件</div>
-                    <button class="clear-search" onclick="clearFilters()" style="margin-top: 1rem;">清除筛选</button>
+                    <div class="message">${searchTip}</div>
+                    <div class="suggestion">${currentSearch ? '试试缩短关键词或换一个' : '试试其他筛选条件'}</div>
+                    ${currentSearch ? '<button class="clear-search" onclick="clearFilters()" style="margin-top: 1rem;">清除搜索</button>' : ''}
                 </div>
             `;
         }
@@ -2697,12 +2771,17 @@
             
             const index = likedAgents.indexOf(agentId);
             const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
+            const countEl = btn.querySelector('.like-count');
+            const baseCount = agent?.likes || 0;
             
             if (index === -1) {
-                // 点赞
+                // 点赞 - 乐观更新，立即显示 +1
                 likedAgents.push(agentId);
                 btn.classList.add('liked');
-                btn.innerHTML = `❤️ <span class="like-count">${(agent?.likes || 0) + 1}</span>`;
+                btn.innerHTML = `❤️ <span class="like-count">${baseCount + 1}</span>`;
+                // Day 7: 数字动画过渡
+                const newCountEl = btn.querySelector('.like-count');
+                animateNumber(newCountEl, baseCount + 1, 300);
                 
                 // 更新成就统计
                 userStats.likedCount = likedAgents.length;
@@ -2712,7 +2791,9 @@
                 // 取消点赞
                 likedAgents.splice(index, 1);
                 btn.classList.remove('liked');
-                btn.innerHTML = `🤍 <span class="like-count">${agent?.likes || 0}</span>`;
+                btn.innerHTML = `🤍 <span class="like-count">${baseCount}</span>`;
+                const newCountEl = btn.querySelector('.like-count');
+                animateNumber(newCountEl, baseCount, 200);
                 
                 // 更新成就统计
                 userStats.likedCount = likedAgents.length;
@@ -2722,21 +2803,24 @@
             // 保存到本地存储
             localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
             
-            // 添加心跳动画
-            btn.classList.add('liked');
-            setTimeout(() => btn.classList.remove('liked'), 600);
+            // 点赞脉冲动画
+            btn.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                btn.style.transform = '';
+                btn.classList.remove('liked');
+            }, 300);
         }
 
         function setupSearchListeners() {
             const searchInput = document.getElementById('searchInput');
-            let debounceTimer;
+            // Day 7: 使用抽取的 debounce 工具函数（替代内联写法）
+            const debouncedSearch = debounce((value) => {
+                currentSearch = value;
+                applyFilters();
+            }, 250);
 
             searchInput.addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    currentSearch = e.target.value;
-                    applyFilters();
-                }, 300);
+                debouncedSearch(e.target.value);
             });
 
             searchInput.addEventListener('keydown', (e) => {
