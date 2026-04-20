@@ -161,6 +161,123 @@
             box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
         }
 
+        .favorite-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 138, 0.1);
+            border: 1px solid rgba(255, 107, 138, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ff6b8a;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(255, 107, 138, 0.2);
+            transform: scale(1.1);
+        }
+
+        .favorite-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #ff6b8a, #ff4757);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(255, 107, 138, 0.4);
+        }
+
+        .favorite-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 138, 0.1);
+            border: 1px solid rgba(255, 107, 138, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ff6b8a;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(255, 107, 138, 0.2);
+            transform: scale(1.1);
+        }
+
+        .favorite-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #ff6b8a, #ff4757);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(255, 107, 138, 0.4);
+        }
+
+        /* Keyboard shortcut hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            font-size: 0.8rem;
+            color: #888;
+            z-index: 50;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+        }
+
+        .keyboard-hint.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .keyboard-hint kbd {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: rgba(107, 92, 231, 0.2);
+            border: 1px solid rgba(107, 92, 231, 0.4);
+            border-radius: 4px;
+            font-family: monospace;
+            color: #B8B5FF;
+            margin: 0 0.2rem;
+        }
+
+        .keyboard-hint .hint-title {
+            color: #00FFD1;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
         .points {
             display: flex;
             align-items: center;
@@ -890,6 +1007,32 @@
             transform: scale(1.2);
         }
 
+        /* Favorite card button (Day 6) */
+        .favorite-card-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            padding: 0.2rem;
+            color: #888;
+        }
+
+        .favorite-card-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .favorite-card-btn.favorited {
+            color: #FFD700;
+            animation: starPop 0.4s ease;
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
         .like-btn.liked {
             animation: heartBeat 0.6s ease;
         }
@@ -1426,6 +1569,231 @@
             visibility: visible;
         }
 
+        /* ========== Favorite Panel (Day 6) ========== */
+        .favorite-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(255, 107, 138, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .favorite-panel.active {
+            transform: translateX(0);
+        }
+
+        .favorite-panel-header {
+            padding: 1.5rem;
+            background: rgba(255, 107, 138, 0.1);
+            border-bottom: 1px solid rgba(255, 107, 138, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .favorite-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ff6b8a;
+        }
+
+        .favorite-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 107, 138, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .favorite-panel-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .favorite-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .favorite-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+
+        .favorite-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .favorite-empty-text {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #B8B5FF;
+        }
+
+        .favorite-empty-hint {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .favorite-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .favorite-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 107, 138, 0.05);
+            border: 1px solid rgba(255, 107, 138, 0.15);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .favorite-card:hover {
+            background: rgba(255, 107, 138, 0.1);
+            border-color: rgba(255, 107, 138, 0.3);
+            transform: translateX(-4px);
+        }
+
+        .favorite-card-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.3), rgba(0, 255, 209, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .favorite-card-avatar[data-rarity="ssr"] {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .favorite-card-avatar[data-rarity="sr"] {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.3), rgba(160, 160, 160, 0.2));
+        }
+
+        .favorite-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .favorite-card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .favorite-card-meta {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .favorite-card-score {
+            color: #00FFD1;
+            font-weight: 600;
+        }
+
+        .favorite-card-remove {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 107, 138, 0.1);
+            border-radius: 50%;
+            color: #ff6b8a;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .favorite-card-remove:hover {
+            background: rgba(255, 107, 107, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Mobile favorite panel */
+        @media (max-width: 480px) {
+            .favorite-panel {
+                max-width: 100%;
+            }
+
+            .favorite-card {
+                padding: 0.8rem;
+            }
+
+            .favorite-card-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Favorite button in modal */
+        .modal-favorite-btn {
+            background: rgba(255, 107, 138, 0.1);
+            border: 1px solid rgba(255, 107, 138, 0.3);
+            color: #ff6b8a;
+        }
+
+        .modal-favorite-btn:hover {
+            background: rgba(255, 107, 138, 0.2);
+        }
+
+        .modal-favorite-btn.favorited {
+            background: linear-gradient(90deg, #ff6b8a, #ff4757);
+            color: #fff;
+        }
+
+        @keyframes favoritePop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .favorite-btn.favorited {
+            animation: favoritePop 0.4s ease;
+        }
+
         /* Card entrance stagger animation */
         @keyframes cardEnter {
             from {
@@ -1484,6 +1852,10 @@
                 🏆
                 <span class="achievement-badge" id="achievementBadge">0</span>
             </button>
+            <button class="favorite-btn" id="favoriteBtn" onclick="toggleFavoritePanel()">
+                ❤️
+                <span class="favorite-badge" id="favoriteBadge">0</span>
+            </button>
             <div class="points">
                 <span class="points-icon">💎</span>
                 <span class="points-value" id="my-points">--</span>
@@ -1516,6 +1888,28 @@
                 <div class="achievement-stat-label">总成就</div>
             </div>
         </div>
+    </div>
+
+    <!-- Favorite Panel (Day 6) -->
+    <div class="favorite-panel" id="favoritePanel">
+        <div class="favorite-panel-header">
+            <div class="favorite-panel-title">
+                <span>❤️</span> 我的收藏
+            </div>
+            <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
+        </div>
+        <div class="favorite-panel-body" id="favoritePanelBody">
+            <!-- Favorite items will be populated -->
+        </div>
+    </div>
+
+    <!-- Keyboard Hint (Day 6) -->
+    <div class="keyboard-hint" id="keyboardHint">
+        <div class="hint-title">⌨️ 快捷键</div>
+        <div><kbd>/</kbd> 搜索</div>
+        <div><kbd>F</kbd> 收藏</div>
+        <div><kbd>Esc</kbd> 关闭</div>
+        <div><kbd>?</kbd> 帮助</div>
     </div>
 
     <button class="mobile-toggle" id="mobileToggle">👤</button>
@@ -1671,6 +2065,10 @@
                         <span id="follow-icon">🤝</span>
                         <span id="follow-text">关注</span>
                     </button>
+                    <button class="modal-btn modal-favorite-btn" id="modal-favorite-btn" onclick="toggleFavorite()">
+                        <span id="favorite-icon">🤍</span>
+                        <span id="favorite-text">收藏</span>
+                    </button>
                     <button class="modal-btn modal-btn-secondary" onclick="shareAgent()">
                         <span>📤</span> 分享
                     </button>
@@ -1719,9 +2117,10 @@
         let currentSort = 'default'; // 排序方式 (Day 3)
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
+        let favoriteAgents = JSON.parse(localStorage.getItem('favoriteAgents') || '[]'); // 收藏记录 (Day 6)
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
 
-        // ========== Achievement System (Day 5) ==========
+        // ========== Achievement System (Day 5, Updated Day 6) ==========
         const ACHIEVEMENTS = {
             interaction: [
                 { id: 'first_like', name: '初次心动', icon: '💖', desc: '首次点赞', target: 1, key: 'likedCount' },
@@ -1730,6 +2129,9 @@
                 { id: 'first_follow', name: '社交新星', icon: '🤝', desc: '首次关注', target: 1, key: 'followedCount' },
                 { id: 'follow_5', name: '好友满天下', icon: '👥', desc: '关注5个Agent', target: 5, key: 'followedCount' },
                 { id: 'first_share', name: '分享使者', icon: '📤', desc: '首次分享', target: 1, key: 'shareCount' },
+                { id: 'first_favorite', name: '初次收藏', icon: '⭐', desc: '首次收藏Agent', target: 1, key: 'favoriteCount' },
+                { id: 'favorite_5', name: '精选达人', icon: '🌟', desc: '收藏5个Agent', target: 5, key: 'favoriteCount' },
+                { id: 'favorite_10', name: '收藏世家', icon: '💫', desc: '收藏10个Agent', target: 10, key: 'favoriteCount' },
             ],
             explorer: [
                 { id: 'view_10', name: '探索者', icon: '🔍', desc: '查看10个Agent', target: 10, key: 'viewedCount' },
@@ -1754,6 +2156,7 @@
             if (!userStats.likedCount) userStats.likedCount = likedAgents.length;
             if (!userStats.followedCount) userStats.followedCount = followedAgents.length;
             if (!userStats.shareCount) userStats.shareCount = 0;
+            if (!userStats.favoriteCount) userStats.favoriteCount = favoriteAgents.length;
             if (!userStats.viewedCount) userStats.viewedCount = 0;
             if (!userStats.hotViewCount) userStats.hotViewCount = 0;
             if (!userStats.rarityTypes) userStats.rarityTypes = [];
@@ -1839,6 +2242,149 @@
             const count = unlockedAchievements.length;
             badge.textContent = count;
             badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        // ========== Favorite System (Day 6) ==========
+        function updateFavoriteBadge() {
+            const badge = document.getElementById('favoriteBadge');
+            const count = favoriteAgents.length;
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        function toggleFavoritePanel() {
+            const panel = document.getElementById('favoritePanel');
+            const overlay = document.getElementById('panelOverlay');
+            const isOpen = panel.classList.contains('active');
+            
+            if (isOpen) {
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                // Close achievement panel if open
+                document.getElementById('achievementPanel').classList.remove('active');
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                overlay.onclick = toggleFavoritePanel;
+                document.body.style.overflow = 'hidden';
+                renderFavoritePanel();
+            }
+        }
+
+        function renderFavoritePanel() {
+            const body = document.getElementById('favoritePanelBody');
+            
+            if (favoriteAgents.length === 0) {
+                body.innerHTML = `
+                    <div class="favorite-empty">
+                        <div class="favorite-empty-icon">💫</div>
+                        <div class="favorite-empty-text">还没有收藏任何Agent</div>
+                        <div class="favorite-empty-hint">点击Agent卡片中的❤️来收藏</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const favoriteList = favoriteAgents.map(id => {
+                const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+                return agent;
+            }).filter(Boolean);
+
+            if (favoriteList.length === 0) {
+                body.innerHTML = `
+                    <div class="favorite-empty">
+                        <div class="favorite-empty-icon">💫</div>
+                        <div class="favorite-empty-text">收藏的Agent暂时不在列表中</div>
+                        <div class="favorite-empty-hint">去首页探索更多Agent吧</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="favorite-list">';
+            favoriteList.forEach(agent => {
+                html += `
+                    <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
+                        <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
+                        <div class="favorite-card-info">
+                            <div class="favorite-card-name">${agent.name}</div>
+                            <div class="favorite-card-meta">
+                                <span class="favorite-card-score">${agent.fashion_score}</span>
+                                <span>时尚值</span>
+                            </div>
+                        </div>
+                        <button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            body.innerHTML = html;
+        }
+
+        function toggleFavorite(agentId) {
+            agentId = agentId || currentModalAgent?.id;
+            if (!agentId) return;
+
+            const index = favoriteAgents.indexOf(agentId);
+            if (index > -1) {
+                favoriteAgents.splice(index, 1);
+                showToast('已取消收藏');
+            } else {
+                favoriteAgents.push(agentId);
+                showToast('已添加到收藏');
+            }
+            saveFavoriteAgents();
+            updateFavoriteBadge();
+            updateFavoriteButton(agentId);
+            
+            // 更新成就统计
+            userStats.favoriteCount = favoriteAgents.length;
+            saveUserStats();
+            checkAchievements();
+        }
+
+        function removeFavorite(agentId) {
+            const index = favoriteAgents.indexOf(agentId);
+            if (index > -1) {
+                favoriteAgents.splice(index, 1);
+                saveFavoriteAgents();
+                updateFavoriteBadge();
+                renderFavoritePanel();
+                showToast('已取消收藏');
+                
+                // 如果在详情弹窗中，更新按钮状态
+                if (currentModalAgent?.id === agentId) {
+                    updateFavoriteButton(agentId);
+                }
+            }
+        }
+
+        function saveFavoriteAgents() {
+            localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
+        }
+
+        function updateFavoriteButton(agentId) {
+            agentId = agentId || currentModalAgent?.id;
+            if (!agentId) return;
+            
+            const btn = document.getElementById('modal-favorite-btn');
+            const icon = document.getElementById('favorite-icon');
+            const text = document.getElementById('favorite-text');
+            
+            if (favoriteAgents.includes(agentId)) {
+                btn.classList.add('favorited');
+                icon.textContent = '❤️';
+                text.textContent = '已收藏';
+            } else {
+                btn.classList.remove('favorited');
+                icon.textContent = '🤍';
+                text.textContent = '收藏';
+            }
+        }
+
+        function isAgentFavorited(agentId) {
+            return favoriteAgents.includes(agentId);
         }
 
         function renderAchievementPanel() {
@@ -1977,6 +2523,8 @@
             const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
             const isLiked = likedAgents.includes(agent.id);
             const heartClass = isLiked ? '❤️' : '🤍';
+            const isFavorited = favoriteAgents.includes(agent.id);
+            const starClass = isFavorited ? '⭐' : '☆';
 
             return `
                 <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')">
@@ -1992,9 +2540,14 @@
                         <div class="card-outfit">${itemsHtml}</div>
                         <div class="card-footer">
                             <div class="card-tags">${tagsHtml}</div>
-                            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
-                                ${heartClass} <span class="like-count">${agent.likes}</span>
-                            </button>
+                            <div class="card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
+                                    ${heartClass} <span class="like-count">${agent.likes}</span>
+                                </button>
+                                <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
+                                    ${starClass}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2320,6 +2873,9 @@
 
             // 更新关注按钮状态
             updateFollowButton(agent.id);
+            
+            // 更新收藏按钮状态 (Day 6)
+            updateFavoriteButton(agent.id);
 
             // 显示弹窗
             modal.classList.add('active');
@@ -2579,6 +3135,7 @@
             // 初始化成就系统 (Day 5)
             initUserStats();
             updateAchievementBadge();
+            updateFavoriteBadge(); // Day 6: 初始化收藏角标
             
             createParticles();
             setupTabListeners();
@@ -2587,6 +3144,7 @@
             setupSearchListeners(); // Day 2: 搜索功能
             setupFilterListeners(); // Day 2: 筛选功能
             setupModalListeners(); // Day 4: 弹窗关闭事件
+            setupKeyboardShortcuts(); // Day 6: 快捷键支持
 
             // Load initial data
             await Promise.all([
@@ -2598,6 +3156,60 @@
             
             // 检查成就 (Day 5)
             checkAchievements();
+        }
+
+        // ========== Keyboard Shortcuts (Day 6) ==========
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // 忽略在输入框中的快捷键
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                // '/' - 聚焦搜索框
+                if (e.key === '/') {
+                    e.preventDefault();
+                    document.querySelector('.search-input')?.focus();
+                }
+
+                // 'f' 或 'F' - 收藏当前查看的Agent
+                if (e.key === 'f' || e.key === 'F') {
+                    if (currentModalAgent) {
+                        toggleFavorite(currentModalAgent.id);
+                    }
+                }
+
+                // '?' - 显示/隐藏快捷键帮助
+                if (e.key === '?') {
+                    showKeyboardHint();
+                }
+
+                // 'Escape' - 关闭弹窗/面板
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('agent-modal');
+                    const achievementPanel = document.getElementById('achievementPanel');
+                    const favoritePanel = document.getElementById('favoritePanel');
+                    const keyboardHint = document.getElementById('keyboardHint');
+
+                    if (keyboardHint.classList.contains('show')) {
+                        keyboardHint.classList.remove('show');
+                    } else if (modal.classList.contains('active')) {
+                        closeModal();
+                    } else if (favoritePanel.classList.contains('active')) {
+                        toggleFavoritePanel();
+                    } else if (achievementPanel.classList.contains('active')) {
+                        toggleAchievementPanel();
+                    }
+                }
+            });
+        }
+
+        function showKeyboardHint() {
+            const hint = document.getElementById('keyboardHint');
+            hint.classList.add('show');
+            setTimeout(() => {
+                hint.classList.remove('show');
+            }, 3000);
         }
 
         // ========== Modal Event Listeners (Day 4) ==========
