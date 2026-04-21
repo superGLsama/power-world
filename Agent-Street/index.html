@@ -866,6 +866,143 @@
             color: #fff;
         }
 
+        /* ========== Tag Filter (Day 7) ========== */
+        .tag-filter-section {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(107, 92, 231, 0.1);
+        }
+
+        .tag-filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .tag-filter-title {
+            font-size: 0.85rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-filter-clear {
+            background: none;
+            border: none;
+            color: #ff6b8a;
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .tag-filter-clear:hover {
+            background: rgba(255, 107, 138, 0.1);
+        }
+
+        .tag-filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag-filter-btn {
+            padding: 0.4rem 0.8rem;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid rgba(107, 92, 231, 0.2);
+            border-radius: 20px;
+            color: #B8B5FF;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .tag-filter-btn:hover {
+            background: rgba(107, 92, 231, 0.2);
+            border-color: rgba(0, 255, 209, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .tag-filter-btn.active {
+            background: linear-gradient(90deg, rgba(0, 255, 209, 0.2), rgba(0, 255, 209, 0.1));
+            border-color: #00FFD1;
+            color: #00FFD1;
+        }
+
+        .tag-filter-btn .tag-icon {
+            font-size: 0.9rem;
+        }
+
+        .active-tags-display {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed rgba(107, 92, 231, 0.2);
+        }
+
+        .active-tag-chip {
+            padding: 0.2rem 0.6rem;
+            background: linear-gradient(90deg, rgba(0, 255, 209, 0.15), rgba(0, 255, 209, 0.1));
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 15px;
+            font-size: 0.75rem;
+            color: #00FFD1;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            animation: tagChipIn 0.2s ease;
+        }
+
+        .active-tag-chip .remove-tag {
+            background: none;
+            border: none;
+            color: #00FFD1;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.8rem;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .active-tag-chip .remove-tag:hover {
+            opacity: 1;
+        }
+
+        @keyframes tagChipIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Mobile tag filter */
+        @media (max-width: 600px) {
+            .tag-filter-group {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 0.5rem;
+            }
+
+            .tag-filter-btn {
+                flex-shrink: 0;
+            }
+        }
+
         .results-count {
             display: flex;
             justify-content: space-between;
@@ -2008,6 +2145,20 @@
                 </div>
             </div>
 
+            <!-- Tag Filter (Day 7) -->
+            <div class="tag-filter-section">
+                <div class="tag-filter-header">
+                    <div class="tag-filter-title">
+                        <span>🏷️</span> 风格筛选
+                    </div>
+                    <button class="tag-filter-clear" id="clearTagFilters" onclick="clearTagFilters()" style="display: none;">清除标签</button>
+                </div>
+                <div class="tag-filter-group" id="tagFilterGroup">
+                    <!-- Tags will be dynamically populated -->
+                </div>
+                <div class="active-tags-display" id="activeTagsDisplay" style="display: none;"></div>
+            </div>
+
             <div class="results-count" id="resultsCount">
                 <span>显示 <span class="count filtered-count" id="filteredCount">0</span> 个Agent</span>
             </div>
@@ -2177,6 +2328,8 @@
         let currentSearch = ''; // 搜索关键词 (Day 2)
         let currentRarity = 'all'; // 稀有度筛选 (Day 2)
         let currentSort = 'default'; // 排序方式 (Day 3)
+        let currentTags = []; // 标签筛选 (Day 7)
+        let availableTags = []; // 可用标签列表 (Day 7)
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
         let favoriteAgents = JSON.parse(localStorage.getItem('favoriteAgents') || '[]'); // 收藏记录 (Day 6)
@@ -2682,6 +2835,13 @@
                 );
             }
 
+            // 按标签筛选 (Day 7)
+            if (currentTags.length > 0) {
+                filtered = filtered.filter(agent =>
+                    currentTags.every(tag => agent.tags.includes(tag))
+                );
+            }
+
             return filtered;
         }
 
@@ -2746,6 +2906,7 @@
             currentSearch = '';
             currentRarity = 'all';
             currentSort = 'default';
+            currentTags = []; // Day 7: 清除标签筛选
             document.getElementById('searchInput').value = '';
 
             // 重置筛选按钮状态
@@ -2758,8 +2919,171 @@
                 btn.classList.toggle('active', btn.dataset.sort === 'default');
             });
 
+            // 重置标签筛选状态 (Day 7)
+            document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            updateActiveTagsDisplay();
+            updateClearTagButton();
+
             // 重新应用筛选
             applyFilters();
+        }
+
+        // ========== Tag Filter Functions (Day 7) ==========
+        /**
+         * 从数据中提取所有可用标签
+         */
+        function extractAvailableTags() {
+            const tagSet = new Set();
+            allAgentsData.forEach(agent => {
+                if (agent.tags) {
+                    agent.tags.forEach(tag => tagSet.add(tag));
+                }
+            });
+            // 转换为数组并排序
+            return Array.from(tagSet).sort();
+        }
+
+        /**
+         * 标签图标映射
+         */
+        function getTagIcon(tag) {
+            const iconMap = {
+                '#街头': '🛹',
+                '#科技': '🤖',
+                '#赛博朋克': '🌃',
+                '#可爱': '🎀',
+                '#优雅': '👑',
+                '#暗黑': '🦇',
+                '#极简': '⬜',
+                '#未来': '🚀',
+                '#艺术': '🎨',
+                '#复古': '📻',
+                '#梦幻': '🌈',
+                '#东方': '🏯',
+                '#运动': '⚽'
+            };
+            return iconMap[tag] || '🏷️';
+        }
+
+        /**
+         * 渲染标签筛选按钮
+         */
+        function renderTagFilters() {
+            const container = document.getElementById('tagFilterGroup');
+            availableTags = extractAvailableTags();
+            
+            if (availableTags.length === 0) {
+                container.innerHTML = '<span style="color: #666; font-size: 0.85rem;">暂无标签</span>';
+                return;
+            }
+
+            container.innerHTML = availableTags.map(tag => {
+                const isActive = currentTags.includes(tag);
+                const icon = getTagIcon(tag);
+                return `<button class="tag-filter-btn ${isActive ? 'active' : ''}" 
+                    data-tag="${tag}" 
+                    onclick="toggleTagFilter('${tag}')">
+                    <span class="tag-icon">${icon}</span>
+                    ${tag}
+                </button>`;
+            }).join('');
+        }
+
+        /**
+         * 切换标签筛选
+         */
+        function toggleTagFilter(tag) {
+            const index = currentTags.indexOf(tag);
+            if (index > -1) {
+                // 取消选中
+                currentTags.splice(index, 1);
+            } else {
+                // 选中
+                currentTags.push(tag);
+            }
+            
+            // 更新按钮状态
+            updateTagButtons();
+            updateActiveTagsDisplay();
+            updateClearTagButton();
+            
+            // 重新应用筛选
+            applyFilters();
+        }
+
+        /**
+         * 更新标签按钮状态
+         */
+        function updateTagButtons() {
+            document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+                const tag = btn.dataset.tag;
+                btn.classList.toggle('active', currentTags.includes(tag));
+            });
+        }
+
+        /**
+         * 更新已选标签显示
+         */
+        function updateActiveTagsDisplay() {
+            const container = document.getElementById('activeTagsDisplay');
+            const clearBtn = document.getElementById('clearTagFilters');
+            
+            if (currentTags.length === 0) {
+                container.style.display = 'none';
+                clearBtn.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'flex';
+            clearBtn.style.display = 'block';
+            
+            container.innerHTML = currentTags.map(tag => {
+                const icon = getTagIcon(tag);
+                return `<div class="active-tag-chip">
+                    <span>${icon}</span>
+                    <span>${tag}</span>
+                    <button class="remove-tag" onclick="removeTagFilter('${tag}')">✕</button>
+                </div>`;
+            }).join('');
+        }
+
+        /**
+         * 更新清除标签按钮显示
+         */
+        function updateClearTagButton() {
+            const clearBtn = document.getElementById('clearTagFilters');
+            if (currentTags.length > 0) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        /**
+         * 清除所有标签筛选
+         */
+        function clearTagFilters() {
+            currentTags = [];
+            updateTagButtons();
+            updateActiveTagsDisplay();
+            updateClearTagButton();
+            applyFilters();
+        }
+
+        /**
+         * 移除单个标签筛选
+         */
+        function removeTagFilter(tag) {
+            const index = currentTags.indexOf(tag);
+            if (index > -1) {
+                currentTags.splice(index, 1);
+                updateTagButtons();
+                updateActiveTagsDisplay();
+                updateClearTagButton();
+                applyFilters();
+            }
         }
 
         // ========== Like Function (Day 3) ==========
@@ -2893,10 +3217,14 @@
                 allAgentsData = agents;
                 agentsData = agents;
 
+                // 渲染标签筛选 (Day 7)
+                renderTagFilters();
+
                 // 重置搜索、筛选和排序状态
                 currentSearch = '';
                 currentRarity = 'all';
                 currentSort = 'default';
+                currentTags = []; // Day 7: 重置标签筛选
                 document.getElementById('searchInput').value = '';
                 document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.rarity === 'all');
@@ -2904,6 +3232,8 @@
                 document.querySelectorAll('.sort-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.sort === 'default');
                 });
+                updateActiveTagsDisplay();
+                updateClearTagButton();
 
                 // 更新结果计数
                 document.getElementById('filteredCount').textContent = agents.length;
