@@ -260,6 +260,46 @@
             box-shadow: 0 2px 8px rgba(255, 107, 138, 0.4);
         }
 
+        /* Recent Viewed Button (Day 9) */
+        .recent-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(100, 181, 246, 0.15);
+            border: 1px solid rgba(100, 181, 246, 0.25);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #64b5f6;
+        }
+
+        .recent-btn:hover {
+            background: rgba(100, 181, 246, 0.25);
+            transform: scale(1.1);
+        }
+
+        .recent-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(100, 181, 246, 0.4);
+        }
+
         .favorite-btn {
             position: relative;
             width: 40px;
@@ -1908,6 +1948,223 @@
             color: #666;
         }
 
+        /* ========== Recent Viewed Panel (Day 9) ========== */
+        .recent-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(100, 181, 246, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .recent-panel.active {
+            transform: translateX(0);
+        }
+
+        .recent-panel-header {
+            padding: 1.5rem;
+            background: rgba(100, 181, 246, 0.1);
+            border-bottom: 1px solid rgba(100, 181, 246, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recent-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64b5f6;
+        }
+
+        .recent-panel-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recent-clear-btn {
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            color: #ff6b8a;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-clear-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .recent-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(100, 181, 246, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .recent-panel-close:hover {
+            background: rgba(100, 181, 246, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .recent-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .recent-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+
+        .recent-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .recent-empty-text {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #B8B5FF;
+        }
+
+        .recent-empty-hint {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recent-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(100, 181, 246, 0.05);
+            border: 1px solid rgba(100, 181, 246, 0.15);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-card:hover {
+            background: rgba(100, 181, 246, 0.1);
+            border-color: rgba(100, 181, 246, 0.3);
+            transform: translateX(-4px);
+        }
+
+        .recent-card-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.3), rgba(0, 255, 209, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .recent-card-avatar[data-rarity="ssr"] {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .recent-card-avatar[data-rarity="sr"] {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.3), rgba(255, 64, 129, 0.2));
+            box-shadow: 0 0 20px rgba(156, 39, 176, 0.2);
+        }
+
+        .recent-card-avatar[data-rarity="r"] {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.3), rgba(66, 165, 245, 0.2));
+            box-shadow: 0 0 20px rgba(100, 181, 246, 0.2);
+        }
+
+        .recent-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .recent-card-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recent-card-rarity {
+            display: flex;
+            align-items: center;
+        }
+
+        .recent-card-remove {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 50%;
+            color: #ff6b8a;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .recent-card-remove:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        /* Mobile Recent Panel */
+        @media (max-width: 480px) {
+            .recent-panel {
+                max-width: 100%;
+            }
+
+            .recent-card {
+                padding: 0.8rem;
+            }
+
+            .recent-card-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+
         .favorite-list {
             display: flex;
             flex-direction: column;
@@ -2106,6 +2363,10 @@
                 🏆
                 <span class="achievement-badge" id="achievementBadge">0</span>
             </button>
+            <button class="recent-btn" id="recentBtn" onclick="toggleRecentPanel()">
+                🕐
+                <span class="recent-badge" id="recentBadge">0</span>
+            </button>
             <button class="favorite-btn" id="favoriteBtn" onclick="toggleFavoritePanel()">
                 ❤️
                 <span class="favorite-badge" id="favoriteBadge">0</span>
@@ -2157,11 +2418,28 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8) -->
+    <!-- Recent Viewed Panel (Day 9) -->
+    <div class="recent-panel" id="recentPanel">
+        <div class="recent-panel-header">
+            <div class="recent-panel-title">
+                <span>🕐</span> 最近浏览
+            </div>
+            <div class="recent-panel-actions">
+                <button class="recent-clear-btn" id="clearRecentBtn" onclick="clearRecentlyViewed()">清空</button>
+                <button class="recent-panel-close" onclick="toggleRecentPanel()">✕</button>
+            </div>
+        </div>
+        <div class="recent-panel-body" id="recentPanelBody">
+            <!-- Recent items will be populated -->
+        </div>
+    </div>
+
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div><kbd>/</kbd> 搜索</div>
         <div><kbd>T</kbd> 主题</div>
+        <div><kbd>R</kbd> 浏览</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
@@ -2458,6 +2736,8 @@
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
         let favoriteAgents = JSON.parse(localStorage.getItem('favoriteAgents') || '[]'); // 收藏记录 (Day 6)
+        let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]'); // 最近浏览 (Day 9)
+        const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
 
         // ========== Achievement System (Day 5, Updated Day 6) ==========
@@ -2590,6 +2870,119 @@
             const count = favoriteAgents.length;
             badge.textContent = count;
             badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        // ========== Recently Viewed System (Day 9) ==========
+        function updateRecentBadge() {
+            const badge = document.getElementById('recentBadge');
+            const count = recentlyViewed.length;
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'flex' : 'none';
+            
+            const clearBtn = document.getElementById('clearRecentBtn');
+            if (clearBtn) {
+                clearBtn.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+        function toggleRecentPanel() {
+            const panel = document.getElementById('recentPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const isOpen = panel.classList.contains('active');
+            
+            if (isOpen) {
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                // Close other panels if open
+                document.getElementById('achievementPanel').classList.remove('active');
+                document.getElementById('favoritePanel').classList.remove('active');
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                overlay.onclick = toggleRecentPanel;
+                document.body.style.overflow = 'hidden';
+                renderRecentPanel();
+            }
+        }
+
+        function renderRecentPanel() {
+            const body = document.getElementById('recentPanelBody');
+            
+            if (recentlyViewed.length === 0) {
+                body.innerHTML = `
+                    <div class="recent-empty">
+                        <div class="recent-empty-icon">🔍</div>
+                        <div class="recent-empty-text">还没有浏览记录</div>
+                        <div class="recent-empty-hint">点击Agent卡片即可记录浏览</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const recentList = recentlyViewed.map(agent => {
+                const rarityClass = `rarity-${agent.rarity.toLowerCase()}`;
+                return `
+                    <div class="recent-card" onclick="openModal('${agent.id}')">
+                        <div class="recent-card-avatar ${rarityClass}" data-rarity="${agent.rarity}">
+                            ${agent.avatar}
+                        </div>
+                        <div class="recent-card-info">
+                            <div class="recent-card-name">${agent.name}</div>
+                            <div class="recent-card-rarity">
+                                <span class="rarity-badge ${rarityClass}">${agent.rarity}</span>
+                            </div>
+                        </div>
+                        <button class="recent-card-remove" onclick="event.stopPropagation(); removeFromRecentlyViewed('${agent.id}')">✕</button>
+                    </div>
+                `;
+            }).join('');
+
+            body.innerHTML = `<div class="recent-list">${recentList}</div>`;
+        }
+
+        function addToRecentlyViewed(agent) {
+            // Remove if already exists
+            const index = recentlyViewed.findIndex(a => a.id === agent.id);
+            if (index > -1) {
+                recentlyViewed.splice(index, 1);
+            }
+            
+            // Add to the beginning
+            recentlyViewed.unshift({
+                id: agent.id,
+                name: agent.name,
+                avatar: agent.avatar,
+                rarity: agent.rarity
+            });
+            
+            // Limit the size
+            if (recentlyViewed.length > MAX_RECENTLY_VIEWED) {
+                recentlyViewed = recentlyViewed.slice(0, MAX_RECENTLY_VIEWED);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+            updateRecentBadge();
+        }
+
+        function removeFromRecentlyViewed(agentId) {
+            const index = recentlyViewed.findIndex(a => a.id === agentId);
+            if (index > -1) {
+                recentlyViewed.splice(index, 1);
+                localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+                updateRecentBadge();
+                renderRecentPanel();
+            }
+        }
+
+        function clearRecentlyViewed() {
+            if (recentlyViewed.length === 0) return;
+            
+            recentlyViewed = [];
+            localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+            updateRecentBadge();
+            renderRecentPanel();
         }
 
         function toggleFavoritePanel() {
@@ -3368,7 +3761,7 @@
             }
         }
 
-        // ========== Agent Modal Functions (Day 4) ==========
+        // ========== Agent Modal Functions (Day 4, Day 9) ==========
         function openAgentModal(agentId) {
             // 查找 agent 数据
             const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
@@ -3383,6 +3776,9 @@
             }
             saveUserStats();
             checkAchievements();
+
+            // 添加到最近浏览 (Day 9)
+            addToRecentlyViewed(agent);
 
             // 填充弹窗内容
             const modal = document.getElementById('agent-modal');
@@ -3677,6 +4073,7 @@
             initUserStats();
             updateAchievementBadge();
             updateFavoriteBadge(); // Day 6: 初始化收藏角标
+            updateRecentBadge(); // Day 9: 初始化最近浏览角标
             
             createParticles();
             setupTabListeners();
@@ -3718,6 +4115,11 @@
                     toggleTheme();
                 }
 
+                // 'r' 或 'R' - 切换最近浏览面板 (Day 9)
+                if (e.key === 'r' || e.key === 'R') {
+                    toggleRecentPanel();
+                }
+
                 // 'f' 或 'F' - 收藏当前查看的Agent
                 if (e.key === 'f' || e.key === 'F') {
                     if (currentModalAgent) {
@@ -3735,6 +4137,7 @@
                     const modal = document.getElementById('agent-modal');
                     const achievementPanel = document.getElementById('achievementPanel');
                     const favoritePanel = document.getElementById('favoritePanel');
+                    const recentPanel = document.getElementById('recentPanel'); // Day 9
                     const keyboardHint = document.getElementById('keyboardHint');
 
                     if (keyboardHint.classList.contains('show')) {
@@ -3743,6 +4146,8 @@
                         closeModal();
                     } else if (favoritePanel.classList.contains('active')) {
                         toggleFavoritePanel();
+                    } else if (recentPanel.classList.contains('active')) { // Day 9
+                        toggleRecentPanel();
                     } else if (achievementPanel.classList.contains('active')) {
                         toggleAchievementPanel();
                     }
