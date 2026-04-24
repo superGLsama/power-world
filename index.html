@@ -282,6 +282,33 @@
             transform: scale(1.1);
         }
 
+        /* Settings Button (Day 10) */
+        .settings-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(156, 136, 255, 0.15);
+            border: 1px solid rgba(156, 136, 255, 0.25);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #9c88ff;
+        }
+
+        .settings-btn:hover {
+            background: rgba(156, 136, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .settings-btn.active {
+            background: rgba(156, 136, 255, 0.3);
+            box-shadow: 0 0 15px rgba(156, 136, 255, 0.4);
+        }
+
         .recent-badge {
             position: absolute;
             top: -4px;
@@ -1859,6 +1886,280 @@
             visibility: visible;
         }
 
+        /* ========== Settings Panel (Day 10) ========== */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(156, 136, 255, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .settings-panel.active {
+            transform: translateX(0);
+        }
+
+        .settings-panel-header {
+            padding: 1.5rem;
+            background: rgba(156, 136, 255, 0.1);
+            border-bottom: 1px solid rgba(156, 136, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(156, 136, 255, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-panel-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .settings-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .settings-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-section-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-card {
+            background: rgba(156, 136, 255, 0.05);
+            border: 1px solid rgba(156, 136, 255, 0.15);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .settings-card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .settings-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .settings-action-btn {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .settings-action-btn.primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #fff;
+        }
+
+        .settings-action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(107, 92, 231, 0.4);
+        }
+
+        .settings-action-btn.secondary {
+            background: rgba(156, 136, 255, 0.15);
+            color: var(--text-primary);
+            border: 1px solid rgba(156, 136, 255, 0.25);
+        }
+
+        .settings-action-btn.secondary:hover {
+            background: rgba(156, 136, 255, 0.25);
+        }
+
+        .settings-action-btn.danger {
+            background: rgba(255, 107, 138, 0.15);
+            color: var(--accent-danger);
+            border: 1px solid rgba(255, 107, 138, 0.25);
+        }
+
+        .settings-action-btn.danger:hover {
+            background: rgba(255, 107, 138, 0.25);
+        }
+
+        .settings-action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .settings-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .settings-stat-item {
+            text-align: center;
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 12px;
+        }
+
+        .settings-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-secondary);
+        }
+
+        .settings-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .settings-info-box {
+            background: rgba(0, 255, 209, 0.1);
+            border: 1px solid rgba(0, 255, 209, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .settings-info-box p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .confirm-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-modal-content {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border: 1px solid var(--accent-danger);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 350px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .confirm-modal.active .confirm-modal-content {
+            transform: scale(1);
+        }
+
+        .confirm-modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .confirm-modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirm-modal-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Mobile Settings Panel */
+        @media (max-width: 480px) {
+            .settings-panel {
+                max-width: 100%;
+            }
+        }
+
         /* ========== Favorite Panel (Day 6) ========== */
         .favorite-panel {
             position: fixed;
@@ -2371,6 +2672,9 @@
                 ❤️
                 <span class="favorite-badge" id="favoriteBadge">0</span>
             </button>
+            <button class="settings-btn" id="settingsBtn" onclick="toggleSettingsPanel()">
+                📦
+            </button>
             <div class="points">
                 <span class="points-icon">💎</span>
                 <span class="points-value" id="my-points">--</span>
@@ -2380,7 +2684,7 @@
     </header>
 
     <!-- Panel Overlay -->
-    <div class="panel-overlay" id="panelOverlay" onclick="toggleAchievementPanel()"></div>
+    <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
 
     <!-- Achievement Panel (Day 5) -->
     <div class="achievement-panel" id="achievementPanel">
@@ -2434,12 +2738,99 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9) -->
+    <!-- Settings Panel (Day 10) -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-panel-header">
+            <div class="settings-panel-title">
+                <span>📦</span> 数据管理
+            </div>
+            <button class="settings-panel-close" onclick="toggleSettingsPanel()">✕</button>
+        </div>
+        <div class="settings-panel-body">
+            <!-- 数据统计 -->
+            <div class="settings-section">
+                <div class="settings-section-title">📊 数据统计</div>
+                <div class="settings-stats">
+                    <div class="settings-stat-item">
+                        <div class="settings-stat-value" id="settingsFavoriteCount">0</div>
+                        <div class="settings-stat-label">收藏</div>
+                    </div>
+                    <div class="settings-stat-item">
+                        <div class="settings-stat-value" id="settingsRecentCount">0</div>
+                        <div class="settings-stat-label">浏览</div>
+                    </div>
+                    <div class="settings-stat-item">
+                        <div class="settings-stat-value" id="settingsAchievementCount">0</div>
+                        <div class="settings-stat-label">成就</div>
+                    </div>
+                    <div class="settings-stat-item">
+                        <div class="settings-stat-value" id="settingsThemeName">深色</div>
+                        <div class="settings-stat-label">主题</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 导出数据 -->
+            <div class="settings-section">
+                <div class="settings-section-title">💾 导出与导入</div>
+                <div class="settings-card">
+                    <div class="settings-card-title">📤 导出数据</div>
+                    <div class="settings-card-desc">将所有个人数据（收藏、浏览历史、成就等）导出为备份文件</div>
+                    <button class="settings-action-btn primary" onclick="exportUserData()">
+                        <span>⬇️</span> 导出备份
+                    </button>
+                </div>
+                <div class="settings-card">
+                    <div class="settings-card-title">📥 导入数据</div>
+                    <div class="settings-card-desc">从备份文件恢复所有个人数据</div>
+                    <div class="file-input-wrapper">
+                        <button class="settings-action-btn secondary" onclick="document.getElementById('importFileInput').click()">
+                            <span>📁</span> 选择备份文件
+                        </button>
+                        <input type="file" id="importFileInput" accept=".json" onchange="importUserData(this)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 危险操作 -->
+            <div class="settings-section">
+                <div class="settings-section-title">⚠️ 危险操作</div>
+                <div class="settings-card">
+                    <div class="settings-card-title">🗑️ 重置数据</div>
+                    <div class="settings-card-desc">清除所有个人数据，包括收藏、浏览历史、成就等。此操作不可撤销！</div>
+                    <button class="settings-action-btn danger" onclick="showResetConfirm()">
+                        <span>⚡</span> 重置所有数据
+                    </button>
+                </div>
+            </div>
+
+            <!-- 使用说明 -->
+            <div class="settings-info-box">
+                <p>💡 <strong>备份建议</strong>：定期导出数据可防止数据丢失。导入数据时会覆盖现有数据，请谨慎操作。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal (Day 10) -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-modal-content">
+            <div class="confirm-modal-icon">⚠️</div>
+            <div class="confirm-modal-title">确认重置数据？</div>
+            <div class="confirm-modal-desc">这将清除所有收藏、浏览历史、成就等数据。此操作<strong>不可撤销</strong>！</div>
+            <div class="confirm-modal-buttons">
+                <button class="settings-action-btn secondary" onclick="hideResetConfirm()">取消</button>
+                <button class="settings-action-btn danger" onclick="resetAllData()">确认重置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div><kbd>/</kbd> 搜索</div>
         <div><kbd>T</kbd> 主题</div>
         <div><kbd>R</kbd> 浏览</div>
+        <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
@@ -4074,6 +4465,7 @@
             updateAchievementBadge();
             updateFavoriteBadge(); // Day 6: 初始化收藏角标
             updateRecentBadge(); // Day 9: 初始化最近浏览角标
+            updateSettingsStats(); // Day 10: 初始化设置面板统计
             
             createParticles();
             setupTabListeners();
@@ -4120,6 +4512,11 @@
                     toggleRecentPanel();
                 }
 
+                // 's' 或 'S' - 切换设置面板 (Day 10)
+                if (e.key === 's' || e.key === 'S') {
+                    toggleSettingsPanel();
+                }
+
                 // 'f' 或 'F' - 收藏当前查看的Agent
                 if (e.key === 'f' || e.key === 'F') {
                     if (currentModalAgent) {
@@ -4138,6 +4535,7 @@
                     const achievementPanel = document.getElementById('achievementPanel');
                     const favoritePanel = document.getElementById('favoritePanel');
                     const recentPanel = document.getElementById('recentPanel'); // Day 9
+                    const settingsPanel = document.getElementById('settingsPanel'); // Day 10
                     const keyboardHint = document.getElementById('keyboardHint');
 
                     if (keyboardHint.classList.contains('show')) {
@@ -4148,11 +4546,231 @@
                         toggleFavoritePanel();
                     } else if (recentPanel.classList.contains('active')) { // Day 9
                         toggleRecentPanel();
+                    } else if (settingsPanel.classList.contains('active')) { // Day 10
+                        toggleSettingsPanel();
                     } else if (achievementPanel.classList.contains('active')) {
                         toggleAchievementPanel();
                     }
                 }
             });
+        }
+
+        // ========== Settings Panel Functions (Day 10) ==========
+        function closeAllPanels() {
+            const achievementPanel = document.getElementById('achievementPanel');
+            const favoritePanel = document.getElementById('favoritePanel');
+            const recentPanel = document.getElementById('recentPanel');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const achievementBtn = document.getElementById('achievementBtn');
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            const recentBtn = document.getElementById('recentBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+
+            achievementPanel.classList.remove('active');
+            favoritePanel.classList.remove('active');
+            recentPanel.classList.remove('active');
+            settingsPanel.classList.remove('active');
+            overlay.classList.remove('active');
+            
+            achievementBtn.classList.remove('active');
+            favoriteBtn.classList.remove('active');
+            recentBtn.classList.remove('active');
+            settingsBtn.classList.remove('active');
+        }
+
+        function toggleSettingsPanel() {
+            const panel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('settingsBtn');
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                updateSettingsStats();
+            }
+        }
+
+        function updateSettingsStats() {
+            document.getElementById('settingsFavoriteCount').textContent = favoriteAgents.length;
+            document.getElementById('settingsRecentCount').textContent = recentlyViewed.length;
+            document.getElementById('settingsAchievementCount').textContent = unlockedAchievements.length;
+            
+            const savedTheme = localStorage.getItem('theme');
+            document.getElementById('settingsThemeName').textContent = 
+                savedTheme === 'light' ? '浅色' : '深色';
+        }
+
+        function exportUserData() {
+            const data = {
+                version: '1.0',
+                exportTime: new Date().toISOString(),
+                theme: localStorage.getItem('theme') || 'dark',
+                likedAgents: likedAgents,
+                followedAgents: followedAgents,
+                favoriteAgents: favoriteAgents,
+                recentlyViewed: recentlyViewed,
+                userStats: userStats,
+                unlockedAchievements: unlockedAchievements
+            };
+
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `agent-street-backup-${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('✅ 数据导出成功！');
+        }
+
+        function importUserData(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // 验证数据格式
+                    if (!data.version || !data.exportTime) {
+                        throw new Error('无效的备份文件格式');
+                    }
+
+                    // 导入数据
+                    if (data.theme) localStorage.setItem('theme', data.theme);
+                    if (data.likedAgents) {
+                        likedAgents = data.likedAgents;
+                        localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
+                    }
+                    if (data.followedAgents) {
+                        followedAgents = data.followedAgents;
+                        localStorage.setItem('followedAgents', JSON.stringify(followedAgents));
+                    }
+                    if (data.favoriteAgents) {
+                        favoriteAgents = data.favoriteAgents;
+                        localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
+                    }
+                    if (data.recentlyViewed) {
+                        recentlyViewed = data.recentlyViewed;
+                        localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+                    }
+                    if (data.userStats) {
+                        userStats = data.userStats;
+                        localStorage.setItem('userStats', JSON.stringify(userStats));
+                    }
+                    if (data.unlockedAchievements) {
+                        unlockedAchievements = data.unlockedAchievements;
+                        localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                    }
+
+                    // 更新UI
+                    initTheme();
+                    updateFavoriteBadge();
+                    updateRecentBadge();
+                    updateAchievementBadge();
+                    updateSettingsStats();
+                    loadTabData(currentTab);
+
+                    showToast('✅ 数据导入成功！');
+                } catch (err) {
+                    showToast('❌ 导入失败：' + err.message);
+                    console.error('Import error:', err);
+                }
+            };
+            reader.readAsText(file);
+            
+            // 清空input以允许重复选择同一文件
+            input.value = '';
+        }
+
+        function showResetConfirm() {
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function hideResetConfirm() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function resetAllData() {
+            // 清除所有用户数据
+            localStorage.removeItem('likedAgents');
+            localStorage.removeItem('followedAgents');
+            localStorage.removeItem('favoriteAgents');
+            localStorage.removeItem('recentlyViewed');
+            localStorage.removeItem('userStats');
+            localStorage.removeItem('unlockedAchievements');
+
+            // 重置内存变量
+            likedAgents = [];
+            followedAgents = [];
+            favoriteAgents = [];
+            recentlyViewed = [];
+            userStats = { totalVisits: 0, totalLikes: 0, totalFollows: 0 };
+            unlockedAchievements = [];
+
+            // 更新UI
+            updateFavoriteBadge();
+            updateRecentBadge();
+            updateAchievementBadge();
+            updateSettingsStats();
+            loadTabData(currentTab);
+
+            hideResetConfirm();
+            toggleSettingsPanel();
+            showToast('🗑️ 所有数据已重置');
+        }
+
+        function showToast(message) {
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                font-weight: 600;
+                z-index: 3000;
+                animation: toastIn 0.3s ease;
+                box-shadow: 0 4px 20px rgba(107, 92, 231, 0.4);
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // 添加动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes toastIn {
+                    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+                @keyframes toastOut {
+                    from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                    to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => {
+                    toast.remove();
+                    style.remove();
+                }, 300);
+            }, 2500);
         }
 
         function showKeyboardHint() {
