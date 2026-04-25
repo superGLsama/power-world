@@ -309,6 +309,290 @@
             box-shadow: 0 0 15px rgba(156, 136, 255, 0.4);
         }
 
+        /* Notification Button (Day 11) */
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.25);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ffc107;
+        }
+
+        .notification-btn:hover {
+            background: rgba(255, 193, 7, 0.25);
+            transform: scale(1.1);
+        }
+
+        .notification-btn:hover .notification-icon {
+            animation: bellRing 0.5s ease;
+        }
+
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #ff6b8a, #ff4757);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Notification Panel (Day 11) */
+        .notification-panel {
+            position: fixed;
+            top: 70px;
+            right: -420px;
+            width: 380px;
+            max-height: 500px;
+            background: var(--bg-overlay);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            z-index: 1001;
+            transition: right var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification-panel.active {
+            right: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .notification-panel {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                max-height: 100%;
+                border-radius: 0;
+                right: -100%;
+            }
+            .notification-panel.active {
+                right: 0;
+            }
+        }
+
+        .notification-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .notification-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .notification-panel-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .notification-clear-btn {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 8px;
+            color: var(--accent-danger);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .notification-clear-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+        }
+
+        .notification-panel-close {
+            width: 28px;
+            height: 28px;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid var(--border-default);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .notification-panel-close:hover {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+
+        .notification-tabs {
+            display: flex;
+            padding: 0.5rem 1.2rem;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .notification-tab {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .notification-tab:hover {
+            color: var(--text-secondary);
+        }
+
+        .notification-tab.active {
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .notification-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-item:hover {
+            background: rgba(107, 92, 231, 0.1);
+        }
+
+        .notification-item.unread {
+            background: rgba(107, 92, 231, 0.08);
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: var(--accent-primary);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .notification-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon-wrap.like {
+            background: rgba(255, 107, 138, 0.15);
+            color: var(--accent-danger);
+        }
+
+        .notification-icon-wrap.follow {
+            background: rgba(107, 92, 231, 0.15);
+            color: var(--accent-primary);
+        }
+
+        .notification-icon-wrap.favorite {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        .notification-icon-wrap.achievement {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--accent-warning);
+        }
+
+        .notification-icon-wrap.share {
+            background: rgba(100, 181, 246, 0.15);
+            color: #64b5f6;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+            line-height: 1.3;
+        }
+
+        .notification-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .notification-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .notification-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .notification-empty-text {
+            font-size: 0.9rem;
+        }
+
         .recent-badge {
             position: absolute;
             top: -4px;
@@ -2656,6 +2940,11 @@
     <header>
         <div class="logo">Agent Street</div>
         <div class="header-right">
+            <!-- Notification Button (Day 11) -->
+            <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()" title="通知">
+                <span class="notification-icon">🔔</span>
+                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </button>
             <!-- Theme Toggle (Day 8) -->
             <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
                 <span class="theme-icon">🌙</span>
@@ -2685,6 +2974,28 @@
 
     <!-- Panel Overlay -->
     <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+    <!-- Notification Panel (Day 11) -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-panel-header">
+            <div class="notification-panel-title">
+                <span>🔔</span> 通知消息
+            </div>
+            <div class="notification-panel-actions">
+                <button class="notification-clear-btn" onclick="clearAllNotifications()">清空</button>
+                <button class="notification-panel-close" onclick="toggleNotificationPanel()">✕</button>
+            </div>
+        </div>
+        <div class="notification-tabs">
+            <button class="notification-tab active" data-filter="all" onclick="filterNotifications('all')">全部</button>
+            <button class="notification-tab" data-filter="like" onclick="filterNotifications('like')">❤️点赞</button>
+            <button class="notification-tab" data-filter="follow" onclick="filterNotifications('follow')">🤝关注</button>
+            <button class="notification-tab" data-filter="achievement" onclick="filterNotifications('achievement')">🏆成就</button>
+        </div>
+        <div class="notification-panel-body" id="notificationPanelBody">
+            <!-- Notification items will be populated -->
+        </div>
+    </div>
 
     <!-- Achievement Panel (Day 5) -->
     <div class="achievement-panel" id="achievementPanel">
@@ -2829,6 +3140,7 @@
         <div class="hint-title">⌨️ 快捷键</div>
         <div><kbd>/</kbd> 搜索</div>
         <div><kbd>T</kbd> 主题</div>
+        <div><kbd>N</kbd> 通知</div>
         <div><kbd>R</kbd> 浏览</div>
         <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
@@ -3246,6 +3558,9 @@
                 toast.style.animation = 'toastOut 0.3s ease forwards';
                 setTimeout(() => toast.remove(), 300);
             }, 2500);
+            
+            // Day 11: 添加成就解锁通知
+            addNotification('achievement', '🎉 成就解锁', `${achievement.name} - ${achievement.desc}`);
         }
 
         function updateAchievementBadge() {
@@ -3451,12 +3766,18 @@
             if (!agentId) return;
 
             const index = favoriteAgents.indexOf(agentId);
+            const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
             if (index > -1) {
                 favoriteAgents.splice(index, 1);
                 showToast('已取消收藏');
             } else {
                 favoriteAgents.push(agentId);
                 showToast('已添加到收藏');
+                
+                // Day 11: 添加收藏通知
+                if (agent) {
+                    addNotification('favorite', '你收藏了', `将 ${agent.name} 加入了精选收藏`, agentId);
+                }
             }
             saveFavoriteAgents();
             updateFavoriteBadge();
@@ -4020,6 +4341,11 @@
                 userStats.likedCount = likedAgents.length;
                 saveUserStats();
                 checkAchievements();
+                
+                // Day 11: 添加点赞通知
+                if (agent) {
+                    addNotification('like', '你点赞了', `欣赏 ${agent.name} 的穿搭`, agentId);
+                }
             } else {
                 // 取消点赞
                 likedAgents.splice(index, 1);
@@ -4247,6 +4573,9 @@
                 userStats.followedCount = followedAgents.length;
                 saveUserStats();
                 checkAchievements();
+                
+                // Day 11: 添加关注通知
+                addNotification('follow', '你关注了', `开始关注 ${currentModalAgent.name}`, agentId);
             } else {
                 // 取消关注
                 followedAgents.splice(index, 1);
@@ -4466,6 +4795,7 @@
             updateFavoriteBadge(); // Day 6: 初始化收藏角标
             updateRecentBadge(); // Day 9: 初始化最近浏览角标
             updateSettingsStats(); // Day 10: 初始化设置面板统计
+            updateNotificationBadge(); // Day 11: 初始化通知角标
             
             createParticles();
             setupTabListeners();
@@ -4505,6 +4835,11 @@
                 // 't' 或 'T' - 切换主题 (Day 8)
                 if (e.key === 't' || e.key === 'T') {
                     toggleTheme();
+                }
+
+                // 'n' 或 'N' - 切换通知面板 (Day 11)
+                if (e.key === 'n' || e.key === 'N') {
+                    toggleNotificationPanel();
                 }
 
                 // 'r' 或 'R' - 切换最近浏览面板 (Day 9)
@@ -4561,22 +4896,207 @@
             const favoritePanel = document.getElementById('favoritePanel');
             const recentPanel = document.getElementById('recentPanel');
             const settingsPanel = document.getElementById('settingsPanel');
+            const notificationPanel = document.getElementById('notificationPanel');
             const overlay = document.getElementById('panelOverlay');
             const achievementBtn = document.getElementById('achievementBtn');
             const favoriteBtn = document.getElementById('favoriteBtn');
             const recentBtn = document.getElementById('recentBtn');
             const settingsBtn = document.getElementById('settingsBtn');
+            const notificationBtn = document.getElementById('notificationBtn');
 
             achievementPanel.classList.remove('active');
             favoritePanel.classList.remove('active');
             recentPanel.classList.remove('active');
             settingsPanel.classList.remove('active');
+            notificationPanel.classList.remove('active');
             overlay.classList.remove('active');
             
             achievementBtn.classList.remove('active');
             favoriteBtn.classList.remove('active');
             recentBtn.classList.remove('active');
             settingsBtn.classList.remove('active');
+            notificationBtn.classList.remove('active');
+        }
+
+        // ========== Notification System (Day 11) ==========
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        let currentNotificationFilter = 'all';
+        const MAX_NOTIFICATIONS = 50;
+
+        function toggleNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('notificationBtn');
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                // Mark all as read when opening
+                markAllAsRead();
+                renderNotifications();
+            }
+        }
+
+        function addNotification(type, title, desc, agentId = null) {
+            const notification = {
+                id: Date.now(),
+                type: type, // like, follow, favorite, achievement, share
+                title: title,
+                desc: desc,
+                agentId: agentId,
+                time: new Date().toISOString(),
+                read: false
+            };
+            
+            notifications.unshift(notification);
+            
+            // Keep only MAX_NOTIFICATIONS
+            if (notifications.length > MAX_NOTIFICATIONS) {
+                notifications = notifications.slice(0, MAX_NOTIFICATIONS);
+            }
+            
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            updateNotificationBadge();
+            
+            // Show toast for new notification
+            showNotificationToast(notification);
+        }
+
+        function showNotificationToast(notification) {
+            const toast = document.createElement('div');
+            toast.className = 'achievement-unlock-toast notification-toast';
+            toast.innerHTML = `
+                <span class="unlock-icon">${getNotificationIcon(notification.type)}</span>
+                <div class="unlock-content">
+                    <div class="unlock-title">${notification.title}</div>
+                    <div class="unlock-desc">${notification.desc}</div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                like: '❤️',
+                follow: '🤝',
+                favorite: '⭐',
+                achievement: '🏆',
+                share: '📤'
+            };
+            return icons[type] || '🔔';
+        }
+
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            const unreadCount = notifications.filter(n => !n.read).length;
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function markAllAsRead() {
+            notifications.forEach(n => n.read = true);
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            updateNotificationBadge();
+        }
+
+        function renderNotifications() {
+            const body = document.getElementById('notificationPanelBody');
+            const filtered = currentNotificationFilter === 'all' 
+                ? notifications 
+                : notifications.filter(n => n.type === currentNotificationFilter);
+            
+            if (filtered.length === 0) {
+                body.innerHTML = `
+                    <div class="notification-empty">
+                        <div class="notification-empty-icon">🔔</div>
+                        <div class="notification-empty-text">暂无通知</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            body.innerHTML = filtered.map(n => `
+                <div class="notification-item ${n.read ? '' : 'unread'}" 
+                     onclick="handleNotificationClick(${n.id}, '${n.type}', ${n.agentId})">
+                    <div class="notification-icon-wrap ${n.type}">
+                        ${getNotificationIcon(n.type)}
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${n.title}</div>
+                        <div class="notification-desc">${n.desc}</div>
+                        <div class="notification-time">${formatNotificationTime(n.time)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatNotificationTime(timeStr) {
+            const time = new Date(timeStr);
+            const now = new Date();
+            const diff = now - time;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) return '刚刚';
+            if (minutes < 60) return `${minutes}分钟前`;
+            if (hours < 24) return `${hours}小时前`;
+            if (days < 7) return `${days}天前`;
+            return time.toLocaleDateString('zh-CN');
+        }
+
+        function filterNotifications(filter) {
+            currentNotificationFilter = filter;
+            
+            // Update tab UI
+            document.querySelectorAll('.notification-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.filter === filter);
+            });
+            
+            renderNotifications();
+        }
+
+        function handleNotificationClick(notificationId, type, agentId) {
+            // Mark as read
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.read = true;
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotificationBadge();
+            }
+            
+            // Handle click based on type
+            if (agentId) {
+                // Open agent detail
+                closeAllPanels();
+                const agent = agentsData.find(a => a.id === agentId);
+                if (agent) {
+                    openAgentModal(agent);
+                }
+            }
+            
+            renderNotifications();
+        }
+
+        function clearAllNotifications() {
+            if (confirm('确定要清空所有通知吗？')) {
+                notifications = [];
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotificationBadge();
+                renderNotifications();
+            }
         }
 
         function toggleSettingsPanel() {
