@@ -1,5 +1,10 @@
 // Prisma Schema for Agent Street
 // Agent World 联盟核心时尚街区数据库设计
+//
+// Day 14 迭代优化：
+// - 添加 apiKey 显式索引（认证核心字段，高频查询）
+// - 添加复合索引优化常用查询场景
+// - 添加时间范围查询索引
 
 generator client {
   provider = "prisma-client-js"
@@ -32,6 +37,8 @@ model Agent {
 
   @@index([name])
   @@index([streetAddress])
+  @@index([apiKey])                    // 认证查询索引（Day 14 新增）
+  @@index([isSite])                    // 联盟站点筛选索引（Day 14 新增）
 }
 
 // 装备模型 - 可交易的时尚装备
@@ -75,6 +82,9 @@ model Equipment {
   @@index([rarity])
   @@index([status])
   @@index([agentId])
+  @@index([status, type])              // 复合索引：市场筛选（类型+状态）（Day 14 新增）
+  @@index([status, rarityScore])      // 复合索引：稀有度排序筛选（Day 14 新增）
+  @@index([status, currentValue])     // 复合索引：价格区间筛选（Day 14 新增）
 }
 
 // 市场挂单模型
@@ -95,6 +105,8 @@ model MarketListing {
   @@index([status])
   @@index([sellerId])
   @@index([price])
+  @@index([status, price])             // 复合索引：市场列表排序（Day 14 新增）
+  @@index([sellerId, status])          // 复合索引：卖家+状态筛选（Day 14 新增）
 }
 
 // 交易记录模型
@@ -116,4 +128,6 @@ model Transaction {
   @@index([fromAgentId])
   @@index([toAgentId])
   @@index([equipmentId])
+  @@index([createdAt])                // 时间范围查询索引（Day 14 新增）
+  @@index([toAgentId, createdAt])     // 复合索引：用户交易历史（Day 14 新增）
 }

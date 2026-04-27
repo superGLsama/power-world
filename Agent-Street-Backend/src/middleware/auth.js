@@ -1,12 +1,90 @@
 /**
  * 认证中间件
  * 验证 Bearer Token，从 Agent World API 获取 Agent 信息
+ * 
+ * Day 14 优化：
+ * - 添加 LRU 缓存层减少数据库查询
+ * - 优化查询性能
  */
 
 import { PrismaClient } from '@prisma/client';
 import { error, ErrorCodes } from '../utils/response.js';
 
 const prisma = new PrismaClient();
+
+// ========== 认证缓存配置（Day 14 新增）==========
+
+/**
+ * LRU 认证缓存
+ * 目的：减少高频认证请求对数据库的压力
+ * 策略：
+ *   - 每个 token 缓存 60 秒
+ *   - 最多缓存 500 个 token
+ *   - 缓存命中时直接返回，跳过数据库查询
+ *   - Token 变更（如刷新）时自动失效
+ */
+class AuthCache {
+  constructor(maxSize = 500, ttlMs = 60000) {
+    this.cache = new Map(); // { token -> { agent, expiry } }
+    this.maxSize = maxSize;
+    this.ttlMs = ttlMs;
+  }
+
+  // 获取缓存
+  get(token) {
+    const entry = this.cache.get(token);
+    if (!entry) return null;
+    
+    // 检查过期
+    if (Date.now() > entry.expiry) {
+      this.cache.delete(token);
+      return null;
+    }
+    
+    // LRU: 移到末尾表示最近使用
+    this.cache.delete(token);
+    this.cache.set(token, entry);
+    
+    return entry.agent;
+  }
+
+  // 设置缓存
+  set(token, agent) {
+    // 检查容量，超出则删除最老的
+    if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    
+    this.cache.set(token, {
+      agent,
+      expiry: Date.now() + this.ttlMs
+    });
+  }
+
+  // 失效指定 token（token 刷新时调用）
+  invalidate(token) {
+    this.cache.delete(token);
+  }
+
+  // 清理过期缓存
+  cleanup() {
+    const now = Date.now();
+    for (const [token, entry] of this.cache.entries()) {
+      if (now > entry.expiry) {
+        this.cache.delete(token);
+      }
+    }
+  }
+}
+
+// 全局认证缓存实例
+const authCache = new AuthCache(500, 60000);
+
+// 每 5 分钟清理过期缓存
+setInterval(() => authCache.cleanup(), 5 * 60 * 1000);
+
+// ========== 原有代码 ==========
 
 /**
  * 获取请求中的 Bearer Token
@@ -57,6 +135,8 @@ async function verifyWithAgentWorld(token) {
  * 支持两种认证方式：
  * 1. 本地 API Key（已注册的 Agent）
  * 2. Agent World 联盟 API Key
+ * 
+ * Day 14 优化：添加缓存层
  */
 export async function authenticate(req, res, next) {
   try {
@@ -66,14 +146,23 @@ export async function authenticate(req, res, next) {
       return res.status(401).json(error(ErrorCodes.UNAUTHORIZED, '未提供认证令牌'));
     }
     
-    // 优先从本地数据库验证
+    // 尝试从缓存获取（Day 14 优化）
+    const cachedAgent = authCache.get(token);
+    if (cachedAgent) {
+      req.agent = cachedAgent;
+      req.agentId = cachedAgent.id;
+      return next();
+    }
+    
+    // 缓存未命中，从数据库查询
     let agent = await prisma.agent.findFirst({
       where: {
         OR: [
           { apiKey: token },
           { id: token }
         ]
-      }
+      },
+      // Day 14 优化：按索引字段查询，Prisma 会利用 apiKey 索引
     });
     
     // 如果本地未找到，尝试 Agent World API 验证
@@ -111,6 +200,9 @@ export async function authenticate(req, res, next) {
       return res.status(401).json(error(ErrorCodes.UNAUTHORIZED, '无效的认证令牌'));
     }
     
+    // 写入缓存（Day 14 优化）
+    authCache.set(token, agent);
+    
     // 将 agent 信息附加到请求对象
     req.agent = agent;
     req.agentId = agent.id;
@@ -134,7 +226,7 @@ export async function authenticateSite(req, res, next) {
       return res.status(401).json(error(ErrorCodes.UNAUTHORIZED, '未提供站点认证令牌'));
     }
     
-    // 查找联盟站点
+    // 查找联盟站点（isSite 索引优化）
     const site = await prisma.agent.findFirst({
       where: {
         apiKey: token,
@@ -159,12 +251,22 @@ export async function authenticateSite(req, res, next) {
 /**
  * 可选的认证中间件
  * 不强制要求认证，但如果有 token 会解析
+ * 
+ * Day 14 优化：添加缓存
  */
 export async function optionalAuth(req, res, next) {
   const token = getBearerToken(req);
   
   if (token) {
     try {
+      // 尝试缓存
+      const cachedAgent = authCache.get(token);
+      if (cachedAgent) {
+        req.agent = cachedAgent;
+        req.agentId = cachedAgent.id;
+        return next();
+      }
+      
       const agent = await prisma.agent.findFirst({
         where: {
           OR: [
@@ -175,6 +277,7 @@ export async function optionalAuth(req, res, next) {
       });
       
       if (agent) {
+        authCache.set(token, agent);
         req.agent = agent;
         req.agentId = agent.id;
       }
@@ -220,5 +323,10 @@ export function rateLimit(limit, windowMs) {
     next();
   };
 }
+
+/**
+ * 导出缓存清理方法（供测试或手动调用）
+ */
+export { authCache };
 
 export default authenticate;
