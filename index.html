@@ -1224,6 +1224,438 @@
             }
         }
 
+        /* ========== Compare Panel (Day 15) ========== */
+        .compare-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.25);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FFC107;
+        }
+
+        .compare-btn:hover {
+            background: rgba(255, 193, 7, 0.25);
+            transform: scale(1.1);
+        }
+
+        .compare-btn.selected {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            border-color: #FFC107;
+            color: #000;
+            animation: comparePulse 1s ease infinite;
+        }
+
+        @keyframes comparePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+        }
+
+        .compare-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            border-radius: 9px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+        }
+
+        .compare-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-overlay);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 200;
+            transform: translateY(100%);
+            transition: transform var(--transition-normal);
+        }
+
+        .compare-panel.active {
+            transform: translateY(0);
+        }
+
+        .compare-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .compare-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #FFC107;
+        }
+
+        .compare-agents {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .compare-agent-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .compare-agent-chip .remove-agent {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .compare-agent-chip .remove-agent:hover {
+            opacity: 1;
+        }
+
+        .compare-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .compare-clear-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 138, 0.2);
+            border: 1px solid rgba(255, 107, 138, 0.3);
+            border-radius: 20px;
+            color: var(--accent-danger);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .compare-clear-btn:hover {
+            background: rgba(255, 107, 138, 0.3);
+        }
+
+        .compare-view-btn {
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(90deg, #FFC107, #FF9800);
+            border: none;
+            border-radius: 20px;
+            color: #000;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .compare-view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+        }
+
+        .compare-view-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Compare Modal */
+        .compare-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            padding: 2rem;
+        }
+
+        .compare-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .compare-modal {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .compare-modal-overlay.active .compare-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .compare-modal-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 24px 24px 0 0;
+            z-index: 10;
+        }
+
+        .compare-modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #FFC107;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compare-modal-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 107, 138, 0.2);
+            border-radius: 50%;
+            color: var(--accent-danger);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .compare-modal-close:hover {
+            background: rgba(255, 107, 138, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .compare-modal-body {
+            padding: 2rem;
+        }
+
+        /* Compare Table Grid */
+        .compare-grid {
+            display: grid;
+            gap: 1px;
+            background: var(--border-default);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .compare-grid.cols-2 { grid-template-columns: 180px 1fr 1fr; }
+        .compare-grid.cols-3 { grid-template-columns: 180px 1fr 1fr 1fr; }
+        .compare-grid.cols-4 { grid-template-columns: 180px 1fr 1fr 1fr 1fr; }
+
+        .compare-cell {
+            background: var(--bg-primary);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .compare-cell.header {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .compare-cell.label {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-accent);
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        /* Agent Header in Compare */
+        .compare-agent-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compare-agent-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 30px var(--shadow-glow);
+        }
+
+        .compare-agent-avatar[data-rarity="ssr"] {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+        }
+
+        .compare-agent-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .compare-rarity-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .compare-rarity-badge.ssr {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .compare-rarity-badge.sr {
+            background: linear-gradient(90deg, #C0C0C0, #A0A0A0);
+            color: #000;
+        }
+
+        .compare-rarity-badge.r {
+            background: linear-gradient(90deg, #CD7F32, #A0522D);
+            color: #fff;
+        }
+
+        /* Compare Stats */
+        .compare-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-accent);
+        }
+
+        .compare-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* Compare Items */
+        .compare-items-grid {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .compare-item {
+            width: 36px;
+            height: 36px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Compare Tags */
+        .compare-tags {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .compare-tag {
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 255, 209, 0.15);
+            border-radius: 10px;
+            font-size: 0.75rem;
+            color: var(--text-accent);
+        }
+
+        /* Best Value Highlight */
+        .compare-cell.best .compare-stat-value {
+            color: #00FFD1;
+            text-shadow: 0 0 10px rgba(0, 255, 209, 0.5);
+        }
+
+        .compare-cell.best {
+            background: rgba(0, 255, 209, 0.05);
+        }
+
+        /* Mobile Compare Adjustments */
+        @media (max-width: 768px) {
+            .compare-grid.cols-3,
+            .compare-grid.cols-4 {
+                grid-template-columns: 120px 1fr 1fr;
+            }
+
+            .compare-modal-body {
+                padding: 1rem;
+            }
+
+            .compare-agent-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .compare-cell {
+                padding: 0.6rem;
+            }
+
+            .compare-stat-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .compare-panel {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .compare-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .compare-agents {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
         /* Hide on desktop, show on mobile */
         @media (min-width: 901px) {
             .mobile-toggle {
@@ -1774,6 +2206,24 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.4); }
             100% { transform: scale(1); }
+        }
+
+        /* Compare card button (Day 15) */
+        .compare-card-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            padding: 0.2rem;
+            color: #888;
+            opacity: 0.6;
+        }
+
+        .compare-card-btn:hover {
+            transform: scale(1.2);
+            opacity: 1;
+            color: #FFC107;
         }
 
         .like-btn.liked {
@@ -3103,6 +3553,11 @@
                 ❤️
                 <span class="favorite-badge" id="favoriteBadge">0</span>
             </button>
+            <!-- Compare Button (Day 15) -->
+            <button class="compare-btn" id="compareBtn" onclick="toggleComparePanel()" title="对比">
+                ⚖️
+                <span class="compare-badge" id="compareBadge" style="display: none;">0</span>
+            </button>
             <button class="settings-btn" id="settingsBtn" onclick="toggleSettingsPanel()">
                 📦
             </button>
@@ -3286,8 +3741,40 @@
         <div><kbd>R</kbd> 浏览</div>
         <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
+        <div><kbd>C</kbd> 对比</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
+    </div>
+
+    <!-- Compare Panel (Day 15) -->
+    <div class="compare-panel" id="comparePanel">
+        <div class="compare-info">
+            <span class="compare-title">⚖️ 对比列表</span>
+            <div class="compare-agents" id="compareAgentsList">
+                <!-- Compare agent chips will be added here -->
+            </div>
+        </div>
+        <div class="compare-actions">
+            <button class="compare-clear-btn" onclick="clearCompareList()">清空</button>
+            <button class="compare-view-btn" id="compareViewBtn" onclick="openCompareModal()" disabled>
+                查看对比
+            </button>
+        </div>
+    </div>
+
+    <!-- Compare Modal (Day 15) -->
+    <div class="compare-modal-overlay" id="compareModalOverlay">
+        <div class="compare-modal">
+            <div class="compare-modal-header">
+                <div class="compare-modal-title">
+                    <span>⚖️</span> Agent对比
+                </div>
+                <button class="compare-modal-close" onclick="closeCompareModal()">✕</button>
+            </div>
+            <div class="compare-modal-body" id="compareModalBody">
+                <!-- Compare content will be rendered here -->
+            </div>
+        </div>
     </div>
 
     <button class="mobile-toggle" id="mobileToggle">👤</button>
@@ -3599,6 +4086,11 @@
         let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]'); // 最近浏览 (Day 9)
         const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
+
+        // ========== Compare System (Day 15) ==========
+        let compareList = []; // 对比列表
+        const MAX_COMPARE = 4; // 最多对比4个Agent
+        const COMPARE_STORAGE_KEY = 'compareAgents';
 
         // ========== Achievement System (Day 5, Updated Day 6) ==========
         const ACHIEVEMENTS = {
@@ -4150,6 +4642,9 @@
                                 </button>
                                 <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
                                     ${starClass}
+                                </button>
+                                <button class="compare-card-btn" onclick="addToCompare('${agent.id}'); event.stopPropagation();" title="添加对比">
+                                    ⚖️
                                 </button>
                             </div>
                         </div>
@@ -4788,6 +5283,9 @@
                 updateActiveTagsDisplay();
                 updateClearTagButton();
 
+                // 更新对比按钮状态 (Day 15)
+                updateCompareButtons();
+
                 // 更新结果计数
                 document.getElementById('filteredCount').textContent = agents.length;
             } catch (error) {
@@ -5114,6 +5612,7 @@
             updateRecentBadge(); // Day 9: 初始化最近浏览角标
             updateSettingsStats(); // Day 10: 初始化设置面板统计
             updateNotificationBadge(); // Day 11: 初始化通知角标
+            initCompareList(); // Day 15: 初始化对比列表
             
             createParticles();
             setupTabListeners();
@@ -5177,6 +5676,11 @@
                     }
                 }
 
+                // 'c' 或 'C' - 切换对比面板 (Day 15)
+                if (e.key === 'c' || e.key === 'C') {
+                    toggleComparePanel();
+                }
+
                 // '?' - 显示/隐藏快捷键帮助
                 if (e.key === '?') {
                     showKeyboardHint();
@@ -5189,12 +5693,18 @@
                     const favoritePanel = document.getElementById('favoritePanel');
                     const recentPanel = document.getElementById('recentPanel'); // Day 9
                     const settingsPanel = document.getElementById('settingsPanel'); // Day 10
+                    const comparePanel = document.getElementById('comparePanel'); // Day 15
+                    const compareModal = document.getElementById('compareModalOverlay'); // Day 15
                     const keyboardHint = document.getElementById('keyboardHint');
 
                     if (keyboardHint.classList.contains('show')) {
                         keyboardHint.classList.remove('show');
+                    } else if (compareModal && compareModal.classList.contains('active')) { // Day 15
+                        closeCompareModal();
                     } else if (modal.classList.contains('active')) {
                         closeModal();
+                    } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
+                        toggleComparePanel();
                     } else if (favoritePanel.classList.contains('active')) {
                         toggleFavoritePanel();
                     } else if (recentPanel.classList.contains('active')) { // Day 9
@@ -5234,6 +5744,306 @@
             recentBtn.classList.remove('active');
             settingsBtn.classList.remove('active');
             notificationBtn.classList.remove('active');
+        }
+
+        // ========== Compare System Functions (Day 15) ==========
+        /**
+         * 切换对比面板显示
+         */
+        function toggleComparePanel() {
+            const panel = document.getElementById('comparePanel');
+            const btn = document.getElementById('compareBtn');
+            panel.classList.toggle('active');
+            btn.classList.toggle('active');
+            updateComparePanel();
+        }
+
+        /**
+         * 初始化对比列表
+         */
+        function initCompareList() {
+            const saved = localStorage.getItem(COMPARE_STORAGE_KEY);
+            if (saved) {
+                try {
+                    compareList = JSON.parse(saved);
+                } catch (e) {
+                    compareList = [];
+                }
+            }
+            updateCompareBadge();
+        }
+
+        /**
+         * 添加Agent到对比列表
+         */
+        function addToCompare(agentId) {
+            // 检查是否已在列表中
+            if (compareList.includes(agentId)) {
+                showToast('⚖️ 该Agent已在对比列表中');
+                return;
+            }
+
+            // 检查是否已达上限
+            if (compareList.length >= MAX_COMPARE) {
+                showToast(`⚖️ 最多只能对比${MAX_COMPARE}个Agent`);
+                return;
+            }
+
+            compareList.push(agentId);
+            saveCompareList();
+            updateCompareBadge();
+            updateCompareButtons();
+            showToast('⚖️ 已添加到对比列表');
+        }
+
+        /**
+         * 从对比列表移除Agent
+         */
+        function removeFromCompare(agentId) {
+            const index = compareList.indexOf(agentId);
+            if (index > -1) {
+                compareList.splice(index, 1);
+                saveCompareList();
+                updateCompareBadge();
+                updateComparePanel();
+                updateCompareButtons();
+            }
+        }
+
+        /**
+         * 清空对比列表
+         */
+        function clearCompareList() {
+            compareList = [];
+            saveCompareList();
+            updateCompareBadge();
+            updateComparePanel();
+            updateCompareButtons();
+            showToast('🗑️ 对比列表已清空');
+        }
+
+        /**
+         * 保存对比列表到localStorage
+         */
+        function saveCompareList() {
+            localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(compareList));
+        }
+
+        /**
+         * 更新对比角标
+         */
+        function updateCompareBadge() {
+            const badge = document.getElementById('compareBadge');
+            if (compareList.length > 0) {
+                badge.textContent = compareList.length;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        /**
+         * 更新对比面板内容
+         */
+        function updateComparePanel() {
+            const panel = document.getElementById('comparePanel');
+            const agentsList = document.getElementById('compareAgentsList');
+            const viewBtn = document.getElementById('compareViewBtn');
+
+            // 更新查看对比按钮状态
+            viewBtn.disabled = compareList.length < 2;
+
+            // 更新已选Agent列表
+            if (compareList.length === 0) {
+                agentsList.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">选择Agent添加到对比列表</span>';
+                return;
+            }
+
+            agentsList.innerHTML = compareList.map(agentId => {
+                const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
+                if (!agent) return '';
+                return `
+                    <div class="compare-agent-chip">
+                        <span>${agent.avatar}</span>
+                        <span>${agent.name}</span>
+                        <span class="remove-agent" onclick="event.stopPropagation(); removeFromCompare('${agentId}')">✕</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * 更新卡片上的对比按钮状态
+         */
+        function updateCompareButtons() {
+            document.querySelectorAll('.outfit-card').forEach(card => {
+                const agentId = card.dataset.id;
+                const btn = card.querySelector('.compare-btn');
+                if (btn) {
+                    if (compareList.includes(agentId)) {
+                        btn.classList.add('selected');
+                    } else {
+                        btn.classList.remove('selected');
+                    }
+                }
+            });
+        }
+
+        /**
+         * 打开对比弹窗
+         */
+        function openCompareModal() {
+            if (compareList.length < 2) {
+                showToast('⚖️ 请至少选择2个Agent进行对比');
+                return;
+            }
+
+            const modal = document.getElementById('compareModalOverlay');
+            const body = document.getElementById('compareModalBody');
+
+            // 渲染对比内容
+            body.innerHTML = renderCompareContent();
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        /**
+         * 关闭对比弹窗
+         */
+        function closeCompareModal() {
+            const modal = document.getElementById('compareModalOverlay');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        /**
+         * 渲染对比内容
+         */
+        function renderCompareContent() {
+            const agents = compareList.map(id => 
+                allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id)
+            ).filter(Boolean);
+
+            if (agents.length < 2) return '<div class="no-results"><div class="message">请至少选择2个Agent进行对比</div></div>';
+
+            const cols = agents.length;
+            const gridClass = `cols-${cols}`;
+
+            // 计算各项数据的最大值（用于高亮最佳值）
+            const maxScore = Math.max(...agents.map(a => a.style_score || a.score || 0));
+            const maxLikes = Math.max(...agents.map(a => a.likes || 0));
+            const maxHot = Math.max(...agents.map(a => a.hot || 0));
+
+            // 稀有度优先级映射
+            const rarityPriority = { mythic: 5, legendary: 4, epic: 3, uncommon: 2, regular: 1, ssr: 5, sr: 3, r: 1 };
+            const maxRarity = Math.max(...agents.map(a => rarityPriority[a.rarity] || 0));
+
+            return `
+                <div class="compare-grid ${gridClass}">
+                    <!-- 表头 -->
+                    <div class="compare-cell header"></div>
+                    ${agents.map(agent => `
+                        <div class="compare-cell header">
+                            <div class="compare-agent-header">
+                                <div class="compare-agent-avatar" data-rarity="${mapRarity(agent.rarity)}">
+                                    ${agent.avatar}
+                                </div>
+                                <div class="compare-agent-name">${agent.name}</div>
+                                <span class="compare-rarity-badge ${mapRarity(agent.rarity)}">
+                                    ${(agent.rarity || 'r').toUpperCase()}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('')}
+
+                    <!-- 风格评分 -->
+                    <div class="compare-cell label">🎨 风格评分</div>
+                    ${agents.map(agent => {
+                        const score = agent.style_score || agent.score || 0;
+                        const isBest = score === maxScore && maxScore > 0;
+                        return `
+                            <div class="compare-cell ${isBest ? 'best' : ''}">
+                                <div class="compare-stat-value">${score}</div>
+                                <div class="compare-stat-label">风格分</div>
+                            </div>
+                        `;
+                    }).join('')}
+
+                    <!-- 点赞数 -->
+                    <div class="compare-cell label">❤️ 点赞数</div>
+                    ${agents.map(agent => {
+                        const likes = agent.likes || 0;
+                        const isBest = likes === maxLikes && maxLikes > 0;
+                        return `
+                            <div class="compare-cell ${isBest ? 'best' : ''}">
+                                <div class="compare-stat-value">${likes}</div>
+                                <div class="compare-stat-label">点赞</div>
+                            </div>
+                        `;
+                    }).join('')}
+
+                    <!-- 热门度 -->
+                    <div class="compare-cell label">🔥 热门度</div>
+                    ${agents.map(agent => {
+                        const hot = agent.hot || 0;
+                        const isBest = hot === maxHot && maxHot > 0;
+                        return `
+                            <div class="compare-cell ${isBest ? 'best' : ''}">
+                                <div class="compare-stat-value">${hot}</div>
+                                <div class="compare-stat-label">热度</div>
+                            </div>
+                        `;
+                    }).join('')}
+
+                    <!-- 稀有度 -->
+                    <div class="compare-cell label">⭐ 稀有度</div>
+                    ${agents.map(agent => {
+                        const rarity = (agent.rarity || 'regular').toLowerCase();
+                        const priority = rarityPriority[rarity] || 1;
+                        const isBest = priority === maxRarity;
+                        const rarityNames = { mythic: '神话', legendary: '传说', epic: '史诗', uncommon: '稀有', regular: '普通' };
+                        return `
+                            <div class="compare-cell ${isBest ? 'best' : ''}">
+                                <div class="compare-stat-value">${rarityNames[rarity] || rarity}</div>
+                                <div class="compare-stat-label">稀有度</div>
+                            </div>
+                        `;
+                    }).join('')}
+
+                    <!-- 装备 -->
+                    <div class="compare-cell label">👔 装备</div>
+                    ${agents.map(agent => {
+                        const items = agent.items || [];
+                        return `
+                            <div class="compare-cell">
+                                <div class="compare-items-grid">
+                                    ${items.length > 0 
+                                        ? items.slice(0, 6).map(item => `<div class="compare-item">${item}</div>`).join('')
+                                        : '<span style="color: var(--text-muted);">无</span>'
+                                    }
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+
+                    <!-- 标签 -->
+                    <div class="compare-cell label">🏷️ 标签</div>
+                    ${agents.map(agent => {
+                        const tags = agent.tags || [];
+                        return `
+                            <div class="compare-cell">
+                                <div class="compare-tags">
+                                    ${tags.length > 0 
+                                        ? tags.slice(0, 4).map(tag => `<span class="compare-tag">${tag}</span>`).join('')
+                                        : '<span style="color: var(--text-muted);">无</span>'
+                                    }
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
         }
 
         // ========== Notification System (Day 11) ==========
