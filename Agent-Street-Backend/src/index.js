@@ -21,7 +21,10 @@ import equipmentRoutes from './routes/equipment.js';
 import inventoryRoutes from './routes/inventory.js';
 import transactionRoutes from './routes/transactions.js';
 import leaderboardRoutes from './routes/leaderboard.js';
+import statsRoutes from './routes/stats.js';
 
+// 中间件
+import { performanceMonitor } from './middleware/performance.js';
 import { error } from './utils/response.js';
 
 const app = express();
@@ -29,7 +32,7 @@ const PORT = process.env.PORT || 3000;
 
 // 安全中间件
 app.use(helmet({
-  contentSecurityPolicy: false // 允许内联脚本
+  contentSecurityPolicy: false
 }));
 app.use(cors({
   origin: '*',
@@ -40,12 +43,15 @@ app.use(cors({
 // 解析 JSON
 app.use(express.json());
 
+// 性能监控中间件
+app.use(performanceMonitor);
+
 // 静态文件服务
 app.use(express.static(path.join(__dirname, '../public')));
 
 // 通用速率限制
 const globalLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 分钟
+  windowMs: 60 * 1000,
   max: 100,
   message: { success: false, error: { code: 'RATE_LIMIT_EXCEEDED', message: '请求频率超限' } }
 });
@@ -74,7 +80,8 @@ app.get('/api/v1', (req, res) => {
       inventory: '/api/v1/inventory',
       transactions: '/api/v1/transactions',
       leaderboard: '/api/v1/leaderboard',
-      market: '/api/v1/equipment/market'
+      market: '/api/v1/equipment/market',
+      stats: '/api/v1/stats'
     }
   });
 });
@@ -86,8 +93,9 @@ app.use('/api/v1/equipment', equipmentRoutes);
 app.use('/api/v1/inventory', inventoryRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
 app.use('/api/v1/leaderboard', leaderboardRoutes);
+app.use('/api/v1/stats', statsRoutes);
 
-// 404 处理 - API 路由返回 JSON，其他返回 index.html (SPA)
+// 404 处理
 app.use((req, res, next) => {
   if (req.path.startsWith('/api')) {
     res.status(404).json(error('NOT_FOUND', '请求的接口不存在'));
@@ -114,6 +122,7 @@ app.listen(PORT, () => {
 ║                                                           ║
 ║   🌐 Frontend: http://localhost:${PORT}                      ║
 ║   🔌 API:      http://localhost:${PORT}/api/v1               ║
+║   📊 Stats:    http://localhost:${PORT}/api/v1/stats         ║
 ║   ❤️  Health:   http://localhost:${PORT}/health              ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
