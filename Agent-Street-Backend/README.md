@@ -97,16 +97,136 @@ npm run dev
 | 市场列表查询 | ~50ms | ~10ms |
 | 交易历史查询 | ~100ms | ~20ms |
 
-## 部署
+## Docker 部署（Day 16）
 
-支持 Docker 部署：
+### 环境要求
+
+- Docker 20.10+
+- Docker Compose 2.0+（可选）
+
+### 配置环境变量
 
 ```bash
-docker build -t agent-street-backend .
-docker run -p 3000:3000 --env-file .env agent-street-backend
+# 复制环境变量模板
+cp .env.example .env
+
+# 编辑 .env 填写必要配置
+vim .env
 ```
 
-或使用 Render 平台（见 `render.yaml`）。
+**必需的环境变量：**
+
+| 变量 | 描述 | 示例 |
+|------|------|------|
+| `DATABASE_URL` | PostgreSQL 连接字符串 | `postgresql://user:pass@localhost:5432/agentstreet` |
+| `JWT_SECRET` | JWT 签名密钥 | `your-secret-key-here` |
+| `PORT` | 服务端口 | `3000` |
+| `CORS_ORIGIN` | 允许的跨域源 | `https://yourdomain.com` |
+
+### 开发环境启动
+
+```bash
+# 启动所有服务（后端 + 数据库 + Adminer）
+docker-compose -f docker-compose.dev.yml up -d
+
+# 查看日志
+docker-compose -f docker-compose.dev.yml logs -f backend
+
+# 停止服务
+docker-compose -f docker-compose.dev.yml down
+```
+
+**开发环境服务：**
+
+| 服务 | 地址 |
+|------|------|
+| 后端 API | http://localhost:3000 |
+| 数据库管理 | http://localhost:8080 (Adminer) |
+| 数据库端口 | localhost:5432 |
+
+### 生产环境启动
+
+```bash
+# 启动生产服务
+docker-compose up -d --build
+
+# 查看服务状态
+docker-compose ps
+
+# 查看日志
+docker-compose logs -f backend
+
+# 停止服务
+docker-compose down
+```
+
+### 健康检查
+
+```bash
+# 检查服务健康状态
+curl http://localhost:3000/health
+
+# 响应示例
+{
+  "status": "healthy",
+  "service": "agent-street-api",
+  "version": "1.0.0",
+  "timestamp": "2026-04-30T09:00:00.000Z",
+  "uptime": 3600.5,
+  "checks": {
+    "memory": { "status": "ok", "used": "45MB", "total": "128MB" },
+    "database": { "status": "ok" }
+  }
+}
+```
+
+### 数据库迁移
+
+```bash
+# 进入后端容器
+docker exec -it agent-street-backend sh
+
+# 运行 Prisma 迁移
+npx prisma migrate deploy
+
+# 或同步 schema（开发环境）
+npx prisma db push
+```
+
+### 数据持久化
+
+生产环境的数据卷会自动持久化：
+
+- `postgres_data`: PostgreSQL 数据目录
+- `redis_data`: Redis 数据目录（可选）
+
+## 其他部署方式
+
+### Docker 单容器
+
+```bash
+# 构建镜像
+docker build -t agent-street-backend .
+
+# 运行容器
+docker run -d \
+  --name agent-street-backend \
+  -p 3000:3000 \
+  --env-file .env \
+  agent-street-backend
+```
+
+### Render 平台
+
+使用 `render.yaml` 配置一键部署到 Render：
+
+```bash
+# 安装 Render CLI
+npm install -g @render/cli
+
+# 部署
+render deploy
+```
 
 ## License
 

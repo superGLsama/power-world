@@ -10,9 +10,14 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { PrismaClient } from '@prisma/client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// 全局 Prisma 实例（用于健康检查）
+const prisma = new PrismaClient();
+global.prisma = prisma;
 
 // 路由模块
 import authRoutes from './routes/auth.js';
@@ -57,14 +62,39 @@ const globalLimiter = rateLimit({
 });
 app.use('/api', globalLimiter);
 
-// 健康检查
-app.get('/health', (req, res) => {
-  res.json({
+// 健康检查（支持 Docker 健康检查）
+app.get('/health', async (req, res) => {
+  const healthcheck = {
     status: 'healthy',
     service: 'agent-street-api',
     version: '1.0.0',
-    timestamp: new Date().toISOString()
-  });
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    checks: {
+      memory: {
+        status: 'ok',
+        used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
+        total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + 'MB'
+      }
+    }
+  };
+  
+  // 检查数据库连接（如果 Prisma 可用）
+  try {
+    if (global.prisma) {
+      await global.prisma.$queryRaw`SELECT 1`;
+      healthcheck.checks.database = { status: 'ok' };
+    } else {
+      healthcheck.checks.database = { status: 'not_initialized' };
+    }
+  } catch (err) {
+    healthcheck.checks.database = { status: 'error', message: err.message };
+    healthcheck.status = 'degraded';
+  }
+  
+  // 如果所有检查通过，返回 200
+  const allHealthy = Object.values(healthcheck.checks).every(c => c.status === 'ok' || c.status === 'not_initialized');
+  res.status(allHealthy ? 200 : 503).json(healthcheck);
 });
 
 // API 版本信息
