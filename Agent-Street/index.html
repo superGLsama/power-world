@@ -4070,6 +4070,226 @@
             ? 'http://localhost:3000'
             : '';
 
+        // ========== API Client (Day 17) ==========
+        // 增强的 API 请求客户端，支持 Token 自动刷新和错误重试
+        const API_CONFIG = {
+            baseUrl: API_BASE,
+            timeout: 15000,           // 请求超时 15 秒
+            maxRetries: 3,            // 最大重试次数
+            retryDelay: 1000,         // 重试延迟 1 秒
+            tokenRefreshBuffer: 5 * 60 * 1000 // Token 刷新缓冲：提前 5 分钟
+        };
+
+        // API Client 类（Day 17 新增）
+        class APIClient {
+            constructor(config) {
+                this.baseUrl = config.baseUrl;
+                this.timeout = config.timeout;
+                this.maxRetries = config.maxRetries;
+                this.retryDelay = config.retryDelay;
+                this.tokenRefreshBuffer = config.tokenRefreshBuffer;
+                
+                // Token 管理
+                this.accessToken = localStorage.getItem('accessToken');
+                this.tokenExpiry = localStorage.getItem('tokenExpiry') ? parseInt(localStorage.getItem('tokenExpiry')) : null;
+                this.refreshToken = localStorage.getItem('refreshToken');
+            }
+
+            // 检查 Token 是否需要刷新
+            needsRefresh() {
+                if (!this.tokenExpiry) return false;
+                return Date.now() > this.tokenExpiry - this.tokenRefreshBuffer;
+            }
+
+            // 保存 Token
+            saveTokens(accessToken, refreshToken, expiresIn = 3600) {
+                this.accessToken = accessToken;
+                this.refreshToken = refreshToken;
+                this.tokenExpiry = Date.now() + expiresIn * 1000;
+                
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                localStorage.setItem('tokenExpiry', this.tokenExpiry.toString());
+            }
+
+            // 清除 Token
+            clearTokens() {
+                this.accessToken = null;
+                this.refreshToken = null;
+                this.tokenExpiry = null;
+                
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('tokenExpiry');
+            }
+
+            // 获取请求头
+            getHeaders() {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'X-Client-Version': '1.0.0'
+                };
+                if (this.accessToken) {
+                    headers['Authorization'] = `Bearer ${this.accessToken}`;
+                }
+                return headers;
+            }
+
+            // 等待指定时间
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            // 通用请求方法
+            async request(url, options = {}, retries = 0) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+                try {
+                    const response = await fetch(`${this.baseUrl}${url}`, {
+                        ...options,
+                        headers: {
+                            ...this.getHeaders(),
+                            ...options.headers
+                        },
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    // 401 未授权，尝试刷新 Token
+                    if (response.status === 401 && this.refreshToken && retries < 1) {
+                        console.log('[API] Token 过期，尝试刷新...');
+                        const refreshed = await this.refreshAccessToken();
+                        if (refreshed) {
+                            // 重试原请求
+                            return this.request(url, options, retries + 1);
+                        } else {
+                            // 刷新失败，清除 Token
+                            this.clearTokens();
+                        }
+                    }
+
+                    // 429 限流，等待后重试
+                    if (response.status === 429 && retries < this.maxRetries) {
+                        const retryAfter = response.headers.get('Retry-After') || 5;
+                        console.log(`[API] 请求限流，等待 ${retryAfter} 秒后重试...`);
+                        await this.delay(retryAfter * 1000);
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    // 5xx 服务器错误，重试
+                    if (response.status >= 500 && retries < this.maxRetries) {
+                        console.log(`[API] 服务器错误 (${response.status})，${retries + 1}/${this.maxRetries} 次重试...`);
+                        await this.delay(this.retryDelay * (retries + 1));
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw {
+                            status: response.status,
+                            message: data.error?.message || '请求失败',
+                            code: data.error?.code || 'UNKNOWN_ERROR'
+                        };
+                    }
+
+                    return data;
+
+                } catch (error) {
+                    clearTimeout(timeoutId);
+
+                    // 请求超时或中止
+                    if (error.name === 'AbortError') {
+                        throw { status: 0, message: '请求超时，请检查网络连接', code: 'TIMEOUT' };
+                    }
+
+                    // 网络错误
+                    if (!navigator.onLine) {
+                        throw { status: 0, message: '网络连接已断开', code: 'NETWORK_ERROR' };
+                    }
+
+                    // 如果还没超过最大重试次数，且不是客户端错误
+                    if (retries < this.maxRetries && error.status >= 500) {
+                        console.log(`[API] 网络错误，${retries + 1}/${this.maxRetries} 次重试...`);
+                        await this.delay(this.retryDelay * (retries + 1));
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    throw error;
+                }
+            }
+
+            // 刷新 Access Token
+            async refreshAccessToken() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/api/v1/auth/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.refreshToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success && data.data.new_api_key) {
+                            this.saveTokens(data.data.new_api_key, this.refreshToken);
+                            console.log('[API] Token 刷新成功');
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('[API] Token 刷新失败:', error);
+                    return false;
+                }
+            }
+
+            // 便捷 GET 方法
+            async get(url, params = {}) {
+                const queryString = new URLSearchParams(params).toString();
+                const fullUrl = queryString ? `${url}?${queryString}` : url;
+                return this.request(fullUrl, { method: 'GET' });
+            }
+
+            // 便捷 POST 方法
+            async post(url, body = {}) {
+                return this.request(url, {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+
+            // 便捷 PUT 方法
+            async put(url, body = {}) {
+                return this.request(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(body)
+                });
+            }
+
+            // 便捷 DELETE 方法
+            async delete(url, body = {}) {
+                return this.request(url, {
+                    method: 'DELETE',
+                    body: body ? JSON.stringify(body) : undefined
+                });
+            }
+        }
+
+        // 创建全局 API 客户端实例
+        const apiClient = new APIClient(API_CONFIG);
+
+        // 页面加载时检查 Token 状态
+        document.addEventListener('DOMContentLoaded', () => {
+            if (apiClient.accessToken && apiClient.needsRefresh()) {
+                console.log('[API] 页面加载，检测到 Token 即将过期，尝试刷新...');
+                apiClient.refreshAccessToken().catch(console.error);
+            }
+        });
+
         // ========== State ==========
         let currentTab = 'hot';
         let agentsData = [];
