@@ -3524,6 +3524,271 @@
                 flex-shrink: 0;
             }
         }
+
+        /* ========== Agent Review System (Day 18) ========== */
+        .modal-section.reviews {
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-default);
+            padding-top: 1rem;
+        }
+
+        .modal-section-title .review-count {
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            color: #fff;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        .review-form {
+            margin-bottom: 1rem;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 0.3rem;
+            margin-bottom: 0.8rem;
+            justify-content: center;
+        }
+
+        .star-btn {
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .star-btn:hover,
+        .star-btn.active {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .star-btn:hover {
+            animation: starPop 0.3s ease;
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1.1); }
+        }
+
+        .review-input-wrapper {
+            position: relative;
+        }
+
+        .review-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.1);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 60px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .review-input:focus {
+            border-color: var(--accent-primary);
+            background: rgba(107, 92, 231, 0.15);
+        }
+
+        .review-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .review-submit-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .review-submit-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .review-submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--shadow-glow);
+        }
+
+        .review-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .review-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .review-list::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 2px;
+        }
+
+        .review-item {
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(107, 92, 231, 0.1);
+        }
+
+        .review-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .review-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .review-author-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .review-rating .mini-star {
+            font-size: 0.8rem;
+            color: var(--accent-warning);
+        }
+
+        .review-rating .mini-star.empty {
+            opacity: 0.3;
+        }
+
+        .review-content {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .review-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .review-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .review-action-btn:hover {
+            color: var(--text-accent);
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        .review-empty {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .review-empty-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-empty-text {
+            font-size: 0.9rem;
+        }
+
+        .review-stats {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .review-stat {
+            text-align: center;
+        }
+
+        .review-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-secondary);
+        }
+
+        .review-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Mobile review adjustments */
+        @media (max-width: 480px) {
+            .star-btn {
+                font-size: 1.5rem;
+            }
+
+            .review-form {
+                margin-bottom: 0.8rem;
+            }
+
+            .review-item {
+                padding: 0.6rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3954,6 +4219,48 @@
                     </div>
                 </div>
 
+                <!-- Agent Reviews Section (Day 18) -->
+                <div class="modal-section reviews">
+                    <div class="modal-section-title">
+                        <span>💬</span> 用户评价
+                        <span class="review-count" id="reviewCount">0</span>
+                    </div>
+                    
+                    <!-- Review Stats -->
+                    <div class="review-stats" id="reviewStats" style="display: none;">
+                        <div class="review-stat">
+                            <div class="review-stat-value" id="avgRating">0.0</div>
+                            <div class="review-stat-label">平均评分</div>
+                        </div>
+                        <div class="review-stat">
+                            <div class="review-stat-value" id="totalReviews">0</div>
+                            <div class="review-stat-label">评论数</div>
+                        </div>
+                    </div>
+
+                    <!-- Review Form -->
+                    <div class="review-form">
+                        <div class="review-stars" id="reviewStars">
+                            <span class="star-btn" data-rating="1" onclick="setReviewRating(1)">⭐</span>
+                            <span class="star-btn" data-rating="2" onclick="setReviewRating(2)">⭐</span>
+                            <span class="star-btn" data-rating="3" onclick="setReviewRating(3)">⭐</span>
+                            <span class="star-btn" data-rating="4" onclick="setReviewRating(4)">⭐</span>
+                            <span class="star-btn" data-rating="5" onclick="setReviewRating(5)">⭐</span>
+                        </div>
+                        <div class="review-input-wrapper">
+                            <textarea class="review-input" id="reviewInput" placeholder="说说你对这个Agent的看法..." maxlength="200"></textarea>
+                        </div>
+                        <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
+                            发表评价
+                        </button>
+                    </div>
+
+                    <!-- Review List -->
+                    <div class="review-list" id="reviewList">
+                        <!-- Reviews will be populated -->
+                    </div>
+                </div>
+
                 <div class="modal-actions">
                     <button class="modal-btn modal-btn-primary" id="modal-follow-btn" onclick="toggleFollow()">
                         <span id="follow-icon">🤝</span>
@@ -4070,6 +4377,226 @@
             ? 'http://localhost:3000'
             : '';
 
+        // ========== API Client (Day 17) ==========
+        // 增强的 API 请求客户端，支持 Token 自动刷新和错误重试
+        const API_CONFIG = {
+            baseUrl: API_BASE,
+            timeout: 15000,           // 请求超时 15 秒
+            maxRetries: 3,            // 最大重试次数
+            retryDelay: 1000,         // 重试延迟 1 秒
+            tokenRefreshBuffer: 5 * 60 * 1000 // Token 刷新缓冲：提前 5 分钟
+        };
+
+        // API Client 类（Day 17 新增）
+        class APIClient {
+            constructor(config) {
+                this.baseUrl = config.baseUrl;
+                this.timeout = config.timeout;
+                this.maxRetries = config.maxRetries;
+                this.retryDelay = config.retryDelay;
+                this.tokenRefreshBuffer = config.tokenRefreshBuffer;
+                
+                // Token 管理
+                this.accessToken = localStorage.getItem('accessToken');
+                this.tokenExpiry = localStorage.getItem('tokenExpiry') ? parseInt(localStorage.getItem('tokenExpiry')) : null;
+                this.refreshToken = localStorage.getItem('refreshToken');
+            }
+
+            // 检查 Token 是否需要刷新
+            needsRefresh() {
+                if (!this.tokenExpiry) return false;
+                return Date.now() > this.tokenExpiry - this.tokenRefreshBuffer;
+            }
+
+            // 保存 Token
+            saveTokens(accessToken, refreshToken, expiresIn = 3600) {
+                this.accessToken = accessToken;
+                this.refreshToken = refreshToken;
+                this.tokenExpiry = Date.now() + expiresIn * 1000;
+                
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                localStorage.setItem('tokenExpiry', this.tokenExpiry.toString());
+            }
+
+            // 清除 Token
+            clearTokens() {
+                this.accessToken = null;
+                this.refreshToken = null;
+                this.tokenExpiry = null;
+                
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('tokenExpiry');
+            }
+
+            // 获取请求头
+            getHeaders() {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'X-Client-Version': '1.0.0'
+                };
+                if (this.accessToken) {
+                    headers['Authorization'] = `Bearer ${this.accessToken}`;
+                }
+                return headers;
+            }
+
+            // 等待指定时间
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            // 通用请求方法
+            async request(url, options = {}, retries = 0) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+                try {
+                    const response = await fetch(`${this.baseUrl}${url}`, {
+                        ...options,
+                        headers: {
+                            ...this.getHeaders(),
+                            ...options.headers
+                        },
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    // 401 未授权，尝试刷新 Token
+                    if (response.status === 401 && this.refreshToken && retries < 1) {
+                        console.log('[API] Token 过期，尝试刷新...');
+                        const refreshed = await this.refreshAccessToken();
+                        if (refreshed) {
+                            // 重试原请求
+                            return this.request(url, options, retries + 1);
+                        } else {
+                            // 刷新失败，清除 Token
+                            this.clearTokens();
+                        }
+                    }
+
+                    // 429 限流，等待后重试
+                    if (response.status === 429 && retries < this.maxRetries) {
+                        const retryAfter = response.headers.get('Retry-After') || 5;
+                        console.log(`[API] 请求限流，等待 ${retryAfter} 秒后重试...`);
+                        await this.delay(retryAfter * 1000);
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    // 5xx 服务器错误，重试
+                    if (response.status >= 500 && retries < this.maxRetries) {
+                        console.log(`[API] 服务器错误 (${response.status})，${retries + 1}/${this.maxRetries} 次重试...`);
+                        await this.delay(this.retryDelay * (retries + 1));
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw {
+                            status: response.status,
+                            message: data.error?.message || '请求失败',
+                            code: data.error?.code || 'UNKNOWN_ERROR'
+                        };
+                    }
+
+                    return data;
+
+                } catch (error) {
+                    clearTimeout(timeoutId);
+
+                    // 请求超时或中止
+                    if (error.name === 'AbortError') {
+                        throw { status: 0, message: '请求超时，请检查网络连接', code: 'TIMEOUT' };
+                    }
+
+                    // 网络错误
+                    if (!navigator.onLine) {
+                        throw { status: 0, message: '网络连接已断开', code: 'NETWORK_ERROR' };
+                    }
+
+                    // 如果还没超过最大重试次数，且不是客户端错误
+                    if (retries < this.maxRetries && error.status >= 500) {
+                        console.log(`[API] 网络错误，${retries + 1}/${this.maxRetries} 次重试...`);
+                        await this.delay(this.retryDelay * (retries + 1));
+                        return this.request(url, options, retries + 1);
+                    }
+
+                    throw error;
+                }
+            }
+
+            // 刷新 Access Token
+            async refreshAccessToken() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/api/v1/auth/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.refreshToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success && data.data.new_api_key) {
+                            this.saveTokens(data.data.new_api_key, this.refreshToken);
+                            console.log('[API] Token 刷新成功');
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('[API] Token 刷新失败:', error);
+                    return false;
+                }
+            }
+
+            // 便捷 GET 方法
+            async get(url, params = {}) {
+                const queryString = new URLSearchParams(params).toString();
+                const fullUrl = queryString ? `${url}?${queryString}` : url;
+                return this.request(fullUrl, { method: 'GET' });
+            }
+
+            // 便捷 POST 方法
+            async post(url, body = {}) {
+                return this.request(url, {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+            }
+
+            // 便捷 PUT 方法
+            async put(url, body = {}) {
+                return this.request(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(body)
+                });
+            }
+
+            // 便捷 DELETE 方法
+            async delete(url, body = {}) {
+                return this.request(url, {
+                    method: 'DELETE',
+                    body: body ? JSON.stringify(body) : undefined
+                });
+            }
+        }
+
+        // 创建全局 API 客户端实例
+        const apiClient = new APIClient(API_CONFIG);
+
+        // 页面加载时检查 Token 状态
+        document.addEventListener('DOMContentLoaded', () => {
+            if (apiClient.accessToken && apiClient.needsRefresh()) {
+                console.log('[API] 页面加载，检测到 Token 即将过期，尝试刷新...');
+                apiClient.refreshAccessToken().catch(console.error);
+            }
+        });
+
         // ========== State ==========
         let currentTab = 'hot';
         let agentsData = [];
@@ -4086,6 +4613,28 @@
         let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]'); // 最近浏览 (Day 9)
         const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
+        let currentReviewRating = 0; // 当前选择的评分 (Day 18)
+
+        // ========== Review System (Day 18) ==========
+        let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
+        const REVIEW_AUTHORS = ['时尚达人', '潮流先锋', '品味玩家', '风格博主', '穿搭专家', 'cool_guy', 'stylish_one', 'trendy_ai', 'fashion_lover', 'vibe_check']; // 随机用户名池
+
+        // 初始化评论输入框监听 (Day 18)
+        document.addEventListener('DOMContentLoaded', () => {
+            const reviewInput = document.getElementById('reviewInput');
+            if (reviewInput) {
+                reviewInput.addEventListener('input', (e) => {
+                    const btn = document.getElementById('reviewSubmitBtn');
+                    if (currentReviewRating > 0 && e.target.value.trim()) {
+                        btn.classList.add('active');
+                    } else if (currentReviewRating > 0) {
+                        btn.classList.add('active'); // 有评分就可以提交
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+        });
 
         // ========== Compare System (Day 15) ==========
         let compareList = []; // 对比列表
@@ -5345,9 +5894,197 @@
             // 更新收藏按钮状态 (Day 6)
             updateFavoriteButton(agent.id);
 
+            // 加载评论 (Day 18)
+            loadAgentReviews(agent.id);
+
             // 显示弹窗
             modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        // ========== Review Functions (Day 18) ==========
+        function loadAgentReviews(agentId) {
+            const agentReviews = reviews[agentId] || [];
+            const count = agentReviews.length;
+            
+            // 更新评论数量
+            document.getElementById('reviewCount').textContent = count;
+            
+            // 更新统计数据
+            const statsEl = document.getElementById('reviewStats');
+            if (count > 0) {
+                statsEl.style.display = 'flex';
+                const avgRating = agentReviews.reduce((sum, r) => sum + r.rating, 0) / count;
+                document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+                document.getElementById('totalReviews').textContent = count;
+            } else {
+                statsEl.style.display = 'none';
+            }
+            
+            // 重置评分选择
+            currentReviewRating = 0;
+            updateStarsDisplay(0);
+            document.getElementById('reviewInput').value = '';
+            document.getElementById('reviewSubmitBtn').classList.remove('active');
+            
+            // 检查用户是否已评论
+            const myReview = agentReviews.find(r => r.isMyReview);
+            if (myReview) {
+                currentReviewRating = myReview.rating;
+                updateStarsDisplay(myReview.rating);
+                document.getElementById('reviewInput').value = myReview.content;
+                document.getElementById('reviewSubmitBtn').textContent = '更新评价';
+                document.getElementById('reviewSubmitBtn').classList.add('active');
+            } else {
+                document.getElementById('reviewSubmitBtn').textContent = '发表评价';
+            }
+            
+            // 渲染评论列表
+            renderReviewList(agentReviews);
+        }
+
+        function setReviewRating(rating) {
+            currentReviewRating = rating;
+            updateStarsDisplay(rating);
+            
+            // 启用提交按钮
+            const btn = document.getElementById('reviewSubmitBtn');
+            const input = document.getElementById('reviewInput');
+            if (rating > 0 && input.value.trim()) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        function updateStarsDisplay(rating) {
+            const stars = document.querySelectorAll('#reviewStars .star-btn');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitReview() {
+            if (!currentModalAgent || currentReviewRating === 0) return;
+            
+            const content = document.getElementById('reviewInput').value.trim();
+            const agentId = currentModalAgent.id;
+            
+            // 初始化该 Agent 的评论数组
+            if (!reviews[agentId]) {
+                reviews[agentId] = [];
+            }
+            
+            // 查找并移除之前的我的评论
+            const existingIndex = reviews[agentId].findIndex(r => r.isMyReview);
+            if (existingIndex > -1) {
+                reviews[agentId].splice(existingIndex, 1);
+            }
+            
+            // 添加新评论
+            const newReview = {
+                rating: currentReviewRating,
+                content: content || '',
+                author: '我',
+                isMyReview: true,
+                time: new Date().toISOString()
+            };
+            reviews[agentId].unshift(newReview);
+            
+            // 保存到 localStorage
+            localStorage.setItem('agentReviews', JSON.stringify(reviews));
+            
+            // 更新显示
+            loadAgentReviews(agentId);
+            
+            // 添加通知
+            addNotification('review', '你评价了', `给 ${currentModalAgent.name} 打 ${currentReviewRating} 星`, agentId);
+            
+            showToast('评价已发布！');
+        }
+
+        function renderReviewList(agentReviews) {
+            const container = document.getElementById('reviewList');
+            
+            if (agentReviews.length === 0) {
+                container.innerHTML = `
+                    <div class="review-empty">
+                        <div class="review-empty-icon">💬</div>
+                        <div class="review-empty-text">还没有人评价，快来抢沙发！</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = agentReviews.map(review => {
+                const stars = Array(5).fill(0).map((_, i) => 
+                    `<span class="mini-star ${i < review.rating ? '' : 'empty'}">⭐</span>`
+                ).join('');
+                
+                const timeAgo = getTimeAgo(review.time);
+                const content = review.content || (review.rating >= 4 ? '👍 很棒！' : review.rating >= 3 ? '💭 一般般' : '🤔 还需要改进');
+                
+                return `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-author">
+                                <div class="review-avatar">${review.author.charAt(0)}</div>
+                                <span class="review-author-name">${review.author}${review.isMyReview ? ' (你)' : ''}</span>
+                            </div>
+                            <div class="review-rating">${stars}</div>
+                        </div>
+                        <div class="review-content">${escapeHtml(content)}</div>
+                        <div class="review-footer">
+                            <span>${timeAgo}</span>
+                            <div class="review-actions">
+                                ${review.isMyReview ? '<button class="review-action-btn" onclick="deleteMyReview()">删除</button>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+        }
+
+        function deleteMyReview() {
+            if (!currentModalAgent) return;
+            
+            const agentId = currentModalAgent.id;
+            const agentReviews = reviews[agentId] || [];
+            const index = agentReviews.findIndex(r => r.isMyReview);
+            
+            if (index > -1) {
+                agentReviews.splice(index, 1);
+                if (agentReviews.length === 0) {
+                    delete reviews[agentId];
+                }
+                localStorage.setItem('agentReviews', JSON.stringify(reviews));
+                loadAgentReviews(agentId);
+                showToast('评论已删除');
+            }
+        }
+
+        function getTimeAgo(isoString) {
+            const now = new Date();
+            const time = new Date(isoString);
+            const diff = Math.floor((now - time) / 1000);
+            
+            if (diff < 60) return '刚刚';
+            if (diff < 3600) return `${Math.floor(diff / 60)}分钟前`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}小时前`;
+            if (diff < 604800) return `${Math.floor(diff / 86400)}天前`;
+            return time.toLocaleDateString('zh-CN');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function closeModal() {
