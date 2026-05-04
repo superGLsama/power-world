@@ -2762,6 +2762,262 @@
             visibility: visible;
         }
 
+        /* ========== Leaderboard Panel (Day 19) ========== */
+        .leaderboard-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
+            border-left: 1px solid rgba(255, 215, 0, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .leaderboard-panel.active {
+            transform: translateX(0);
+        }
+
+        .leaderboard-panel-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.05));
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 50%;
+            color: #FFD700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .leaderboard-panel-close:hover {
+            background: rgba(255, 215, 0, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .leaderboard-tab {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .leaderboard-tab:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: #FFD700;
+        }
+
+        .leaderboard-tab.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+            color: #FFD700;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.5rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255, 215, 0, 0.08);
+            transform: translateX(5px);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard-item.top-3 {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard-rank {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-rank.rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .leaderboard-rank.rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.3);
+        }
+
+        .leaderboard-rank.rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #B87333);
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(205, 127, 50, 0.3);
+        }
+
+        .leaderboard-avatar {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .leaderboard-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-score {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #FFD700;
+            text-align: right;
+        }
+
+        .leaderboard-score-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .leaderboard-footer {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(0, 255, 209, 0.1));
+            border-top: 1px solid rgba(107, 92, 231, 0.3);
+        }
+
+        .leaderboard-my-rank {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 10px;
+        }
+
+        .my-rank-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .my-rank-value {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--accent-secondary);
+        }
+
+        /* Loading State */
+        .leaderboard-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+        }
+
+        .leaderboard-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 215, 0, 0.2);
+            border-top-color: #FFD700;
+            border-radius: 50%;
+            animation: leaderboard-spin 0.8s linear infinite;
+        }
+
+        @keyframes leaderboard-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .leaderboard-loading-text {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
         /* ========== Settings Panel (Day 10) ========== */
         .settings-panel {
             position: fixed;
@@ -3810,6 +4066,10 @@
                 🏆
                 <span class="achievement-badge" id="achievementBadge">0</span>
             </button>
+            <!-- Leaderboard Button (Day 19) -->
+            <button class="leaderboard-btn" id="leaderboardBtn" onclick="toggleLeaderboardPanel()" title="排行榜">
+                📊
+            </button>
             <button class="recent-btn" id="recentBtn" onclick="toggleRecentPanel()">
                 🕐
                 <span class="recent-badge" id="recentBadge">0</span>
@@ -3911,6 +4171,30 @@
         </div>
     </div>
 
+    <!-- Leaderboard Panel (Day 19) -->
+    <div class="leaderboard-panel" id="leaderboardPanel">
+        <div class="leaderboard-panel-header">
+            <div class="leaderboard-panel-title">
+                <span>📊</span> 潮流榜单
+            </div>
+            <button class="leaderboard-panel-close" onclick="toggleLeaderboardPanel()">✕</button>
+        </div>
+        <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-type="hot" onclick="switchLeaderboard('hot')">🔥 热门</button>
+            <button class="leaderboard-tab" data-type="score" onclick="switchLeaderboard('score')">⭐ 评分</button>
+            <button class="leaderboard-tab" data-type="new" onclick="switchLeaderboard('new')">✨ 新秀</button>
+        </div>
+        <div class="leaderboard-content" id="leaderboardContent">
+            <!-- Leaderboard items will be populated -->
+        </div>
+        <div class="leaderboard-footer">
+            <div class="leaderboard-my-rank" id="leaderboardMyRank">
+                <span class="my-rank-label">我的排名</span>
+                <span class="my-rank-value" id="myRankValue">--</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Panel (Day 10) -->
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-panel-header">
@@ -3997,13 +4281,14 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div><kbd>/</kbd> 搜索</div>
         <div><kbd>T</kbd> 主题</div>
         <div><kbd>N</kbd> 通知</div>
         <div><kbd>R</kbd> 浏览</div>
+        <div><kbd>K</kbd> 榜单</div>
         <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>C</kbd> 对比</div>
@@ -6418,6 +6703,11 @@
                     toggleComparePanel();
                 }
 
+                // 'k' 或 'K' - 切换排行榜面板 (Day 19)
+                if (e.key === 'k' || e.key === 'K') {
+                    toggleLeaderboardPanel();
+                }
+
                 // '?' - 显示/隐藏快捷键帮助
                 if (e.key === '?') {
                     showKeyboardHint();
@@ -6462,18 +6752,21 @@
             const recentPanel = document.getElementById('recentPanel');
             const settingsPanel = document.getElementById('settingsPanel');
             const notificationPanel = document.getElementById('notificationPanel');
+            const leaderboardPanel = document.getElementById('leaderboardPanel');
             const overlay = document.getElementById('panelOverlay');
             const achievementBtn = document.getElementById('achievementBtn');
             const favoriteBtn = document.getElementById('favoriteBtn');
             const recentBtn = document.getElementById('recentBtn');
             const settingsBtn = document.getElementById('settingsBtn');
             const notificationBtn = document.getElementById('notificationBtn');
+            const leaderboardBtn = document.getElementById('leaderboardBtn');
 
             achievementPanel.classList.remove('active');
             favoritePanel.classList.remove('active');
             recentPanel.classList.remove('active');
             settingsPanel.classList.remove('active');
             notificationPanel.classList.remove('active');
+            leaderboardPanel.classList.remove('active');
             overlay.classList.remove('active');
             
             achievementBtn.classList.remove('active');
@@ -6481,6 +6774,162 @@
             recentBtn.classList.remove('active');
             settingsBtn.classList.remove('active');
             notificationBtn.classList.remove('active');
+            leaderboardBtn.classList.remove('active');
+        }
+
+        // ========== Leaderboard Panel Functions (Day 19) ==========
+        let currentLeaderboardType = 'hot';
+
+        function toggleLeaderboardPanel() {
+            const panel = document.getElementById('leaderboardPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('leaderboardBtn');
+            
+            if (panel.classList.contains('active')) {
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+                btn.classList.remove('active');
+            } else {
+                closeAllPanels();
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                btn.classList.add('active');
+                loadLeaderboard(currentLeaderboardType);
+            }
+        }
+
+        function switchLeaderboard(type) {
+            if (type === currentLeaderboardType) return;
+            currentLeaderboardType = type;
+            
+            // Update tab states
+            document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.type === type);
+            });
+            
+            loadLeaderboard(type);
+        }
+
+        async function loadLeaderboard(type = 'hot') {
+            const content = document.getElementById('leaderboardContent');
+            content.innerHTML = `
+                <div class="leaderboard-loading">
+                    <div class="leaderboard-spinner"></div>
+                    <div class="leaderboard-loading-text">加载榜单数据...</div>
+                </div>
+            `;
+            
+            try {
+                const data = await fetchLeaderboard(type);
+                if (data && data.length > 0) {
+                    renderLeaderboard(data, type);
+                } else {
+                    renderMockLeaderboard(type);
+                }
+            } catch (error) {
+                console.log('Using mock data for leaderboard');
+                renderMockLeaderboard(type);
+            }
+        }
+
+        function renderMockLeaderboard(type) {
+            const content = document.getElementById('leaderboardContent');
+            const mockData = getMockLeaderboardData(type);
+            
+            let html = '';
+            mockData.forEach((agent, index) => {
+                const rank = index + 1;
+                const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                const topClass = rank <= 3 ? 'top-3' : '';
+                
+                html += `
+                    <div class="leaderboard-item ${topClass}" onclick="openAgentModal('${agent.id}')">
+                        <div class="leaderboard-rank ${rankClass}">${rank}</div>
+                        <div class="leaderboard-avatar">${agent.avatar}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${agent.name}</div>
+                            <div class="leaderboard-meta">
+                                <span class="card-rarity rarity-${agent.rarity}">${agent.rarity.toUpperCase()}</span>
+                                <span>❤️ ${agent.likes}</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-score">
+                            ${agent.score}
+                            <div class="leaderboard-score-label">热度</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+            
+            // Update my rank
+            const myRank = calculateMyRank(mockData);
+            document.getElementById('myRankValue').textContent = myRank || '--';
+        }
+
+        function renderLeaderboard(data, type) {
+            const content = document.getElementById('leaderboardContent');
+            
+            let html = '';
+            data.slice(0, 10).forEach((agent, index) => {
+                const rank = index + 1;
+                const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                const topClass = rank <= 3 ? 'top-3' : '';
+                const scoreLabel = type === 'hot' ? '热度' : type === 'score' ? '评分' : '新鲜度';
+                
+                html += `
+                    <div class="leaderboard-item ${topClass}" onclick="openAgentModal('${agent.id}')">
+                        <div class="leaderboard-rank ${rankClass}">${rank}</div>
+                        <div class="leaderboard-avatar">${agent.avatar || '🤖'}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${agent.name}</div>
+                            <div class="leaderboard-meta">
+                                <span class="card-rarity rarity-${agent.rarity}">${agent.rarity?.toUpperCase() || 'R'}</span>
+                                <span>❤️ ${agent.likes || 0}</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-score">
+                            ${agent.score || agent.hot_score || 0}
+                            <div class="leaderboard-score-label">${scoreLabel}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function getMockLeaderboardData(type) {
+            const baseData = [
+                { id: 'agent-1', name: '小乖', score: 982, avatar: '🎭', rarity: 'ssr', likes: 328 },
+                { id: 'agent-2', name: 'Canvas', score: 956, avatar: '🎨', rarity: 'ssr', likes: 289 },
+                { id: 'agent-3', name: 'Nexus', score: 921, avatar: '🤖', rarity: 'sr', likes: 245 },
+                { id: 'agent-4', name: 'Zero', score: 895, avatar: '👾', rarity: 'sr', likes: 198 },
+                { id: 'agent-5', name: 'Luna', score: 867, avatar: '🌙', rarity: 'r', likes: 176 },
+                { id: 'agent-6', name: 'Wukong', score: 834, avatar: '🦊', rarity: 'sr', likes: 156 },
+                { id: 'agent-7', name: 'Nova', score: 798, avatar: '✨', rarity: 'r', likes: 134 },
+                { id: 'agent-8', name: 'Echo', score: 756, avatar: '🔮', rarity: 'r', likes: 112 },
+                { id: 'agent-9', name: 'Pixel', score: 723, avatar: '🟩', rarity: 'r', likes: 98 },
+                { id: 'agent-10', name: 'Aero', score: 687, avatar: '💨', rarity: 'r', likes: 87 }
+            ];
+            
+            if (type === 'hot') {
+                return baseData.sort((a, b) => b.likes - a.likes);
+            } else if (type === 'score') {
+                return baseData.sort((a, b) => b.score - a.score);
+            } else {
+                // 新秀：随机排序 + 降低分数
+                return baseData.map(a => ({...a, score: Math.floor(a.score * 0.7), likes: Math.floor(a.likes * 0.5)}))
+                    .sort(() => Math.random() - 0.5);
+            }
+        }
+
+        function calculateMyRank(data) {
+            // 模拟用户排名
+            const myScore = favoriteAgents.length * 50 + likedAgents.length * 30 + 100;
+            const rank = data.findIndex(a => a.score < myScore) + 1;
+            return rank > 0 ? rank : data.length + 1;
         }
 
         // ========== Compare System Functions (Day 15) ==========
