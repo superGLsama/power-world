@@ -3670,6 +3670,28 @@
             font-weight: 600;
         }
 
+        .rarity-tag {
+            padding: 0.1rem 0.4rem;
+            font-size: 0.65rem;
+            border-radius: 8px;
+            margin-left: 0.3rem;
+        }
+
+        .rarity-tag.ssr {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .rarity-tag.sr {
+            background: rgba(192, 192, 192, 0.2);
+            color: #c0c0c0;
+        }
+
+        .rarity-tag.r {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+        }
+
         .favorite-card-remove {
             width: 36px;
             height: 36px;
@@ -3689,6 +3711,244 @@
         .favorite-card-remove:hover {
             background: rgba(255, 107, 107, 0.2);
             transform: scale(1.1);
+        }
+
+        /* ========== Favorite Toolbar (Day 20) ========== */
+        .favorite-toolbar {
+            padding: 0.8rem 1rem;
+            background: rgba(255, 107, 138, 0.05);
+            border-bottom: 1px solid rgba(255, 107, 138, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .favorite-stats {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: #888;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .stat-item .count {
+            color: #ff6b8a;
+            font-weight: 600;
+        }
+
+        .stat-item.ssr .count { color: #ffd700; }
+        .stat-item.sr .count { color: #c0c0c0; }
+        .stat-item.r .count { color: #64b5f6; }
+
+        .favorite-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .favorite-filter {
+            display: flex;
+            gap: 0.3rem;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255, 107, 138, 0.2);
+            background: transparent;
+            color: #888;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 107, 138, 0.1);
+            color: #ff6b8a;
+        }
+
+        .filter-btn.active {
+            background: rgba(255, 107, 138, 0.2);
+            color: #ff6b8a;
+            border-color: rgba(255, 107, 138, 0.4);
+        }
+
+        .favorite-sort select {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .favorite-sort select:focus {
+            border-color: rgba(255, 107, 138, 0.4);
+        }
+
+        .favorite-view-toggle {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .view-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #888;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .view-btn.active {
+            background: rgba(255, 107, 138, 0.2);
+            color: #ff6b8a;
+            border-color: rgba(255, 107, 138, 0.4);
+        }
+
+        /* Favorite Grid View */
+        .favorite-list.grid-view {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .favorite-list.grid-view .favorite-card {
+            flex-direction: column;
+            padding: 0.8rem;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .favorite-list.grid-view .favorite-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .favorite-list.grid-view .favorite-card-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+        }
+
+        .favorite-list.grid-view .favorite-card-info {
+            width: 100%;
+        }
+
+        .favorite-list.grid-view .favorite-card-name {
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .favorite-list.grid-view .favorite-card-meta {
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .favorite-list.grid-view .favorite-card-remove {
+            position: absolute;
+            top: 0.4rem;
+            right: 0.4rem;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .favorite-list.grid-view .favorite-card:hover .favorite-card-remove {
+            opacity: 1;
+        }
+
+        /* Favorite list view enhancements */
+        .favorite-list.list-view .favorite-card {
+            position: relative;
+        }
+
+        /* Light theme toolbar */
+        [data-theme="light"] .favorite-toolbar {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .stat-item {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        [data-theme="light"] .filter-btn {
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+
+        [data-theme="light"] .filter-btn:hover {
+            background: rgba(255, 107, 138, 0.08);
+            color: #ff6b8a;
+        }
+
+        [data-theme="light"] .favorite-sort select {
+            border-color: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.02);
+            color: #333;
+        }
+
+        [data-theme="light"] .view-btn {
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+
+        [data-theme="light"] .view-btn:hover {
+            background: rgba(0, 0, 0, 0.03);
+            color: #333;
+        }
+
+        /* Mobile favorite toolbar */
+        @media (max-width: 480px) {
+            .favorite-toolbar {
+                padding: 0.6rem;
+            }
+
+            .favorite-filter {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .favorite-sort {
+                order: 1;
+            }
+
+            .favorite-view-toggle {
+                order: 3;
+            }
+
+            .favorite-list.grid-view {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
         }
 
         /* Mobile favorite panel */
@@ -4149,6 +4409,31 @@
                 <span>❤️</span> 我的收藏
             </div>
             <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
+        </div>
+        <!-- Day 20: Favorite Panel Toolbar -->
+        <div class="favorite-toolbar" id="favoriteToolbar">
+            <div class="favorite-stats" id="favoriteStats"></div>
+            <div class="favorite-controls">
+                <div class="favorite-filter" id="favoriteFilter">
+                    <button class="filter-btn active" data-rarity="all" onclick="filterFavorites('all')">全部</button>
+                    <button class="filter-btn" data-rarity="ssr" onclick="filterFavorites('ssr')">传奇</button>
+                    <button class="filter-btn" data-rarity="sr" onclick="filterFavorites('sr')">史诗</button>
+                    <button class="filter-btn" data-rarity="r" onclick="filterFavorites('r')">稀有</button>
+                </div>
+                <div class="favorite-sort">
+                    <select id="favoriteSortSelect" onchange="sortFavorites(this.value)">
+                        <option value="default">默认排序</option>
+                        <option value="score-desc">时尚值 ↓</option>
+                        <option value="score-asc">时尚值 ↑</option>
+                        <option value="name-asc">名称 A-Z</option>
+                        <option value="name-desc">名称 Z-A</option>
+                    </select>
+                </div>
+                <div class="favorite-view-toggle">
+                    <button class="view-btn active" data-view="list" onclick="toggleFavoriteView('list')" title="列表视图">☰</button>
+                    <button class="view-btn" data-view="grid" onclick="toggleFavoriteView('grid')" title="网格视图">⊞</button>
+                </div>
+            </div>
         </div>
         <div class="favorite-panel-body" id="favoritePanelBody">
             <!-- Favorite items will be populated -->
@@ -5194,8 +5479,14 @@
             }
         }
 
+        // ========== Favorite Panel State (Day 20) ==========
+        let favoriteViewMode = localStorage.getItem('favoriteViewMode') || 'list';
+        let favoriteFilterRarity = localStorage.getItem('favoriteFilterRarity') || 'all';
+        let favoriteSortOrder = localStorage.getItem('favoriteSortOrder') || 'default';
+
         function renderFavoritePanel() {
             const body = document.getElementById('favoritePanelBody');
+            const statsContainer = document.getElementById('favoriteStats');
             
             if (favoriteAgents.length === 0) {
                 body.innerHTML = `
@@ -5205,10 +5496,11 @@
                         <div class="favorite-empty-hint">点击Agent卡片中的❤️来收藏</div>
                     </div>
                 `;
+                statsContainer.innerHTML = '';
                 return;
             }
 
-            const favoriteList = favoriteAgents.map(id => {
+            let favoriteList = favoriteAgents.map(id => {
                 const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
                 return agent;
             }).filter(Boolean);
@@ -5221,11 +5513,58 @@
                         <div class="favorite-empty-hint">去首页探索更多Agent吧</div>
                     </div>
                 `;
+                statsContainer.innerHTML = '';
                 return;
             }
 
-            let html = '<div class="favorite-list">';
+            // Calculate stats
+            const ssrCount = favoriteList.filter(a => a.rarity === 'ssr').length;
+            const srCount = favoriteList.filter(a => a.rarity === 'sr').length;
+            const rCount = favoriteList.filter(a => a.rarity === 'r').length;
+            
+            statsContainer.innerHTML = `
+                <span class="stat-item"><span class="count">${favoriteList.length}</span> 总计</span>
+                <span class="stat-item ssr"><span class="count">${ssrCount}</span> 传奇</span>
+                <span class="stat-item sr"><span class="count">${srCount}</span> 史诗</span>
+                <span class="stat-item r"><span class="count">${rCount}</span> 稀有</span>
+            `;
+
+            // Apply filter
+            if (favoriteFilterRarity !== 'all') {
+                favoriteList = favoriteList.filter(a => a.rarity === favoriteFilterRarity);
+            }
+
+            // Apply sort
+            switch (favoriteSortOrder) {
+                case 'score-desc':
+                    favoriteList.sort((a, b) => (b.fashion_score || 0) - (a.fashion_score || 0));
+                    break;
+                case 'score-asc':
+                    favoriteList.sort((a, b) => (a.fashion_score || 0) - (b.fashion_score || 0));
+                    break;
+                case 'name-asc':
+                    favoriteList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    break;
+                case 'name-desc':
+                    favoriteList.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+                    break;
+            }
+
+            if (favoriteList.length === 0) {
+                body.innerHTML = `
+                    <div class="favorite-empty">
+                        <div class="favorite-empty-icon">🔍</div>
+                        <div class="favorite-empty-text">没有找到匹配的收藏</div>
+                        <div class="favorite-empty-hint">试试切换筛选条件</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const viewClass = favoriteViewMode === 'grid' ? 'grid-view' : 'list-view';
+            let html = `<div class="favorite-list ${viewClass}">`;
             favoriteList.forEach(agent => {
+                const rarityLabel = agent.rarity === 'ssr' ? '传奇' : agent.rarity === 'sr' ? '史诗' : '稀有';
                 html += `
                     <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
                         <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
@@ -5234,6 +5573,7 @@
                             <div class="favorite-card-meta">
                                 <span class="favorite-card-score">${agent.fashion_score}</span>
                                 <span>时尚值</span>
+                                <span class="rarity-tag ${agent.rarity}">${rarityLabel}</span>
                             </div>
                         </div>
                         <button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>
@@ -5242,6 +5582,37 @@
             });
             html += '</div>';
             body.innerHTML = html;
+
+            // Update view toggle buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === favoriteViewMode);
+            });
+
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.rarity === favoriteFilterRarity);
+            });
+        }
+
+        // Day 20: Filter favorites by rarity
+        function filterFavorites(rarity) {
+            favoriteFilterRarity = rarity;
+            localStorage.setItem('favoriteFilterRarity', rarity);
+            renderFavoritePanel();
+        }
+
+        // Day 20: Sort favorites
+        function sortFavorites(order) {
+            favoriteSortOrder = order;
+            localStorage.setItem('favoriteSortOrder', order);
+            renderFavoritePanel();
+        }
+
+        // Day 20: Toggle view mode
+        function toggleFavoriteView(view) {
+            favoriteViewMode = view;
+            localStorage.setItem('favoriteViewMode', view);
+            renderFavoritePanel();
         }
 
         function toggleFavorite(agentId) {
