@@ -3214,6 +3214,321 @@
             line-height: 1.5;
         }
 
+        /* ========== System Status Panel (Day 21 - K8s Style) ========== */
+        .system-status-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .system-status-btn:hover {
+            background: rgba(107, 92, 231, 0.4);
+            transform: scale(1.1);
+        }
+
+        .system-status-btn.active {
+            background: rgba(107, 92, 231, 0.5);
+        }
+
+        .system-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00FFD1;
+            box-shadow: 0 0 10px #00FFD1;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .system-status-dot.offline {
+            background: #ff6b8a;
+            box-shadow: 0 0 10px #ff6b8a;
+        }
+
+        .system-status-dot.warning {
+            background: #FFD700;
+            box-shadow: 0 0 10px #FFD700;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        .system-status-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 380px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(13, 13, 26, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(0, 255, 209, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .system-status-panel.active {
+            transform: translateX(0);
+        }
+
+        .system-status-panel-header {
+            padding: 1.5rem;
+            background: rgba(0, 255, 209, 0.08);
+            border-bottom: 1px solid rgba(0, 255, 209, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .system-status-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00FFD1;
+        }
+
+        .system-status-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(0, 255, 209, 0.15);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .system-status-panel-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .system-status-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .system-status-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .system-status-section-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 209, 0.1);
+        }
+
+        .system-status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .system-status-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .system-status-value {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .system-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00FFD1;
+            box-shadow: 0 0 8px #00FFD1;
+        }
+
+        .indicator-dot.offline {
+            background: #ff6b8a;
+            box-shadow: 0 0 8px #ff6b8a;
+        }
+
+        .indicator-dot.warning {
+            background: #FFD700;
+            box-shadow: 0 0 8px #FFD700;
+        }
+
+        .indicator-text {
+            font-size: 0.85rem;
+            color: #00FFD1;
+        }
+
+        .indicator-text.offline {
+            color: #ff6b8a;
+        }
+
+        .indicator-text.warning {
+            color: #FFD700;
+        }
+
+        /* Storage Bar */
+        .storage-bar-container {
+            height: 8px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .storage-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .storage-breakdown {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 10px;
+        }
+
+        .storage-breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .storage-breakdown-item span:nth-child(3) {
+            margin-left: auto;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-muted);
+        }
+
+        .breakdown-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Traffic Indicator */
+        .traffic-indicator {
+            margin-bottom: 0.8rem;
+        }
+
+        .traffic-bar-group {
+            height: 6px;
+            background: rgba(107, 92, 231, 0.15);
+            border-radius: 3px;
+            margin-bottom: 0.3rem;
+            overflow: hidden;
+        }
+
+        .traffic-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00FFD1, #6B5CE7);
+            border-radius: 3px;
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+
+        .traffic-bar.traffic-out {
+            background: linear-gradient(90deg, #ff6b8a, #FFD700);
+        }
+
+        .traffic-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Overview Grid */
+        .system-status-overview {
+            background: rgba(0, 255, 209, 0.05);
+            border: 1px solid rgba(0, 255, 209, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .overview-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #00FFD1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .overview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.8rem 0.5rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .overview-item.healthy .overview-icon {
+            color: #00FFD1;
+        }
+
+        .overview-item.warning .overview-icon {
+            color: #FFD700;
+        }
+
+        .overview-item.error .overview-icon {
+            color: #ff6b8a;
+        }
+
+        .overview-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
         .file-input-wrapper {
             position: relative;
             width: 100%;
@@ -4083,6 +4398,10 @@
                 ⚖️
                 <span class="compare-badge" id="compareBadge" style="display: none;">0</span>
             </button>
+            <!-- System Status Button (Day 21) -->
+            <button class="system-status-btn" id="systemStatusBtn" onclick="toggleSystemStatusPanel()" title="系统状态">
+                <span class="system-status-dot" id="systemStatusDot"></span>
+            </button>
             <button class="settings-btn" id="settingsBtn" onclick="toggleSettingsPanel()">
                 📦
             </button>
@@ -4195,6 +4514,147 @@
         </div>
     </div>
 
+    <!-- System Status Panel (Day 21 - K8s Style) -->
+    <div class="system-status-panel" id="systemStatusPanel">
+        <div class="system-status-panel-header">
+            <div class="system-status-panel-title">
+                <span>🖥️</span> 系统状态
+            </div>
+            <button class="system-status-panel-close" onclick="toggleSystemStatusPanel()">✕</button>
+        </div>
+        <div class="system-status-panel-body">
+            <!-- 运行时长 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">⏱️ 运行信息</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">运行时长</div>
+                    <div class="system-status-value" id="systemUptime">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">当前时间</div>
+                    <div class="system-status-value" id="systemTime">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">访问次数</div>
+                    <div class="system-status-value" id="systemVisits">0</div>
+                </div>
+            </div>
+
+            <!-- API 健康状态 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">🔗 API 状态</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">后端连接</div>
+                    <div class="system-status-indicator">
+                        <span class="indicator-dot" id="apiStatusDot"></span>
+                        <span class="indicator-text" id="apiStatusText">检测中...</span>
+                    </div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">响应延迟</div>
+                    <div class="system-status-value" id="apiLatency">--</div>
+                </div>
+            </div>
+
+            <!-- 存储使用 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">💾 存储使用</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">本地存储</div>
+                    <div class="system-status-value" id="storageUsed">--</div>
+                </div>
+                <div class="storage-bar-container">
+                    <div class="storage-bar" id="storageBar"></div>
+                </div>
+                <div class="storage-breakdown" id="storageBreakdown">
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #6B5CE7;"></span>
+                        <span>收藏</span>
+                        <span id="storageFavorites">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #00FFD1;"></span>
+                        <span>浏览历史</span>
+                        <span id="storageRecent">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #FFD700;"></span>
+                        <span>成就</span>
+                        <span id="storageAchievements">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #ff6b8a;"></span>
+                        <span>其他</span>
+                        <span id="storageOther">0 KB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent 数据 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">🤖 Agent 数据</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">在线 Agent</div>
+                    <div class="system-status-value" id="totalAgents">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">我的收藏</div>
+                    <div class="system-status-value" id="myFavorites">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">我的关注</div>
+                    <div class="system-status-value" id="myFollows">--</div>
+                </div>
+            </div>
+
+            <!-- 实时流量 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">📡 实时流量</div>
+                <div class="traffic-indicator">
+                    <div class="traffic-bar-group">
+                        <div class="traffic-bar" id="trafficIn"></div>
+                    </div>
+                    <div class="traffic-label">
+                        <span>↓ 流入</span>
+                        <span id="trafficInRate">0 KB/s</span>
+                    </div>
+                </div>
+                <div class="traffic-indicator">
+                    <div class="traffic-bar-group">
+                        <div class="traffic-bar traffic-out" id="trafficOut"></div>
+                    </div>
+                    <div class="traffic-label">
+                        <span>↑ 流出</span>
+                        <span id="trafficOutRate">0 KB/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 健康状态总览 -->
+            <div class="system-status-overview">
+                <div class="overview-title">📊 健康状态总览</div>
+                <div class="overview-grid">
+                    <div class="overview-item" id="overviewUptime">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">服务</div>
+                    </div>
+                    <div class="overview-item" id="overviewStorage">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">存储</div>
+                    </div>
+                    <div class="overview-item" id="overviewApi">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">API</div>
+                    </div>
+                    <div class="overview-item" id="overviewNetwork">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">网络</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Panel (Day 10) -->
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-panel-header">
@@ -4281,7 +4741,7 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div><kbd>/</kbd> 搜索</div>
@@ -4292,6 +4752,7 @@
         <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>C</kbd> 对比</div>
+        <div><kbd>⇧D</kbd> 状态</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
     </div>
@@ -6635,6 +7096,7 @@
             updateSettingsStats(); // Day 10: 初始化设置面板统计
             updateNotificationBadge(); // Day 11: 初始化通知角标
             initCompareList(); // Day 15: 初始化对比列表
+            initSystemStatusIndicator(); // Day 21: 初始化系统状态指示器
             
             createParticles();
             setupTabListeners();
@@ -6708,6 +7170,11 @@
                     toggleLeaderboardPanel();
                 }
 
+                // 'Shift+D' - 切换系统状态面板 (Day 21)
+                if (e.key === 'D' && e.shiftKey) {
+                    toggleSystemStatusPanel();
+                }
+
                 // '?' - 显示/隐藏快捷键帮助
                 if (e.key === '?') {
                     showKeyboardHint();
@@ -6722,6 +7189,7 @@
                     const settingsPanel = document.getElementById('settingsPanel'); // Day 10
                     const comparePanel = document.getElementById('comparePanel'); // Day 15
                     const compareModal = document.getElementById('compareModalOverlay'); // Day 15
+                    const systemStatusPanel = document.getElementById('systemStatusPanel'); // Day 21
                     const keyboardHint = document.getElementById('keyboardHint');
 
                     if (keyboardHint.classList.contains('show')) {
@@ -6732,6 +7200,8 @@
                         closeModal();
                     } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
                         toggleComparePanel();
+                    } else if (systemStatusPanel && systemStatusPanel.classList.contains('active')) { // Day 21
+                        toggleSystemStatusPanel();
                     } else if (favoritePanel.classList.contains('active')) {
                         toggleFavoritePanel();
                     } else if (recentPanel.classList.contains('active')) { // Day 9
@@ -6753,6 +7223,7 @@
             const settingsPanel = document.getElementById('settingsPanel');
             const notificationPanel = document.getElementById('notificationPanel');
             const leaderboardPanel = document.getElementById('leaderboardPanel');
+            const systemStatusPanel = document.getElementById('systemStatusPanel');
             const overlay = document.getElementById('panelOverlay');
             const achievementBtn = document.getElementById('achievementBtn');
             const favoriteBtn = document.getElementById('favoriteBtn');
@@ -6760,6 +7231,7 @@
             const settingsBtn = document.getElementById('settingsBtn');
             const notificationBtn = document.getElementById('notificationBtn');
             const leaderboardBtn = document.getElementById('leaderboardBtn');
+            const systemStatusBtn = document.getElementById('systemStatusBtn');
 
             achievementPanel.classList.remove('active');
             favoritePanel.classList.remove('active');
@@ -6767,6 +7239,7 @@
             settingsPanel.classList.remove('active');
             notificationPanel.classList.remove('active');
             leaderboardPanel.classList.remove('active');
+            systemStatusPanel.classList.remove('active');
             overlay.classList.remove('active');
             
             achievementBtn.classList.remove('active');
@@ -6775,6 +7248,231 @@
             settingsBtn.classList.remove('active');
             notificationBtn.classList.remove('active');
             leaderboardBtn.classList.remove('active');
+            systemStatusBtn.classList.remove('active');
+        }
+
+        // ========== System Status Panel Functions (Day 21 - K8s Style) ==========
+        let systemStartTime = Date.now();
+        let systemStatusInterval = null;
+
+        function toggleSystemStatusPanel() {
+            const panel = document.getElementById('systemStatusPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('systemStatusBtn');
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                startSystemStatusMonitor();
+                updateSystemStatus();
+            } else {
+                stopSystemStatusMonitor();
+            }
+        }
+
+        function startSystemStatusMonitor() {
+            if (systemStatusInterval) clearInterval(systemStatusInterval);
+            // 更新频率：每秒更新时间，每10秒检测API
+            systemStatusInterval = setInterval(() => {
+                updateSystemStatusTime();
+                // 每10秒更新一次完整状态
+                if (Math.random() < 0.1) {
+                    updateSystemStatus();
+                }
+            }, 1000);
+            updateSystemStatus();
+        }
+
+        function stopSystemStatusMonitor() {
+            if (systemStatusInterval) {
+                clearInterval(systemStatusInterval);
+                systemStatusInterval = null;
+            }
+        }
+
+        function updateSystemStatus() {
+            // 更新运行信息
+            updateSystemStatusTime();
+            
+            // 更新访问次数
+            const visits = userStats.totalVisits || 0;
+            document.getElementById('systemVisits').textContent = visits;
+
+            // 更新 Agent 数据
+            document.getElementById('totalAgents').textContent = '50+';
+            document.getElementById('myFavorites').textContent = favoriteAgents.length;
+            document.getElementById('myFollows').textContent = followedAgents.length;
+
+            // 更新存储使用
+            updateStorageUsage();
+
+            // 检测 API 状态
+            checkApiStatus();
+
+            // 更新流量指示器
+            updateTrafficIndicator();
+
+            // 更新健康状态总览
+            updateHealthOverview();
+        }
+
+        function updateSystemStatusTime() {
+            // 运行时长
+            const uptime = Date.now() - systemStartTime;
+            const hours = Math.floor(uptime / 3600000);
+            const minutes = Math.floor((uptime % 3600000) / 60000);
+            const seconds = Math.floor((uptime % 60000) / 1000);
+            document.getElementById('systemUptime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // 当前时间
+            const now = new Date();
+            document.getElementById('systemTime').textContent = 
+                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+        }
+
+        function updateStorageUsage() {
+            // 计算 localStorage 各部分大小
+            const sizes = {
+                favorites: getStorageSize('favoriteAgents'),
+                recent: getStorageSize('recentlyViewed'),
+                achievements: getStorageSize('unlockedAchievements'),
+                other: getStorageSize('likedAgents') + getStorageSize('followedAgents') + getStorageSize('userStats')
+            };
+
+            const totalSize = sizes.favorites + sizes.recent + sizes.achievements + sizes.other;
+            const maxSize = 5 * 1024; // 假设 5MB 配额
+
+            document.getElementById('storageFavorites').textContent = formatBytes(sizes.favorites);
+            document.getElementById('storageRecent').textContent = formatBytes(sizes.recent);
+            document.getElementById('storageAchievements').textContent = formatBytes(sizes.achievements);
+            document.getElementById('storageOther').textContent = formatBytes(sizes.other);
+
+            document.getElementById('storageUsed').textContent = formatBytes(totalSize);
+
+            // 更新存储条
+            const percentage = Math.min((totalSize / maxSize) * 100, 100);
+            const storageBar = document.getElementById('storageBar');
+            storageBar.style.width = percentage + '%';
+            
+            // 根据使用率改变颜色
+            if (percentage > 80) {
+                storageBar.style.background = 'linear-gradient(90deg, #ff6b8a, #FFD700)';
+            } else if (percentage > 50) {
+                storageBar.style.background = 'linear-gradient(90deg, #FFD700, #6B5CE7)';
+            } else {
+                storageBar.style.background = 'linear-gradient(90deg, #6B5CE7, #00FFD1)';
+            }
+        }
+
+        function getStorageSize(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? new Blob([data]).size : 0;
+            } catch {
+                return 0;
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        async function checkApiStatus() {
+            const apiStatusDot = document.getElementById('apiStatusDot');
+            const apiStatusText = document.getElementById('apiStatusText');
+            const apiLatency = document.getElementById('apiLatency');
+            const statusDot = document.getElementById('systemStatusDot');
+            const overviewApi = document.getElementById('overviewApi');
+
+            const startTime = performance.now();
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/health`, {
+                    method: 'GET',
+                    signal: AbortSignal.timeout(3000)
+                });
+                
+                const latency = Math.round(performance.now() - startTime);
+                
+                if (response.ok) {
+                    apiStatusDot.className = 'indicator-dot';
+                    apiStatusText.className = 'indicator-text';
+                    apiStatusText.textContent = '在线';
+                    apiLatency.textContent = latency + 'ms';
+                    statusDot.className = 'system-status-dot';
+                    overviewApi.className = 'overview-item healthy';
+                    overviewApi.querySelector('.overview-icon').textContent = '✓';
+                } else {
+                    throw new Error('API response not ok');
+                }
+            } catch {
+                apiStatusDot.className = 'indicator-dot offline';
+                apiStatusText.className = 'indicator-text offline';
+                apiStatusText.textContent = '离线（Mock模式）';
+                apiLatency.textContent = '--';
+                statusDot.className = 'system-status-dot warning';
+                overviewApi.className = 'overview-item warning';
+                overviewApi.querySelector('.overview-icon').textContent = '⚠';
+            }
+        }
+
+        function updateTrafficIndicator() {
+            // 模拟流量数据
+            const trafficIn = 10 + Math.random() * 50;
+            const trafficOut = 5 + Math.random() * 30;
+
+            document.getElementById('trafficIn').style.width = Math.min(trafficIn, 100) + '%';
+            document.getElementById('trafficOut').style.width = Math.min(trafficOut, 100) + '%';
+            document.getElementById('trafficInRate').textContent = formatBytes(trafficIn * 1024) + '/s';
+            document.getElementById('trafficOutRate').textContent = formatBytes(trafficOut * 1024) + '/s';
+        }
+
+        function updateHealthOverview() {
+            const overviewUptime = document.getElementById('overviewUptime');
+            const overviewStorage = document.getElementById('overviewStorage');
+            const overviewNetwork = document.getElementById('overviewNetwork');
+
+            // 服务状态 - 总是正常
+            overviewUptime.className = 'overview-item healthy';
+            overviewUptime.querySelector('.overview-icon').textContent = '✓';
+
+            // 存储状态
+            const totalSize = getStorageSize('favoriteAgents') + getStorageSize('recentlyViewed') + 
+                             getStorageSize('unlockedAchievements') + getStorageSize('likedAgents') +
+                             getStorageSize('followedAgents') + getStorageSize('userStats');
+            const maxSize = 5 * 1024;
+            const usagePercent = (totalSize / maxSize) * 100;
+            
+            if (usagePercent > 80) {
+                overviewStorage.className = 'overview-item warning';
+                overviewStorage.querySelector('.overview-icon').textContent = '⚠';
+            } else {
+                overviewStorage.className = 'overview-item healthy';
+                overviewStorage.querySelector('.overview-icon').textContent = '✓';
+            }
+
+            // 网络状态 - 根据 API 状态
+            const apiText = document.getElementById('apiStatusText').textContent;
+            if (apiText === '在线') {
+                overviewNetwork.className = 'overview-item healthy';
+                overviewNetwork.querySelector('.overview-icon').textContent = '✓';
+            } else {
+                overviewNetwork.className = 'overview-item warning';
+                overviewNetwork.querySelector('.overview-icon').textContent = '⚠';
+            }
+        }
+
+        // 初始化系统状态指示器
+        function initSystemStatusIndicator() {
+            const statusDot = document.getElementById('systemStatusDot');
+            // 默认状态
+            statusDot.className = 'system-status-dot';
         }
 
         // ========== Leaderboard Panel Functions (Day 19) ==========
