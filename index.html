@@ -996,7 +996,11 @@
             gap: 1.5rem;
         }
 
+        /* ========== Card Rarity Particle Effects (Day 24) ========== */
+        
+        /* 稀有度动态边框光效 */
         .outfit-card {
+            position: relative;
             background: var(--bg-card);
             backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -1005,12 +1009,43 @@
             transition: all var(--transition-normal);
         }
 
-        .outfit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px var(--shadow-glow);
-            border-color: var(--accent-secondary);
+        /* 稀有度边框脉冲光效 */
+        .outfit-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            background: linear-gradient(90deg, transparent, transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        .outfit-card.ssr::before {
+            background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+            animation: borderGlow 2s linear infinite;
+        }
+
+        .outfit-card.sr::before {
+            background: linear-gradient(90deg, #C0C0C0, #A8A8A8, #C0C0C0);
+            animation: borderGlow 2.5s linear infinite;
+        }
+
+        .outfit-card.r::before {
+            background: linear-gradient(90deg, #CD7F32, #A0522D, #CD7F32);
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.4; filter: blur(4px); }
+            50% { opacity: 0.8; filter: blur(6px); }
+            100% { opacity: 0.4; filter: blur(4px); }
+        }
+
+        /* 稀有度动态背景 */
         .card-image {
             position: relative;
             height: 180px;
@@ -1018,6 +1053,132 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .outfit-card.ssr .card-image {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.1), rgba(255, 215, 0, 0.15));
+            animation: rarityBgSsr 4s ease-in-out infinite;
+        }
+
+        .outfit-card.sr .card-image {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(168, 168, 168, 0.08), rgba(192, 192, 192, 0.1));
+            animation: rarityBgSr 4.5s ease-in-out infinite;
+        }
+
+        .outfit-card.r .card-image {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), rgba(160, 82, 45, 0.08), rgba(205, 127, 50, 0.1));
+            animation: rarityBgR 5s ease-in-out infinite;
+        }
+
+        @keyframes rarityBgSsr {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes rarityBgSr {
+            0%, 100% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            50% { background-position: 100% 50%; filter: hue-rotate(10deg); }
+        }
+
+        @keyframes rarityBgR {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 卡片粒子特效容器 */
+        .card-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .outfit-card:hover .card-particles {
+            opacity: 1;
+        }
+
+        .card-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: cardParticleFloat 3s ease-in-out infinite;
+        }
+
+        .outfit-card.ssr .card-particle {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            box-shadow: 0 0 6px #FFD700;
+        }
+
+        .outfit-card.sr .card-particle {
+            background: linear-gradient(90deg, #C0C0C0, #A8A8A8);
+            box-shadow: 0 0 6px #C0C0C0;
+        }
+
+        .outfit-card.r .card-particle {
+            background: linear-gradient(90deg, #CD7F32, #A0522D);
+            box-shadow: 0 0 6px #CD7F32;
+        }
+
+        @keyframes cardParticleFloat {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-150px) translateX(30px); opacity: 0; }
+        }
+
+        /* 点击波纹效果 */
+        .card-ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+
+        .outfit-card.ssr .card-ripple {
+            background: rgba(255, 215, 0, 0.4);
+        }
+
+        .outfit-card.sr .card-ripple {
+            background: rgba(192, 192, 192, 0.4);
+        }
+
+        .outfit-card.r .card-ripple {
+            background: rgba(205, 127, 50, 0.4);
+        }
+
+        @keyframes rippleEffect {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Hover时边框光效加强 */
+        .outfit-card:hover::before {
+            opacity: 1;
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-glow);
+            border-color: var(--accent-secondary);
+        }
+
+        .outfit-card.ssr:hover {
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .outfit-card.sr:hover {
+            box-shadow: 0 10px 40px rgba(192, 192, 192, 0.3);
+        }
+
+        .outfit-card.r:hover {
+            box-shadow: 0 10px 40px rgba(205, 127, 50, 0.3);
         }
 
         .card-avatar {
@@ -5886,6 +6047,79 @@
             }
         }
 
+        // ========== Card Particle Effects (Day 24) ==========
+        
+        // 创建卡片粒子效果
+        function createCardParticles(card) {
+            const container = card.querySelector('.card-particles');
+            if (!container) return;
+            
+            // 清除现有粒子
+            container.innerHTML = '';
+            
+            // 根据稀有度确定粒子数量
+            const rarity = card.dataset.rarity;
+            const particleCount = rarity === 'ssr' ? 8 : rarity === 'sr' ? 6 : 4;
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'card-particle';
+                
+                // 随机位置
+                particle.style.left = Math.random() * 80 + 10 + '%';
+                particle.style.top = Math.random() * 60 + 40 + '%';
+                
+                // 随机延迟和持续时间
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 创建点击波纹效果
+        function createCardRipple(event, card) {
+            const rect = card.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            const ripple = document.createElement('div');
+            ripple.className = 'card-ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = '50px';
+            ripple.style.height = '50px';
+            ripple.style.marginLeft = '-25px';
+            ripple.style.marginTop = '-25px';
+            
+            card.appendChild(ripple);
+            
+            // 动画结束后移除
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+        
+        // 初始化所有卡片的粒子效果
+        function initCardParticles() {
+            const cards = document.querySelectorAll('.outfit-card');
+            cards.forEach(card => {
+                // 鼠标悬停时创建粒子
+                card.addEventListener('mouseenter', () => {
+                    createCardParticles(card);
+                });
+                
+                // 鼠标离开时清除粒子
+                card.addEventListener('mouseleave', () => {
+                    const container = card.querySelector('.card-particles');
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                });
+            });
+        }
+        
         // ========== Render Functions ==========
         function renderLoading() {
             return `
@@ -5918,8 +6152,9 @@
             const displayName = highlightText(agent.name, currentSearch);
 
             return `
-                <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')">
+                <div class="outfit-card ${rarityClass} visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')" onmousedown="createCardRipple(event, this)">
                     <div class="card-image">
+                        <div class="card-particles"></div>
                         <span class="card-avatar">${agent.avatar}</span>
                         <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
                     </div>
@@ -7117,6 +7352,9 @@
             
             // 检查成就 (Day 5)
             checkAchievements();
+            
+            // 初始化卡片粒子效果 (Day 24)
+            setTimeout(initCardParticles, 100);
         }
 
         // ========== Keyboard Shortcuts (Day 6, Day 8) ==========
