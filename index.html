@@ -2275,10 +2275,22 @@
         .sort-btn.active {
             color: #00FFD1;
             background: rgba(0, 255, 209, 0.1);
+            animation: sortPulse 0.5s ease-out;
         }
 
         .sort-btn .sort-icon {
             font-size: 0.9rem;
+        }
+
+        /* Day 22: Sort indicator animation */
+        @keyframes sortPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .sort-bar {
+            transition: all 0.3s ease;
         }
 
         /* ========== Enhanced Card Animations (Day 3) ========== */
@@ -5075,6 +5087,9 @@
                     <button class="sort-btn" data-sort="hot" onclick="handleSort('hot')">
                         <span class="sort-icon">🔥</span>热度
                     </button>
+                    <button class="sort-btn" data-sort="favorites" onclick="handleSort('favorites')">
+                        <span class="sort-icon">💎</span>收藏最多
+                    </button>
                 </div>
             </div>
 
@@ -6222,6 +6237,13 @@
                 case 'hot':
                     // 热度 - 按点赞数
                     return sorted.sort((a, b) => b.likes - a.likes);
+                case 'favorites':
+                    // Day 22: 收藏数 - 按被收藏次数（从 localStorage 获取收藏数）
+                    const favoriteCountMap = {};
+                    favoriteAgents.forEach(favId => {
+                        favoriteCountMap[favId] = (favoriteCountMap[favId] || 0) + 1;
+                    });
+                    return sorted.sort((a, b) => (favoriteCountMap[b.id] || 0) - (favoriteCountMap[a.id] || 0));
                 default:
                     // 默认 - 综合排序（保持原顺序）
                     return sorted;
