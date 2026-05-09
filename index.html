@@ -742,6 +742,20 @@
             font-weight: 600;
         }
 
+        .keyboard-hint .hint-section-title {
+            color: var(--text-secondary);
+            margin-top: 0.6rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .keyboard-hint .hint-section-title:first-child {
+            margin-top: 0;
+        }
+
         .points {
             display: flex;
             align-items: center;
@@ -4533,10 +4547,72 @@
                 padding: 0.6rem;
             }
         }
+
+        /* ========== Keyboard Navigation (Day 35) ========== */
+        .outfit-card.keyboard-selected {
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px var(--accent-secondary), 
+                        0 8px 32px rgba(0, 255, 209, 0.3);
+            z-index: 10;
+        }
+
+        .outfit-card.keyboard-selected::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-secondary), var(--accent-primary), var(--accent-secondary));
+            border-radius: inherit;
+            z-index: -1;
+            animation: keyboardSelectPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes keyboardSelectPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .keyboard-nav-hint {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .keyboard-nav-hint.show {
+            opacity: 1;
+        }
+
+        .keyboard-nav-hint kbd {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-default);
+            font-family: monospace;
+            margin: 0 0.1rem;
+        }
     </style>
 </head>
 <body>
     <div class="particles" id="particles"></div>
+    
+    <!-- Keyboard Navigation Hint (Day 35) -->
+    <div class="keyboard-nav-hint" id="keyboardNavHint">
+        <kbd>J</kbd>/<kbd>↓</kbd> 下 <kbd>K</kbd>/<kbd>↑</kbd> 上 <kbd>Enter</kbd> 打开 <kbd>F</kbd> 收藏
+    </div>
 
     <header>
         <div class="logo">Agent Street</div>
@@ -4914,18 +4990,27 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
+        <div class="hint-section-title">🔍 导航</div>
+        <div><kbd>J</kbd>/<kbd>↓</kbd> 下一卡片</div>
+        <div><kbd>K</kbd>/<kbd>↑</kbd> 上一卡片</div>
+        <div><kbd>Enter</kbd> 打开详情</div>
+        <div class="hint-section-title">⚡ 操作</div>
         <div><kbd>/</kbd> 搜索</div>
-        <div><kbd>T</kbd> 主题</div>
-        <div><kbd>N</kbd> 通知</div>
-        <div><kbd>R</kbd> 浏览</div>
-        <div><kbd>K</kbd> 榜单</div>
-        <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>C</kbd> 对比</div>
+        <div class="hint-section-title">📱 面板</div>
+        <div><kbd>L</kbd> 收藏夹</div>
+        <div><kbd>I</kbd> 成就</div>
+        <div><kbd>R</kbd> 历史</div>
+        <div><kbd>N</kbd> 通知</div>
+        <div><kbd>T</kbd> 主题</div>
+        <div><kbd>K</kbd> 榜单</div>
+        <div><kbd>S</kbd> 设置</div>
         <div><kbd>⇧D</kbd> 状态</div>
+        <div class="hint-section-title">🔚 其他</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
     </div>
@@ -5536,6 +5621,10 @@
         const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
         let currentReviewRating = 0; // 当前选择的评分 (Day 18)
+        
+        // Keyboard Navigation State (Day 35)
+        let selectedCardIndex = -1; // 当前键盘选中的卡片索引
+        let isKeyboardNavigating = false; // 是否处于键盘导航模式
 
         // ========== Review System (Day 18) ==========
         let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
@@ -6167,7 +6256,7 @@
             const displayName = highlightText(agent.name, currentSearch);
 
             return `
-                <div class="outfit-card ${rarityClass} visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')" onmousedown="createCardRipple(event, this)">
+                <div class="outfit-card ${rarityClass} visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
                     <div class="card-image">
                         <div class="card-particles"></div>
                         <span class="card-avatar">${agent.avatar}</span>
@@ -6305,6 +6394,11 @@
 
             agentsData = filtered;
             
+            // 重置键盘导航状态 (Day 35)
+            clearCardSelection();
+            selectedCardIndex = -1;
+            isKeyboardNavigating = false;
+
             // 添加入场动画
             animateCardsIn();
         }
@@ -6816,6 +6910,11 @@
                 // 保存原始数据用于搜索和筛选 (Day 2)
                 allAgentsData = agents;
                 agentsData = agents;
+
+                // 重置键盘导航状态 (Day 35)
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
 
                 // 渲染标签筛选 (Day 7)
                 renderTagFilters();
@@ -7379,7 +7478,7 @@
             setTimeout(initCardParticles, 100);
         }
 
-        // ========== Keyboard Shortcuts (Day 6, Day 8) ==========
+        // ========== Keyboard Shortcuts (Day 6, Day 8, Day 35) ==========
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
                 // 忽略在输入框中的快捷键
@@ -7393,86 +7492,200 @@
                     document.querySelector('.search-input')?.focus();
                 }
 
+                // ========== Card Keyboard Navigation (Day 35) ==========
+                // 检查是否在导航相关快捷键
+                const isNavKey = ['j', 'J', 'k', 'K', 'ArrowDown', 'ArrowUp', 'Enter', 'f', 'F'].includes(e.key);
+                
+                // J 或 ↓ - 下一张卡片
+                if (e.key === 'j' || e.key === 'J' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateCard('down');
+                    return;
+                }
+
+                // K 或 ↑ - 上一张卡片
+                if (e.key === 'k' || e.key === 'K' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateCard('up');
+                    return;
+                }
+
+                // Enter - 打开选中卡片详情
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    openSelectedCard();
+                    return;
+                }
+
+                // F - 收藏/取消收藏选中卡片
+                if (e.key === 'f' || e.key === 'F') {
+                    if (selectedCardIndex >= 0 && selectedCardIndex < agentsData.length) {
+                        const agent = agentsData[selectedCardIndex];
+                        toggleFavorite(agent.id);
+                    } else if (currentModalAgent) {
+                        toggleFavorite(currentModalAgent.id);
+                    }
+                    return;
+                }
+
                 // 't' 或 'T' - 切换主题 (Day 8)
                 if (e.key === 't' || e.key === 'T') {
                     toggleTheme();
+                    return;
                 }
 
                 // 'n' 或 'N' - 切换通知面板 (Day 11)
                 if (e.key === 'n' || e.key === 'N') {
                     toggleNotificationPanel();
+                    return;
                 }
 
                 // 'r' 或 'R' - 切换最近浏览面板 (Day 9)
                 if (e.key === 'r' || e.key === 'R') {
                     toggleRecentPanel();
+                    return;
                 }
 
                 // 's' 或 'S' - 切换设置面板 (Day 10)
                 if (e.key === 's' || e.key === 'S') {
                     toggleSettingsPanel();
-                }
-
-                // 'f' 或 'F' - 收藏当前查看的Agent
-                if (e.key === 'f' || e.key === 'F') {
-                    if (currentModalAgent) {
-                        toggleFavorite(currentModalAgent.id);
-                    }
+                    return;
                 }
 
                 // 'c' 或 'C' - 切换对比面板 (Day 15)
                 if (e.key === 'c' || e.key === 'C') {
                     toggleComparePanel();
+                    return;
                 }
 
-                // 'k' 或 'K' - 切换排行榜面板 (Day 19)
-                if (e.key === 'k' || e.key === 'K') {
-                    toggleLeaderboardPanel();
+                // 'l' 或 'L' - 切换收藏面板 (Day 6)
+                if (e.key === 'l' || e.key === 'L') {
+                    toggleFavoritePanel();
+                    return;
                 }
+
+                // 'i' 或 'I' - 切换成就面板 (Day 5)
+                if (e.key === 'i' || e.key === 'I') {
+                    toggleAchievementPanel();
+                    return;
+                }
+
+                // 'k' 或 'K' - 切换排行榜面板 (Day 19) - 注意：需要排除j/k导航
+                // (已在上面处理)
 
                 // 'Shift+D' - 切换系统状态面板 (Day 21)
                 if (e.key === 'D' && e.shiftKey) {
                     toggleSystemStatusPanel();
+                    return;
                 }
 
                 // '?' - 显示/隐藏快捷键帮助
                 if (e.key === '?') {
                     showKeyboardHint();
+                    return;
                 }
 
                 // 'Escape' - 关闭弹窗/面板
                 if (e.key === 'Escape') {
-                    const modal = document.getElementById('agent-modal');
-                    const achievementPanel = document.getElementById('achievementPanel');
-                    const favoritePanel = document.getElementById('favoritePanel');
-                    const recentPanel = document.getElementById('recentPanel'); // Day 9
-                    const settingsPanel = document.getElementById('settingsPanel'); // Day 10
-                    const comparePanel = document.getElementById('comparePanel'); // Day 15
-                    const compareModal = document.getElementById('compareModalOverlay'); // Day 15
-                    const systemStatusPanel = document.getElementById('systemStatusPanel'); // Day 21
-                    const keyboardHint = document.getElementById('keyboardHint');
-
-                    if (keyboardHint.classList.contains('show')) {
-                        keyboardHint.classList.remove('show');
-                    } else if (compareModal && compareModal.classList.contains('active')) { // Day 15
-                        closeCompareModal();
-                    } else if (modal.classList.contains('active')) {
-                        closeModal();
-                    } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
-                        toggleComparePanel();
-                    } else if (systemStatusPanel && systemStatusPanel.classList.contains('active')) { // Day 21
-                        toggleSystemStatusPanel();
-                    } else if (favoritePanel.classList.contains('active')) {
-                        toggleFavoritePanel();
-                    } else if (recentPanel.classList.contains('active')) { // Day 9
-                        toggleRecentPanel();
-                    } else if (settingsPanel.classList.contains('active')) { // Day 10
-                        toggleSettingsPanel();
-                    } else if (achievementPanel.classList.contains('active')) {
-                        toggleAchievementPanel();
-                    }
+                    handleEscape();
                 }
             });
+        }
+
+        // ========== Card Navigation Functions (Day 35) ==========
+        function navigateCard(direction) {
+            if (agentsData.length === 0) return;
+
+            // 移除之前的选中状态
+            clearCardSelection();
+
+            // 如果是第一次导航，初始化索引
+            if (selectedCardIndex < 0) {
+                selectedCardIndex = 0;
+            } else {
+                // 移动索引
+                if (direction === 'down') {
+                    selectedCardIndex = Math.min(selectedCardIndex + 1, agentsData.length - 1);
+                } else {
+                    selectedCardIndex = Math.max(selectedCardIndex - 1, 0);
+                }
+            }
+
+            // 标记新的选中卡片
+            selectCard(selectedCardIndex);
+            
+            // 显示导航提示
+            showKeyboardNavHint();
+        }
+
+        function selectCard(index) {
+            const cards = document.querySelectorAll('.outfit-card');
+            if (cards[index]) {
+                cards[index].classList.add('keyboard-selected');
+                cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                isKeyboardNavigating = true;
+            }
+        }
+
+        function clearCardSelection() {
+            const selectedCards = document.querySelectorAll('.outfit-card.keyboard-selected');
+            selectedCards.forEach(card => card.classList.remove('keyboard-selected'));
+        }
+
+        function openSelectedCard() {
+            if (selectedCardIndex >= 0 && selectedCardIndex < agentsData.length) {
+                const agent = agentsData[selectedCardIndex];
+                openAgentModal(agent.id);
+            }
+        }
+
+        function showKeyboardNavHint() {
+            const hint = document.getElementById('keyboardNavHint');
+            if (hint) {
+                hint.classList.add('show');
+                // 3秒后自动隐藏
+                clearTimeout(window.keyboardHintTimeout);
+                window.keyboardHintTimeout = setTimeout(() => {
+                    hint.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        function handleEscape() {
+            const modal = document.getElementById('agent-modal');
+            const achievementPanel = document.getElementById('achievementPanel');
+            const favoritePanel = document.getElementById('favoritePanel');
+            const recentPanel = document.getElementById('recentPanel'); // Day 9
+            const settingsPanel = document.getElementById('settingsPanel'); // Day 10
+            const comparePanel = document.getElementById('comparePanel'); // Day 15
+            const compareModal = document.getElementById('compareModalOverlay'); // Day 15
+            const systemStatusPanel = document.getElementById('systemStatusPanel'); // Day 21
+            const keyboardHint = document.getElementById('keyboardHint');
+
+            if (keyboardHint.classList.contains('show')) {
+                keyboardHint.classList.remove('show');
+            } else if (compareModal && compareModal.classList.contains('active')) { // Day 15
+                closeCompareModal();
+            } else if (modal.classList.contains('active')) {
+                closeModal();
+            } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
+                toggleComparePanel();
+            } else if (systemStatusPanel && systemStatusPanel.classList.contains('active')) { // Day 21
+                toggleSystemStatusPanel();
+            } else if (favoritePanel.classList.contains('active')) {
+                toggleFavoritePanel();
+            } else if (recentPanel.classList.contains('active')) { // Day 9
+                toggleRecentPanel();
+            } else if (settingsPanel.classList.contains('active')) { // Day 10
+                toggleSettingsPanel();
+            } else if (achievementPanel.classList.contains('active')) {
+                toggleAchievementPanel();
+            } else {
+                // 如果所有面板都关闭，清除键盘选中状态
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
+            }
         }
 
         // ========== Settings Panel Functions (Day 10) ==========
