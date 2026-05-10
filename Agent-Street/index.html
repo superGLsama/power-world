@@ -3200,6 +3200,146 @@
             margin-top: 0.3rem;
         }
 
+        /* ========== Storage Manager (Day 36) ========== */
+        .storage-meter {
+            background: rgba(107, 92, 231, 0.15);
+            border-radius: 10px;
+            padding: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .storage-meter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .storage-meter-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .storage-meter-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--accent-secondary);
+        }
+
+        .storage-meter-bar {
+            height: 8px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .storage-meter-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease, background 0.3s;
+        }
+
+        .storage-meter-fill.normal {
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+        }
+
+        .storage-meter-fill.warning {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        .storage-meter-fill.danger {
+            background: linear-gradient(90deg, #FF6B6B, #FF4757);
+            animation: storagePulse 1.5s infinite;
+        }
+
+        @keyframes storagePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .storage-detail-list {
+            margin-top: 1rem;
+        }
+
+        .storage-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(156, 136, 255, 0.1);
+        }
+
+        .storage-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .storage-detail-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .storage-detail-size {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .storage-detail-percent {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            margin-left: 0.5rem;
+        }
+
+        .storage-clean-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .storage-clean-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .storage-clean-title {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-warning);
+        }
+
+        .storage-clean-count {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-warning);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        .storage-clean-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .settings-btn-group.storage-clean-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .settings-btn-group.storage-clean-actions .settings-action-btn {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
         .settings-info-box {
             background: rgba(0, 255, 209, 0.1);
             border: 1px solid rgba(0, 255, 209, 0.2);
@@ -4489,6 +4629,61 @@
             <button class="settings-panel-close" onclick="toggleSettingsPanel()">✕</button>
         </div>
         <div class="settings-panel-body">
+            <!-- 存储管理 (Day 36) -->
+            <div class="settings-section">
+                <div class="settings-section-title">💾 存储管理</div>
+                
+                <!-- 存储使用概览 -->
+                <div class="settings-card">
+                    <div class="settings-card-title">📊 存储使用情况</div>
+                    <div class="storage-meter">
+                        <div class="storage-meter-header">
+                            <span class="storage-meter-label">localStorage 已用</span>
+                            <span class="storage-meter-value" id="storageUsedDisplay">0 KB</span>
+                        </div>
+                        <div class="storage-meter-bar">
+                            <div class="storage-meter-fill normal" id="storageMeterFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="storage-detail-list" id="storageDetailList">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 智能清理 (Day 36) -->
+                <div class="storage-clean-card" id="cleanableCard" style="display: none;">
+                    <div class="storage-clean-header">
+                        <span class="storage-clean-title">🧹 可清理数据</span>
+                        <span class="storage-clean-count" id="cleanableCount">0 项</span>
+                    </div>
+                    <div class="storage-clean-desc" id="cleanableDesc">发现过期或冗余数据，清理可释放存储空间</div>
+                    <div class="settings-btn-group storage-clean-actions">
+                        <button class="settings-action-btn secondary" onclick="showCleanDetails()">
+                            <span>📋</span> 查看详情
+                        </button>
+                        <button class="settings-action-btn primary" onclick="smartClean()">
+                            <span>✨</span> 一键清理
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 快速清理选项 -->
+                <div class="settings-card">
+                    <div class="settings-card-title">🎯 快速清理</div>
+                    <div class="settings-btn-group storage-clean-actions">
+                        <button class="settings-action-btn secondary" onclick="clearSearchHistory()">
+                            <span>🔍</span> 搜索历史
+                        </button>
+                        <button class="settings-action-btn secondary" onclick="clearNotifications()">
+                            <span>🔔</span> 通知
+                        </button>
+                        <button class="settings-action-btn secondary" onclick="clearRecentlyViewed()">
+                            <span>👁️</span> 浏览记录
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- 数据统计 -->
             <div class="settings-section">
                 <div class="settings-section-title">📊 数据统计</div>
@@ -7784,6 +7979,285 @@
             }
         }
 
+        // ========== Storage Manager (Day 36) ==========
+        
+        // 存储键定义
+        const STORAGE_KEYS = {
+            'theme': { name: '🎨 主题设置', icon: '🎨', priority: 'keep' },
+            'likedAgents': { name: '❤️ 点赞记录', icon: '❤️', priority: 'keep' },
+            'followedAgents': { name: '🤝 关注列表', icon: '🤝', priority: 'keep' },
+            'favoriteAgents': { name: '⭐ 收藏夹', icon: '⭐', priority: 'keep' },
+            'unlockedAchievements': { name: '🏆 成就徽章', icon: '🏆', priority: 'keep' },
+            'userStats': { name: '📊 用户统计', icon: '📊', priority: 'keep' },
+            'recentlyViewed': { name: '👁️ 最近浏览', icon: '👁️', priority: 'cleanable', maxAge: 7 },
+            'searchHistory': { name: '🔍 搜索历史', icon: '🔍', priority: 'cleanable', maxAge: 30 },
+            'notifications': { name: '🔔 通知记录', icon: '🔔', priority: 'cleanable', maxAge: 7 },
+            'compareList': { name: '⚖️ 对比列表', icon: '⚖️', priority: 'cleanable', maxAge: 30 },
+            'favoriteViewMode': { name: '📱 视图偏好', icon: '📱', priority: 'keep' },
+            'favoriteFilterRarity': { name: '🔎 筛选偏好', icon: '🔎', priority: 'keep' },
+            'favoriteSortOrder': { name: '📑 排序偏好', icon: '📑', priority: 'keep' },
+            'accessToken': { name: '🔑 访问令牌', icon: '🔑', priority: 'keep' },
+            'refreshToken': { name: '🔄 刷新令牌', icon: '🔄', priority: 'keep' },
+            'tokenExpiry': { name: '⏰ 令牌过期', icon: '⏰', priority: 'keep' },
+            'agentReviews': { name: '💬 评论数据', icon: '💬', priority: 'keep' }
+        };
+
+        // 计算单个键的存储大小
+        function getStorageSize(key) {
+            const value = localStorage.getItem(key);
+            if (!value) return 0;
+            // 字符数 * 2（UTF-16编码每个字符2字节）+ key的长度
+            return (value.length * 2 + key.length * 2);
+        }
+
+        // 格式化字节大小
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        // 获取总存储使用情况
+        function getTotalStorageUsage() {
+            let total = 0;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                total += getStorageSize(key);
+            }
+            return total;
+        }
+
+        // 获取存储详情列表
+        function getStorageDetails() {
+            const details = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const size = getStorageSize(key);
+                const info = STORAGE_KEYS[key] || { name: key, icon: '📦', priority: 'unknown' };
+                details.push({
+                    key,
+                    name: info.name,
+                    icon: info.icon,
+                    size,
+                    priority: info.priority,
+                    maxAge: info.maxAge
+                });
+            }
+            return details.sort((a, b) => b.size - a.size);
+        }
+
+        // 检查可清理的数据
+        function getCleanableData() {
+            const cleanable = [];
+            const now = Date.now();
+            const DAY = 24 * 60 * 60 * 1000;
+
+            for (const [key, info] of Object.entries(STORAGE_KEYS)) {
+                if (info.priority !== 'cleanable') continue;
+                
+                const value = localStorage.getItem(key);
+                if (!value) continue;
+
+                try {
+                    const data = JSON.parse(value);
+                    let canClean = false;
+                    let reason = '';
+
+                    if (info.maxAge && data.timestamp) {
+                        const age = (now - data.timestamp) / DAY;
+                        if (age > info.maxAge) {
+                            canClean = true;
+                            reason = `超过${info.maxAge}天未更新`;
+                        }
+                    }
+
+                    if (info.maxAge && Array.isArray(data) && data.length > 0) {
+                        // 检查数组中是否有时间戳字段
+                        const hasTimestamp = data.some(item => item.timestamp || item.time);
+                        if (hasTimestamp) {
+                            const oldest = Math.min(...data.map(item => item.timestamp || item.time || now));
+                            const age = (now - oldest) / DAY;
+                            if (age > info.maxAge) {
+                                canClean = true;
+                                reason = `数据超过${info.maxAge}天`;
+                            }
+                        }
+                    }
+
+                    if (canClean) {
+                        cleanable.push({
+                            key,
+                            name: info.name,
+                            icon: info.icon,
+                            size: getStorageSize(key),
+                            reason
+                        });
+                    }
+                } catch (e) {
+                    // 非JSON数据，跳过时间检查
+                }
+            }
+
+            // 检查通知数量（超过50条）
+            const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+            if (notifications.length > 50) {
+                cleanable.push({
+                    key: 'notifications',
+                    name: '🔔 通知记录',
+                    icon: '🔔',
+                    size: getStorageSize('notifications'),
+                    reason: `${notifications.length}条通知超过50条限制`
+                });
+            }
+
+            // 检查搜索历史（超过20条）
+            const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+            if (searchHistory.length > 20) {
+                cleanable.push({
+                    key: 'searchHistory',
+                    name: '🔍 搜索历史',
+                    icon: '🔍',
+                    size: getStorageSize('searchHistory'),
+                    reason: `${searchHistory.length}条超过20条限制`
+                });
+            }
+
+            return cleanable;
+        }
+
+        // 更新存储管理UI
+        function updateStorageUI() {
+            const total = getTotalStorageUsage();
+            const maxStorage = 5 * 1024 * 1024; // 假设5MB限制
+            const percent = Math.min((total / maxStorage) * 100, 100);
+
+            // 更新存储使用显示
+            document.getElementById('storageUsedDisplay').textContent = formatBytes(total);
+
+            // 更新进度条
+            const fill = document.getElementById('storageMeterFill');
+            fill.style.width = percent + '%';
+            fill.className = 'storage-meter-fill';
+            if (percent > 80) {
+                fill.classList.add('danger');
+            } else if (percent > 50) {
+                fill.classList.add('warning');
+            } else {
+                fill.classList.add('normal');
+            }
+
+            // 更新存储详情列表
+            const details = getStorageDetails();
+            const listContainer = document.getElementById('storageDetailList');
+            listContainer.innerHTML = details.slice(0, 6).map(item => `
+                <div class="storage-detail-item">
+                    <span class="storage-detail-name">
+                        ${item.icon} ${item.name}
+                    </span>
+                    <span>
+                        <span class="storage-detail-size">${formatBytes(item.size)}</span>
+                        <span class="storage-detail-percent">${(item.size / total * 100).toFixed(1)}%</span>
+                    </span>
+                </div>
+            `).join('');
+
+            // 检查可清理数据
+            const cleanable = getCleanableData();
+            const cleanableCard = document.getElementById('cleanableCard');
+            if (cleanable.length > 0) {
+                cleanableCard.style.display = 'block';
+                document.getElementById('cleanableCount').textContent = cleanable.length + ' 项';
+                const totalCleanableSize = cleanable.reduce((sum, item) => sum + item.size, 0);
+                document.getElementById('cleanableDesc').textContent = 
+                    `可释放 ${formatBytes(totalCleanableSize)} 存储空间`;
+            } else {
+                cleanableCard.style.display = 'none';
+            }
+        }
+
+        // 显示清理详情
+        function showCleanDetails() {
+            const cleanable = getCleanableData();
+            if (cleanable.length === 0) {
+                showToast('✨ 没有需要清理的数据');
+                return;
+            }
+
+            const totalSize = cleanable.reduce((sum, item) => sum + item.size, 0);
+            const list = cleanable.map(item => 
+                `${item.icon} ${item.name}: ${item.reason}`
+            ).join('\n');
+
+            alert(`🧹 可清理数据汇总\n\n${list}\n\n总计: ${formatBytes(totalSize)}`);
+        }
+
+        // 智能清理
+        function smartClean() {
+            const cleanable = getCleanableData();
+            if (cleanable.length === 0) {
+                showToast('✨ 没有需要清理的数据');
+                return;
+            }
+
+            if (!confirm(`确定要清理 ${cleanable.length} 项数据吗？\n这将释放约 ${formatBytes(cleanable.reduce((sum, item) => sum + item.size, 0))} 空间`)) {
+                return;
+            }
+
+            let cleanedCount = 0;
+            cleanable.forEach(item => {
+                if (item.key === 'notifications') {
+                    // 只保留最近20条
+                    notifications = notifications.slice(-20);
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                    cleanedCount++;
+                } else if (item.key === 'searchHistory') {
+                    // 只保留最近10条
+                    const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+                    const trimmed = history.slice(-10);
+                    localStorage.setItem('searchHistory', JSON.stringify(trimmed));
+                    cleanedCount++;
+                } else {
+                    localStorage.removeItem(item.key);
+                    cleanedCount++;
+                }
+            });
+
+            updateStorageUI();
+            showToast(`✨ 已清理 ${cleanedCount} 项数据`);
+        }
+
+        // 清除通知（快速清理）
+        function clearNotifications() {
+            if (notifications.length === 0) {
+                showToast('✨ 没有通知需要清理');
+                return;
+            }
+            if (confirm(`确定要清空 ${notifications.length} 条通知吗？`)) {
+                notifications = [];
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotificationBadge();
+                updateStorageUI();
+                showToast('🔔 通知已清空');
+            }
+        }
+
+        // 清除浏览记录（快速清理）
+        function clearRecentlyViewed() {
+            if (recentlyViewed.length === 0) {
+                showToast('✨ 没有浏览记录需要清理');
+                return;
+            }
+            if (confirm(`确定要清空 ${recentlyViewed.length} 条浏览记录吗？`)) {
+                recentlyViewed = [];
+                localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+                updateRecentBadge();
+                updateStorageUI();
+                showToast('👁️ 浏览记录已清空');
+            }
+        }
+
+        // 修改 toggleSettingsPanel 以包含存储管理更新
         function toggleSettingsPanel() {
             const panel = document.getElementById('settingsPanel');
             const overlay = document.getElementById('panelOverlay');
@@ -7794,6 +8268,7 @@
             
             if (panel.classList.contains('active')) {
                 updateSettingsStats();
+                updateStorageUI(); // Day 36: 更新存储管理UI
             }
         }
 
