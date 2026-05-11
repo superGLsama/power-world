@@ -2451,6 +2451,207 @@
             font-size: 0.85rem;
             color: #00FFD1;
         }
+        
+        /* ========== User Tags in Modal (Day 37) ========== */
+        .modal-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .add-tag-btn {
+            margin-left: auto;
+            padding: 0.25rem 0.6rem;
+            background: rgba(255, 107, 138, 0.15);
+            border: 1px solid rgba(255, 107, 138, 0.3);
+            border-radius: 12px;
+            color: #ff6b8a;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        
+        .add-tag-btn:hover {
+            background: rgba(255, 107, 138, 0.25);
+            transform: scale(1.05);
+        }
+        
+        .modal-user-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+        
+        .user-agent-tag {
+            padding: 0.3rem 0.6rem;
+            background: rgba(107, 92, 231, 0.15);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #B8B5FF;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: default;
+        }
+        
+        .user-agent-tag[data-tag-color="work"] { border-color: rgba(107, 92, 231, 0.5); color: #B8B5FF; background: rgba(107, 92, 231, 0.2); }
+        .user-agent-tag[data-tag-color="study"] { border-color: rgba(0, 184, 148, 0.5); color: #00b894; background: rgba(0, 184, 148, 0.2); }
+        .user-agent-tag[data-tag-color="fun"] { border-color: rgba(253, 121, 168, 0.5); color: #fd79a8; background: rgba(253, 121, 168, 0.2); }
+        .user-agent-tag[data-tag-color="daily"] { border-color: rgba(253, 203, 110, 0.5); color: #fdcb6e; background: rgba(253, 203, 110, 0.2); }
+        .user-agent-tag[data-tag-color="creative"] { border-color: rgba(225, 112, 85, 0.5); color: #e17055; background: rgba(225, 112, 85, 0.2); }
+        .user-agent-tag[data-tag-color="tech"] { border-color: rgba(9, 132, 227, 0.5); color: #0984e3; background: rgba(9, 132, 227, 0.2); }
+        .user-agent-tag[data-tag-color="social"] { border-color: rgba(0, 206, 201, 0.5); color: #00cec9; background: rgba(0, 206, 201, 0.2); }
+        .user-agent-tag[data-tag-color="productivity"] { border-color: rgba(108, 92, 231, 0.5); color: #a29bfe; background: rgba(108, 92, 231, 0.2); }
+        
+        .user-agent-tag .remove-tag {
+            width: 16px;
+            height: 16px;
+            border: none;
+            background: rgba(255, 107, 138, 0.2);
+            border-radius: 50%;
+            color: #ff6b8a;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .user-agent-tag .remove-tag:hover {
+            background: rgba(255, 107, 138, 0.4);
+            transform: scale(1.1);
+        }
+        
+        /* Tag Selector Popup */
+        .tag-selector {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .tag-selector.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tag-selector-header {
+            padding: 0.8rem 1rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-bottom: 1px solid rgba(107, 92, 231, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .tag-selector-close {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: rgba(255, 107, 138, 0.1);
+            border-radius: 50%;
+            color: #ff6b8a;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .tag-selector-body {
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .preset-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .preset-tag-btn {
+            padding: 0.4rem 0.7rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .preset-tag-btn:hover {
+            background: rgba(107, 92, 231, 0.2);
+            border-color: rgba(107, 92, 231, 0.4);
+            color: #B8B5FF;
+        }
+        
+        .preset-tag-btn.selected {
+            background: rgba(107, 92, 231, 0.3);
+            border-color: rgba(107, 92, 231, 0.5);
+            color: #fff;
+        }
+        
+        .custom-tag-input {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .custom-tag-input input {
+            flex: 1;
+            padding: 0.5rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            outline: none;
+        }
+        
+        .custom-tag-input input:focus {
+            border-color: rgba(107, 92, 231, 0.5);
+        }
+        
+        .custom-tag-add {
+            padding: 0.5rem 0.8rem;
+            background: rgba(0, 255, 209, 0.2);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 10px;
+            color: #00FFD1;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .custom-tag-add:hover {
+            background: rgba(0, 255, 209, 0.3);
+        }
+        
+        .no-user-tags {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
 
         .modal-actions {
             display: flex;
@@ -3852,7 +4053,23 @@
             background: rgba(255, 107, 107, 0.2);
             transform: scale(1.1);
         }
-
+        
+        /* ========== User Tags in Favorite Card (Day 37) ========== */
+        .favorite-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-top: 0.4rem;
+        }
+        
+        .user-tag-chip {
+            padding: 0.15rem 0.5rem;
+            font-size: 0.65rem;
+            border-radius: 10px;
+            white-space: nowrap;
+            border: 1px solid;
+        }
+        
         /* ========== Favorite Toolbar (Day 20) ========== */
         .favorite-toolbar {
             padding: 0.8rem 1rem;
@@ -3969,6 +4186,38 @@
             background: rgba(255, 107, 138, 0.2);
             color: #ff6b8a;
             border-color: rgba(255, 107, 138, 0.4);
+        }
+        
+        /* ========== Tag Filter in Favorites (Day 37) ========== */
+        .favorite-tag-filter {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255, 107, 138, 0.1);
+            margin-top: 0.3rem;
+        }
+        
+        .tag-filter-btn {
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tag-filter-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+        
+        .tag-filter-btn.active {
+            background: rgba(255, 107, 138, 0.25);
+            color: #ff6b8a;
+            border-color: rgba(255, 107, 138, 0.5);
         }
 
         /* Favorite Grid View */
@@ -4983,6 +5232,35 @@
                         <!-- Tags will be populated -->
                     </div>
                 </div>
+                
+                <!-- Day 37: User Custom Tags Section -->
+                <div class="modal-section" id="userTagsSection" style="display: none;">
+                    <div class="modal-section-title">
+                        <span>📌</span> 我的标签
+                        <button class="add-tag-btn" id="addTagBtn" onclick="showTagSelector()">
+                            <span>+</span> 添加标签
+                        </button>
+                    </div>
+                    <div class="modal-user-tags" id="modal-user-tags">
+                        <!-- User tags will be populated -->
+                    </div>
+                    <!-- Tag Selector Popup -->
+                    <div class="tag-selector" id="tagSelector">
+                        <div class="tag-selector-header">
+                            <span>选择标签</span>
+                            <button class="tag-selector-close" onclick="hideTagSelector()">✕</button>
+                        </div>
+                        <div class="tag-selector-body">
+                            <div class="preset-tags" id="presetTagsList">
+                                <!-- Preset tags will be populated -->
+                            </div>
+                            <div class="custom-tag-input">
+                                <input type="text" id="customTagInput" placeholder="输入自定义标签..." maxlength="10">
+                                <button class="custom-tag-add" onclick="addCustomTagToAgent()">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Agent Reviews Section (Day 18) -->
                 <div class="modal-section reviews">
@@ -5375,6 +5653,23 @@
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
         let favoriteAgents = JSON.parse(localStorage.getItem('favoriteAgents') || '[]'); // 收藏记录 (Day 6)
+        let agentTags = JSON.parse(localStorage.getItem('agentTags') || '{}'); // Agent自定义标签 (Day 37) {agentId: ['工作', '学习', ...]}
+        
+        // Day 37: 预设标签系统
+        const PRESET_TAGS = [
+            { id: 'work', label: '💼 工作', color: '#6B5CE7' },
+            { id: 'study', label: '📚 学习', color: '#00b894' },
+            { id: 'fun', label: '🎮 娱乐', color: '#fd79a8' },
+            { id: 'daily', label: '🏠 日常', color: '#fdcb6e' },
+            { id: 'creative', label: '🎨 创意', color: '#e17055' },
+            { id: 'tech', label: '🔧 技术', color: '#0984e3' },
+            { id: 'social', label: '💬 社交', color: '#00cec9' },
+            { id: 'productivity', label: '⚡ 效率', color: '#6c5ce7' }
+        ];
+        
+        let userCustomTags = JSON.parse(localStorage.getItem('userCustomTags') || '[]'); // 用户自定义标签
+        let favoriteTagFilter = localStorage.getItem('favoriteTagFilter') || 'all'; // 收藏面板标签筛选
+
         let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]'); // 最近浏览 (Day 9)
         const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
@@ -5533,6 +5828,134 @@
             badge.style.display = count > 0 ? 'flex' : 'none';
         }
 
+        // ========== Agent Custom Tags System (Day 37) ==========
+        
+        /**
+         * 保存标签数据到localStorage
+         */
+        function saveAgentTags() {
+            localStorage.setItem('agentTags', JSON.stringify(agentTags));
+        }
+        
+        /**
+         * 保存用户自定义标签
+         */
+        function saveUserCustomTags() {
+            localStorage.setItem('userCustomTags', JSON.stringify(userCustomTags));
+        }
+        
+        /**
+         * 获取Agent的所有标签（预设+自定义）
+         */
+        function getAgentTags(agentId) {
+            const tags = agentTags[agentId] || [];
+            // 合并预设标签名称
+            return tags.map(tagId => {
+                const preset = PRESET_TAGS.find(p => p.id === tagId);
+                return preset ? preset.label : tagId;
+            });
+        }
+        
+        /**
+         * 获取Agent的标签ID列表
+         */
+        function getAgentTagIds(agentId) {
+            return agentTags[agentId] || [];
+        }
+        
+        /**
+         * 为Agent添加标签
+         */
+        function addTagToAgent(agentId, tagId) {
+            if (!agentTags[agentId]) {
+                agentTags[agentId] = [];
+            }
+            if (!agentTags[agentId].includes(tagId)) {
+                agentTags[agentId].push(tagId);
+                saveAgentTags();
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         * 从Agent移除标签
+         */
+        function removeTagFromAgent(agentId, tagId) {
+            if (agentTags[agentId]) {
+                const index = agentTags[agentId].indexOf(tagId);
+                if (index > -1) {
+                    agentTags[agentId].splice(index, 1);
+                    if (agentTags[agentId].length === 0) {
+                        delete agentTags[agentId];
+                    }
+                    saveAgentTags();
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
+         * 获取所有已使用的标签（合并预设和自定义）
+         */
+        function getAllUsedTags() {
+            const usedTagIds = new Set();
+            Object.values(agentTags).forEach(tags => {
+                tags.forEach(tag => usedTagIds.add(tag));
+            });
+            
+            // 转换为包含完整信息的标签列表
+            return Array.from(usedTagIds).map(tagId => {
+                const preset = PRESET_TAGS.find(p => p.id === tagId);
+                if (preset) return preset;
+                // 自定义标签
+                return { id: tagId, label: `🏷️ ${tagId}`, color: '#888' };
+            });
+        }
+        
+        /**
+         * 添加用户自定义标签
+         */
+        function addCustomTag(tagName) {
+            const trimmed = tagName.trim();
+            if (!trimmed || userCustomTags.includes(trimmed)) {
+                return null;
+            }
+            userCustomTags.push(trimmed);
+            saveUserCustomTags();
+            return trimmed;
+        }
+        
+        /**
+         * 删除用户自定义标签
+         */
+        function deleteCustomTag(tagName) {
+            const index = userCustomTags.indexOf(tagName);
+            if (index > -1) {
+                userCustomTags.splice(index, 1);
+                saveUserCustomTags();
+                
+                // 从所有Agent中移除此标签
+                Object.keys(agentTags).forEach(agentId => {
+                    const tagIndex = agentTags[agentId].indexOf(tagName);
+                    if (tagIndex > -1) {
+                        agentTags[agentId].splice(tagIndex, 1);
+                    }
+                });
+                saveAgentTags();
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         * 获取某标签下的Agent数量
+         */
+        function getTagAgentCount(tagId) {
+            return Object.values(agentTags).filter(tags => tags.includes(tagId)).length;
+        }
+        
         // ========== Favorite System (Day 6) ==========
         function updateFavoriteBadge() {
             const badge = document.getElementById('favoriteBadge');
@@ -5682,6 +6105,7 @@
         function renderFavoritePanel() {
             const body = document.getElementById('favoritePanelBody');
             const statsContainer = document.getElementById('favoriteStats');
+            const toolbar = document.getElementById('favoriteToolbar');
             
             if (favoriteAgents.length === 0) {
                 body.innerHTML = `
@@ -5692,6 +6116,7 @@
                     </div>
                 `;
                 statsContainer.innerHTML = '';
+                toolbar.innerHTML = '';
                 return;
             }
 
@@ -5709,6 +6134,7 @@
                     </div>
                 `;
                 statsContainer.innerHTML = '';
+                toolbar.innerHTML = '';
                 return;
             }
 
@@ -5724,7 +6150,18 @@
                 <span class="stat-item r"><span class="count">${rCount}</span> 稀有</span>
             `;
 
-            // Apply filter
+            // Day 37: Render tag filter bar
+            renderFavoriteTagFilter();
+
+            // Apply tag filter first (Day 37)
+            if (favoriteTagFilter !== 'all') {
+                favoriteList = favoriteList.filter(agent => {
+                    const agentTagIds = getAgentTagIds(agent.id);
+                    return agentTagIds.includes(favoriteTagFilter);
+                });
+            }
+
+            // Apply rarity filter
             if (favoriteFilterRarity !== 'all') {
                 favoriteList = favoriteList.filter(a => a.rarity === favoriteFilterRarity);
             }
@@ -5760,6 +6197,11 @@
             let html = `<div class="favorite-list ${viewClass}">`;
             favoriteList.forEach(agent => {
                 const rarityLabel = agent.rarity === 'ssr' ? '传奇' : agent.rarity === 'sr' ? '史诗' : '稀有';
+                // Day 37: Get user tags for this agent
+                const agentTagsHtml = getAgentTags(agent.id).map(tag => 
+                    `<span class="user-tag-chip" style="background: ${getTagColor(tag)}">${tag}</span>`
+                ).join('');
+                
                 html += `
                     <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
                         <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
@@ -5770,6 +6212,7 @@
                                 <span>时尚值</span>
                                 <span class="rarity-tag ${agent.rarity}">${rarityLabel}</span>
                             </div>
+                            ${agentTagsHtml ? `<div class="favorite-card-tags">${agentTagsHtml}</div>` : ''}
                         </div>
                         <button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>
                     </div>
@@ -5787,6 +6230,65 @@
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.rarity === favoriteFilterRarity);
             });
+        }
+        
+        // Day 37: Render tag filter bar in favorites
+        function renderFavoriteTagFilter() {
+            const toolbar = document.getElementById('favoriteToolbar');
+            const allUsedTags = getAllUsedTags();
+            
+            if (allUsedTags.length === 0) {
+                return; // No tags to filter, keep default toolbar
+            }
+            
+            let tagFilterHtml = `
+                <div class="favorite-tag-filter">
+                    <button class="tag-filter-btn ${favoriteTagFilter === 'all' ? 'active' : ''}" 
+                            data-tag="all" onclick="filterByUserTag('all')">
+                        🏷️ 全部
+                    </button>
+            `;
+            
+            allUsedTags.forEach(tag => {
+                tagFilterHtml += `
+                    <button class="tag-filter-btn ${favoriteTagFilter === tag.id ? 'active' : ''}" 
+                            data-tag="${tag.id}" onclick="filterByUserTag('${tag.id}')"
+                            style="${favoriteTagFilter === tag.id ? `background: ${tag.color}; border-color: ${tag.color};` : ''}">
+                        ${tag.label}
+                    </button>
+                `;
+            });
+            
+            tagFilterHtml += '</div>';
+            
+            // Insert after stats
+            const statsContainer = document.getElementById('favoriteStats');
+            const existingTagFilter = document.querySelector('.favorite-tag-filter');
+            if (existingTagFilter) {
+                existingTagFilter.remove();
+            }
+            statsContainer.insertAdjacentHTML('afterend', tagFilterHtml);
+        }
+        
+        // Day 37: Filter favorites by user tag
+        function filterByUserTag(tagId) {
+            favoriteTagFilter = tagId;
+            localStorage.setItem('favoriteTagFilter', tagId);
+            renderFavoritePanel();
+        }
+        
+        // Day 37: Get tag color for display
+        function getTagColor(tagLabel) {
+            const preset = PRESET_TAGS.find(p => p.label === tagLabel);
+            if (preset) return preset.color + '33'; // Add transparency
+            return '#88888833';
+        }
+        
+        // Day 37: Get tag border color for display
+        function getTagBorderColor(tagLabel) {
+            const preset = PRESET_TAGS.find(p => p.label === tagLabel);
+            if (preset) return preset.color;
+            return '#888888';
         }
 
         // Day 20: Filter favorites by rarity
@@ -6747,10 +7249,160 @@
 
             // 加载评论 (Day 18)
             loadAgentReviews(agent.id);
+            
+            // Day 37: 加载用户标签
+            loadUserTagsForAgent(agent.id);
 
             // 显示弹窗
             modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        // Day 37: Load user tags for agent in modal
+        function loadUserTagsForAgent(agentId) {
+            const userTagsSection = document.getElementById('userTagsSection');
+            const userTagsContainer = document.getElementById('modal-user-tags');
+            const userTagIds = getAgentTagIds(agentId);
+            
+            // 如果是收藏的Agent才显示用户标签功能
+            if (favoriteAgents.includes(agentId)) {
+                userTagsSection.style.display = 'block';
+                
+                if (userTagIds.length === 0) {
+                    userTagsContainer.innerHTML = '<span class="no-user-tags">还没有添加标签</span>';
+                } else {
+                    const tagsHtml = userTagIds.map(tagId => {
+                        const preset = PRESET_TAGS.find(p => p.id === tagId);
+                        const label = preset ? preset.label : `🏷️ ${tagId}`;
+                        const color = preset ? preset.color : '#888';
+                        const colorClass = preset ? `data-tag-color="${preset.id}"` : '';
+                        return `
+                            <div class="user-agent-tag" ${colorClass} style="border-color: ${color}44;">
+                                ${label}
+                                <button class="remove-tag" onclick="removeTagFromAgentUI('${agentId}', '${tagId}')">✕</button>
+                            </div>
+                        `;
+                    }).join('');
+                    userTagsContainer.innerHTML = tagsHtml;
+                }
+            } else {
+                userTagsSection.style.display = 'none';
+            }
+            
+            // 初始化预设标签列表
+            initPresetTagsList(agentId);
+        }
+        
+        // Day 37: Initialize preset tags list in selector
+        function initPresetTagsList(agentId) {
+            const presetTagsList = document.getElementById('presetTagsList');
+            const currentTags = getAgentTagIds(agentId);
+            
+            const tagsHtml = PRESET_TAGS.map(tag => {
+                const isSelected = currentTags.includes(tag.id);
+                return `
+                    <button class="preset-tag-btn ${isSelected ? 'selected' : ''}" 
+                            data-tag-id="${tag.id}"
+                            onclick="togglePresetTag('${agentId}', '${tag.id}')"
+                            style="${isSelected ? `background: ${tag.color}33; border-color: ${tag.color}; color: ${tag.color};` : ''}">
+                        ${tag.label}
+                    </button>
+                `;
+            }).join('');
+            
+            presetTagsList.innerHTML = tagsHtml;
+        }
+        
+        // Day 37: Toggle preset tag
+        function togglePresetTag(agentId, tagId) {
+            const currentTags = getAgentTagIds(agentId);
+            
+            if (currentTags.includes(tagId)) {
+                removeTagFromAgent(agentId, tagId);
+            } else {
+                addTagToAgent(agentId, tagId);
+            }
+            
+            // 更新UI
+            loadUserTagsForAgent(agentId);
+            initPresetTagsList(agentId);
+            
+            // 如果收藏面板打开，更新收藏面板
+            if (document.getElementById('favoritePanel').classList.contains('active')) {
+                renderFavoritePanel();
+            }
+        }
+        
+        // Day 37: Add custom tag to agent
+        function addCustomTagToAgent() {
+            if (!currentModalAgent) return;
+            
+            const input = document.getElementById('customTagInput');
+            const tagName = input.value.trim();
+            
+            if (!tagName) return;
+            
+            // 添加自定义标签
+            addCustomTag(tagName);
+            
+            // 添加到当前Agent
+            addTagToAgent(currentModalAgent.id, tagName);
+            
+            // 清空输入框
+            input.value = '';
+            
+            // 更新UI
+            loadUserTagsForAgent(currentModalAgent.id);
+            initPresetTagsList(currentModalAgent.id);
+            
+            // 如果收藏面板打开，更新收藏面板
+            if (document.getElementById('favoritePanel').classList.contains('active')) {
+                renderFavoritePanel();
+            }
+            
+            showToast('已添加标签');
+        }
+        
+        // Day 37: Remove tag from agent UI
+        function removeTagFromAgentUI(agentId, tagId) {
+            removeTagFromAgent(agentId, tagId);
+            loadUserTagsForAgent(agentId);
+            initPresetTagsList(agentId);
+            
+            // 如果收藏面板打开，更新收藏面板
+            if (document.getElementById('favoritePanel').classList.contains('active')) {
+                renderFavoritePanel();
+            }
+            
+            showToast('已移除标签');
+        }
+        
+        // Day 37: Show tag selector
+        function showTagSelector() {
+            const selector = document.getElementById('tagSelector');
+            selector.classList.add('active');
+            
+            // 添加点击外部关闭
+            setTimeout(() => {
+                document.addEventListener('click', handleOutsideClick);
+            }, 0);
+        }
+        
+        // Day 37: Hide tag selector
+        function hideTagSelector() {
+            const selector = document.getElementById('tagSelector');
+            selector.classList.remove('active');
+            document.removeEventListener('click', handleOutsideClick);
+        }
+        
+        // Day 37: Handle click outside to close selector
+        function handleOutsideClick(e) {
+            const selector = document.getElementById('tagSelector');
+            const addBtn = document.getElementById('addTagBtn');
+            
+            if (!selector.contains(e.target) && !addBtn.contains(e.target)) {
+                hideTagSelector();
+            }
         }
 
         // ========== Review Functions (Day 18) ==========
