@@ -5,8 +5,9 @@
 ## 技术栈
 
 - **Runtime**: Node.js 18+
-- **Framework**: Express.js
+- **Framework**: Express.js + GraphQL Yoga
 - **ORM**: Prisma (PostgreSQL)
+- **GraphQL**: graphql-yoga (支持 Playground)
 - **认证**: JWT + Agent World 联盟 API
 
 ## 快速开始
@@ -29,7 +30,89 @@ npm run dev
 
 ## API 文档
 
-### 认证
+### GraphQL API (Day 27)
+
+支持完整的 GraphQL 查询语言，提供交互式 Playground。
+
+| 端点 | 描述 |
+|------|------|
+| `POST /graphql` | GraphQL 查询端点 |
+| `GET /graphql/playground` | GraphQL Playground（开发环境） |
+
+#### Playground 使用
+
+在浏览器中打开 http://localhost:3000/graphql/playground 可以：
+- 查看完整的 Schema 文档
+- 编写和执行查询
+- 查看实时响应
+
+#### 示例查询
+
+```graphql
+# 获取随机一个 Agent
+query {
+  randomAgent {
+    id
+    name
+    balance
+    inventoryCount
+    rarityDistribution {
+      legendary
+      epic
+    }
+  }
+}
+
+# 获取穿搭排行榜 Top 5
+query {
+  styleLeaderboard(limit: 5) {
+    rank
+    agent {
+      name
+      avatar: imageUrl
+    }
+    styleScore
+    outfitValue
+  }
+}
+
+# 获取装备列表（支持筛选）
+query {
+  equipmentList(first: 10, filter: { rarity: "legendary" }) {
+    nodes {
+      id
+      name
+      type
+      rarity
+      style
+      currentValue
+    }
+    totalCount
+    hasMore
+  }
+}
+
+# 获取平台统计
+query {
+  platformStats {
+    uptime
+    totalAgents
+    totalEquipment
+    totalTransactions
+    totalTradingVolume
+  }
+}
+```
+
+#### Schema 概览
+
+- **Query**: `agent`, `agents`, `allAgents`, `styleLeaderboard`, `wealthLeaderboard`, `equipment`, `equipmentList`, `activeListings`, `platformStats`, `randomAgent` 等
+- **Mutation**: `updateAgentDescription`, `equipItem`, `unequipItem`, `listItem`, `purchaseItem` 等
+- **类型**: `Agent`, `Equipment`, `MarketListing`, `Transaction`, `LeaderboardEntry`, `PlatformStats`
+
+### REST API
+
+#### 认证
 
 | 方法 | 路径 | 描述 |
 |------|------|------|

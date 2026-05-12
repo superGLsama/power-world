@@ -2,12 +2,11 @@
  * Agent Street Backend - 主入口文件
  * Agent World 联盟核心时尚街区后端服务
  * 
- * Day 17 迭代：API 安全增强
- * - 响应压缩 (gzip)
- * - 细粒度限流策略
- * - 请求 ID 全局追踪
- * - 敏感操作审计日志
- * - CORS 增强配置
+ * Day 27 迭代：GraphQL API 集成
+ * - GraphQL Yoga 服务器集成
+ * - 完整的 Schema 和 Resolver
+ * - GraphQL Playground 交互式调试
+ * - REST + GraphQL 双 API 共存
  */
 
 import 'dotenv/config';
@@ -20,11 +19,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaClient } from '@prisma/client';
+import { createYoga, createSchema } from 'graphql-yoga';
+import { typeDefs } from './graphql/schema.js';
+import { resolvers } from './graphql/resolvers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 全局 Prisma 实例（用于健康检查）
+// 全局 Prisma 实例（用于健康检查和 GraphQL）
 const prisma = new PrismaClient();
 global.prisma = prisma;
 
@@ -184,17 +186,105 @@ app.get('/api/v1', (req, res) => {
     version: 'v1.0.0',
     description: 'Agent World 联盟核心时尚街区 API',
     endpoints: {
-      auth: '/api/v1/auth',
-      agents: '/api/v1/agents',
-      equipment: '/api/v1/equipment',
-      inventory: '/api/v1/inventory',
-      transactions: '/api/v1/transactions',
-      leaderboard: '/api/v1/leaderboard',
-      market: '/api/v1/equipment/market',
-      stats: '/api/v1/stats'
+      graphql: '/graphql',
+      playground: '/graphql/playground',
+      rest: {
+        auth: '/api/v1/auth',
+        agents: '/api/v1/agents',
+        equipment: '/api/v1/equipment',
+        inventory: '/api/v1/inventory',
+        transactions: '/api/v1/transactions',
+        leaderboard: '/api/v1/leaderboard',
+        market: '/api/v1/equipment/market',
+        stats: '/api/v1/stats'
+      }
     }
   });
 });
+
+// ========== GraphQL 服务器 (Day 27) ==========
+
+// 创建 GraphQL Schema
+const schema = createSchema({
+  typeDefs,
+  resolvers
+});
+
+// 创建 GraphQL Yoga 实例
+const yoga = new Yoga({
+  schema,
+  graphqlEndpoint: '/graphql',
+  graphiql: {
+    title: 'Agent Street GraphQL Playground',
+    defaultQuery: `# Agent Street GraphQL API
+# 基于 Day 27 GraphQL 学习的最佳实践
+
+# 获取随机一个 Agent
+query {
+  randomAgent {
+    id
+    name
+    balance
+    inventoryCount
+  }
+}
+
+# 获取穿搭排行榜 Top 5
+# query {
+#   styleLeaderboard(limit: 5) {
+#     rank
+#     agent {
+#       name
+#       balance
+#     }
+#     styleScore
+#     outfitValue
+#   }
+# }
+
+# 获取平台统计
+# query {
+#   platformStats {
+#     uptime
+#     totalAgents
+#     totalEquipment
+#     totalTransactions
+#   }
+# }
+
+# 获取装备列表（分页）
+# query {
+#   equipmentList(first: 5) {
+#     nodes {
+#       id
+#       name
+#       type
+#       rarity
+#       style
+#       currentValue
+#     }
+#     totalCount
+#     hasMore
+#   }
+# }
+`
+  },
+  fetchAPI: { Response },
+  context: {
+    prisma // 注入 Prisma 实例供 Resolver 使用
+  }
+});
+
+// GraphQL Playground（开发环境）
+app.get('/graphql/playground', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.send(yoga.renderPlayground());
+});
+
+// GraphQL 端点
+app.all('/graphql', yoga);
+
+// REST + GraphQL 双 API 共存
 
 // 注册路由
 app.use('/api/v1/auth', authRoutes);
@@ -208,9 +298,10 @@ app.use('/api/v1/audit', auditRoutes); // Day 17 - 审计日志路由
 
 // 404 处理
 app.use((req, res, next) => {
+  // GraphQL 请求由 yoga 处理，不拦截
   if (req.path.startsWith('/api')) {
     res.status(404).json(error('NOT_FOUND', '请求的接口不存在'));
-  } else {
+  } else if (!req.path.startsWith('/graphql')) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
   }
 });
@@ -231,10 +322,14 @@ app.listen(PORT, () => {
 ║   Port: ${PORT}                                              ║
 ║   Env:  ${process.env.NODE_ENV || 'development'}                              ║
 ║                                                           ║
-║   🌐 Frontend: http://localhost:${PORT}                      ║
-║   🔌 API:      http://localhost:${PORT}/api/v1               ║
-║   📊 Stats:    http://localhost:${PORT}/api/v1/stats         ║
-║   ❤️  Health:   http://localhost:${PORT}/health              ║
+║   🌐 Frontend:   http://localhost:${PORT}                     ║
+║   🔌 REST API:  http://localhost:${PORT}/api/v1              ║
+║   📊 Stats:      http://localhost:${PORT}/api/v1/stats       ║
+║   🔮 GraphQL:   http://localhost:${PORT}/graphql              ║
+║   🎮 Playground: http://localhost:${PORT}/graphql/playground   ║
+║   ❤️  Health:    http://localhost:${PORT}/health             ║
+║                                                           ║
+║   ✨ Day 27: GraphQL API 集成完成！                        ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
   `);
