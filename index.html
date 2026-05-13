@@ -1010,6 +1010,219 @@
             gap: 1.5rem;
         }
 
+        /* ========== Lazy Loading & Infinite Scroll (Day 39) ========== */
+        
+        /* 懒加载卡片样式 - 初始隐藏 */
+        .outfit-card.lazy-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .outfit-card.lazy-visible {
+            animation: lazyFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes lazyFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 加载更多区域 */
+        .load-more-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .load-more-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .load-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--shadow-glow);
+        }
+
+        .load-more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .load-more-btn.loading {
+            pointer-events: none;
+        }
+
+        .load-more-btn.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 加载进度指示器 */
+        .loading-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 4px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            z-index: 99;
+            box-shadow: 0 4px 15px var(--shadow-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-glow);
+        }
+
+        .back-to-top:active {
+            transform: translateY(0);
+        }
+
+        /* 骨架屏加载动画 */
+        .skeleton-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border-default);
+            padding: 1.5rem;
+            min-height: 280px;
+        }
+
+        .skeleton-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+        }
+
+        .skeleton-line {
+            height: 16px;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-line.medium {
+            width: 80%;
+        }
+
+        .skeleton-items {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .skeleton-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        /* 卡片计数指示器 */
+        .cards-counter {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            z-index: 98;
+        }
+
+        .cards-counter.visible {
+            opacity: 1;
+        }
+
+        .cards-counter span {
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+
+        /* 滚动触发动画 - Intersection Observer 目标元素 */
+        .scroll-trigger {
+            height: 1px;
+            margin-top: -100px;
+        }
+
         /* ========== Card Rarity Particle Effects (Day 24) ========== */
         
         /* 稀有度动态边框光效 */
@@ -5285,6 +5498,9 @@
         </div>
     </div>
 
+    <!-- Back to Top Button (Day 39) -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部">↑</button>
+
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active">
@@ -5625,6 +5841,13 @@
         // Keyboard Navigation State (Day 35)
         let selectedCardIndex = -1; // 当前键盘选中的卡片索引
         let isKeyboardNavigating = false; // 是否处于键盘导航模式
+
+        // ========== Lazy Loading State (Day 39) ==========
+        const LAZY_BATCH_SIZE = 12; // 每次懒加载显示的卡片数量
+        let visibleCardCount = LAZY_BATCH_SIZE; // 当前可见的卡片数量
+        let lazyLoadedCards = new Set(); // 已懒加载的卡片索引集合
+        let lazyObserver = null; // IntersectionObserver 实例
+        let isLazyLoading = false; // 是否正在加载更多
 
         // ========== Review System (Day 18) ==========
         let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
@@ -6243,50 +6466,6 @@
             `;
         }
 
-        function renderAgentCard(agent, index = 0) {
-            const rarityClass = `rarity-${agent.rarity}`;
-            const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
-            const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
-            const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
-            const isLiked = likedAgents.includes(agent.id);
-            const heartClass = isLiked ? '❤️' : '🤍';
-            const isFavorited = favoriteAgents.includes(agent.id);
-            const starClass = isFavorited ? '⭐' : '☆';
-            // Day 7: 高亮搜索关键词
-            const displayName = highlightText(agent.name, currentSearch);
-
-            return `
-                <div class="outfit-card ${rarityClass} visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
-                    <div class="card-image">
-                        <div class="card-particles"></div>
-                        <span class="card-avatar">${agent.avatar}</span>
-                        <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">${displayName}</span>
-                            <span class="card-score">${agent.score}</span>
-                        </div>
-                        <div class="card-outfit">${itemsHtml}</div>
-                        <div class="card-footer">
-                            <div class="card-tags">${tagsHtml}</div>
-                            <div class="card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
-                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
-                                    ${heartClass} <span class="like-count">${agent.likes}</span>
-                                </button>
-                                <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
-                                    ${starClass}
-                                </button>
-                                <button class="compare-card-btn" onclick="addToCompare('${agent.id}'); event.stopPropagation();" title="添加对比">
-                                    ⚖️
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
         function renderEmptyState(tabType) {
             const messages = {
                 hot: '暂无热门Agent，稍后再来看看吧',
@@ -6384,12 +6563,29 @@
                 countEl.classList.remove('updating');
             }, 50);
 
-            // 渲染过滤后的结果
+            // 渲染过滤后的结果 - 使用懒加载 (Day 39)
             const container = document.getElementById('outfits-container');
             if (filtered.length === 0) {
                 container.innerHTML = renderNoResults();
             } else {
-                container.innerHTML = filtered.map((agent, index) => renderAgentCard(agent, index)).join('');
+                // 重置懒加载状态
+                visibleCardCount = LAZY_BATCH_SIZE;
+                lazyLoadedCards.clear();
+                isLazyLoading = false;
+                
+                // 只渲染第一批卡片
+                const firstBatch = filtered.slice(0, visibleCardCount);
+                container.innerHTML = firstBatch.map((agent, index) => 
+                    renderAgentCard(agent, index, true)
+                ).join('');
+                
+                // 添加加载更多区域
+                if (filtered.length > visibleCardCount) {
+                    container.innerHTML += renderLoadMore(filtered.length, visibleCardCount);
+                }
+                
+                // 初始化懒加载观察器
+                initLazyObserver();
             }
 
             agentsData = filtered;
@@ -6399,8 +6595,249 @@
             selectedCardIndex = -1;
             isKeyboardNavigating = false;
 
+            // 添加入场动画（只对可见卡片生效）
+            animateCardsIn();
+        }
+
+        // ========== Lazy Loading Functions (Day 39) ==========
+        
+        /**
+         * 渲染懒加载卡片
+         */
+        function renderAgentCard(agent, index = 0, lazy = false) {
+            const rarityClass = `rarity-${agent.rarity}`;
+            const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
+            const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
+            const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+            const isLiked = likedAgents.includes(agent.id);
+            const heartClass = isLiked ? '❤️' : '🤍';
+            const isFavorited = favoriteAgents.includes(agent.id);
+            const starClass = isFavorited ? '⭐' : '☆';
+            // Day 7: 高亮搜索关键词
+            const displayName = highlightText(agent.name, currentSearch);
+            
+            // 懒加载模式添加特殊类
+            const visibilityClass = lazy ? 'lazy-visible' : '';
+
+            return `
+                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
+                    <div class="card-image">
+                        <div class="card-particles"></div>
+                        <span class="card-avatar">${agent.avatar}</span>
+                        <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">${displayName}</span>
+                            <span class="card-score">${agent.score}</span>
+                        </div>
+                        <div class="card-outfit">${itemsHtml}</div>
+                        <div class="card-footer">
+                            <div class="card-tags">${tagsHtml}</div>
+                            <div class="card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
+                                    ${heartClass} <span class="like-count">${agent.likes}</span>
+                                </button>
+                                <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
+                                    ${starClass}
+                                </button>
+                                <button class="compare-card-btn" onclick="addToCompare('${agent.id}'); event.stopPropagation();" title="添加对比">
+                                    ⚖️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        /**
+         * 渲染加载更多按钮区域
+         */
+        function renderLoadMore(total, loaded) {
+            const remaining = total - loaded;
+            const progress = Math.round((loaded / total) * 100);
+            return `
+                <div class="load-more-container" id="loadMoreContainer">
+                    <div class="loading-progress">
+                        <span>已加载 <strong>${loaded}</strong> / <strong>${total}</strong></span>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreCards()">
+                        加载更多 (${remaining}个)
+                    </button>
+                    <button class="load-more-btn" onclick="loadAllCards()" style="background: rgba(107,92,231,0.3);">
+                        🔮 加载全部
+                    </button>
+                </div>
+            `;
+        }
+        
+        /**
+         * 加载更多卡片
+         */
+        function loadMoreCards() {
+            if (isLazyLoading) return;
+            
+            const container = document.getElementById('outfits-container');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            
+            if (!loadMoreBtn || !container) return;
+            
+            isLazyLoading = true;
+            loadMoreBtn.classList.add('loading');
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.innerHTML = '加载中...';
+            
+            // 模拟加载延迟（实际项目中可能从API获取）
+            setTimeout(() => {
+                const nextBatch = agentsData.slice(visibleCardCount, visibleCardCount + LAZY_BATCH_SIZE);
+                const startIndex = visibleCardCount;
+                
+                // 生成新卡片HTML
+                const newCardsHtml = nextBatch.map((agent, i) => 
+                    renderAgentCard(agent, startIndex + i, true)
+                ).join('');
+                
+                // 在加载更多按钮前插入新卡片
+                loadMoreContainer.insertAdjacentHTML('beforebegin', newCardsHtml);
+                
+                // 更新已加载数量
+                visibleCardCount += nextBatch.length;
+                lazyLoadedCards.add(visibleCardCount);
+                
+                // 移除旧加载更多按钮
+                loadMoreContainer.remove();
+                
+                // 添加新的加载更多按钮
+                if (visibleCardCount < agentsData.length) {
+                    container.innerHTML += renderLoadMore(agentsData.length, visibleCardCount);
+                }
+                
+                // 为新卡片添加入场动画
+                const newCards = container.querySelectorAll('.outfit-card');
+                newCards.forEach((card, i) => {
+                    if (!card.classList.contains('lazy-visible')) {
+                        card.classList.add('lazy-visible');
+                        card.style.animationDelay = `${i * 30}ms`;
+                    }
+                });
+                
+                // 初始化新卡片的粒子效果
+                initCardParticles();
+                
+                isLazyLoading = false;
+                
+                // 显示卡片计数提示
+                showCardsCounter(visibleCardCount, agentsData.length);
+            }, 500);
+        }
+        
+        /**
+         * 加载全部卡片
+         */
+        function loadAllCards() {
+            if (isLazyLoading) return;
+            
+            const container = document.getElementById('outfits-container');
+            if (!container) return;
+            
+            isLazyLoading = true;
+            
+            // 直接渲染所有卡片
+            container.innerHTML = agentsData.map((agent, index) => 
+                renderAgentCard(agent, index, true)
+            ).join('');
+            
+            visibleCardCount = agentsData.length;
+            
             // 添加入场动画
             animateCardsIn();
+            
+            // 初始化所有卡片的粒子效果
+            initCardParticles();
+            
+            isLazyLoading = false;
+            
+            showToast(`已加载全部 ${agentsData.length} 个Agent`);
+        }
+        
+        /**
+         * 初始化懒加载观察器（IntersectionObserver）
+         */
+        function initLazyObserver() {
+            if (lazyObserver) {
+                lazyObserver.disconnect();
+            }
+            
+            lazyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        if (!card.classList.contains('lazy-visible')) {
+                            card.classList.add('lazy-visible');
+                        }
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0.1
+            });
+            
+            // 观察所有懒加载卡片
+            document.querySelectorAll('.outfit-card.lazy-hidden').forEach(card => {
+                lazyObserver.observe(card);
+            });
+        }
+        
+        /**
+         * 显示卡片计数提示
+         */
+        function showCardsCounter(loaded, total) {
+            let counter = document.getElementById('cardsCounter');
+            if (!counter) {
+                counter = document.createElement('div');
+                counter.id = 'cardsCounter';
+                counter.className = 'cards-counter';
+                document.body.appendChild(counter);
+            }
+            
+            counter.innerHTML = `已显示 <span>${loaded}</span> / <span>${total}</span>`;
+            counter.classList.add('visible');
+            
+            setTimeout(() => {
+                counter.classList.remove('visible');
+            }, 2000);
+        }
+        
+        /**
+         * 回到顶部
+         */
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        /**
+         * 初始化滚动监听
+         */
+        function initScrollListener() {
+            const backToTop = document.getElementById('backToTop');
+            if (!backToTop) return;
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
         }
 
         function animateCardsIn() {
@@ -7453,6 +7890,7 @@
             updateNotificationBadge(); // Day 11: 初始化通知角标
             initCompareList(); // Day 15: 初始化对比列表
             initSystemStatusIndicator(); // Day 21: 初始化系统状态指示器
+            initScrollListener(); // Day 39: 初始化滚动监听（回到顶部按钮）
             
             createParticles();
             setupTabListeners();

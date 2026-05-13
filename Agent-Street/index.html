@@ -742,6 +742,20 @@
             font-weight: 600;
         }
 
+        .keyboard-hint .hint-section-title {
+            color: var(--text-secondary);
+            margin-top: 0.6rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .keyboard-hint .hint-section-title:first-child {
+            margin-top: 0;
+        }
+
         .points {
             display: flex;
             align-items: center;
@@ -996,7 +1010,224 @@
             gap: 1.5rem;
         }
 
+        /* ========== Lazy Loading & Infinite Scroll (Day 39) ========== */
+        
+        /* 懒加载卡片样式 - 初始隐藏 */
+        .outfit-card.lazy-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .outfit-card.lazy-visible {
+            animation: lazyFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes lazyFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 加载更多区域 */
+        .load-more-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .load-more-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .load-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px var(--shadow-glow);
+        }
+
+        .load-more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .load-more-btn.loading {
+            pointer-events: none;
+        }
+
+        .load-more-btn.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 加载进度指示器 */
+        .loading-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 4px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            z-index: 99;
+            box-shadow: 0 4px 15px var(--shadow-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-glow);
+        }
+
+        .back-to-top:active {
+            transform: translateY(0);
+        }
+
+        /* 骨架屏加载动画 */
+        .skeleton-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border-default);
+            padding: 1.5rem;
+            min-height: 280px;
+        }
+
+        .skeleton-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+        }
+
+        .skeleton-line {
+            height: 16px;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-line.medium {
+            width: 80%;
+        }
+
+        .skeleton-items {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .skeleton-item {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        /* 卡片计数指示器 */
+        .cards-counter {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            z-index: 98;
+        }
+
+        .cards-counter.visible {
+            opacity: 1;
+        }
+
+        .cards-counter span {
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+
+        /* 滚动触发动画 - Intersection Observer 目标元素 */
+        .scroll-trigger {
+            height: 1px;
+            margin-top: -100px;
+        }
+
+        /* ========== Card Rarity Particle Effects (Day 24) ========== */
+        
+        /* 稀有度动态边框光效 */
         .outfit-card {
+            position: relative;
             background: var(--bg-card);
             backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -1005,12 +1236,43 @@
             transition: all var(--transition-normal);
         }
 
-        .outfit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px var(--shadow-glow);
-            border-color: var(--accent-secondary);
+        /* 稀有度边框脉冲光效 */
+        .outfit-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            background: linear-gradient(90deg, transparent, transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        .outfit-card.ssr::before {
+            background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+            animation: borderGlow 2s linear infinite;
+        }
+
+        .outfit-card.sr::before {
+            background: linear-gradient(90deg, #C0C0C0, #A8A8A8, #C0C0C0);
+            animation: borderGlow 2.5s linear infinite;
+        }
+
+        .outfit-card.r::before {
+            background: linear-gradient(90deg, #CD7F32, #A0522D, #CD7F32);
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.4; filter: blur(4px); }
+            50% { opacity: 0.8; filter: blur(6px); }
+            100% { opacity: 0.4; filter: blur(4px); }
+        }
+
+        /* 稀有度动态背景 */
         .card-image {
             position: relative;
             height: 180px;
@@ -1018,6 +1280,132 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .outfit-card.ssr .card-image {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.1), rgba(255, 215, 0, 0.15));
+            animation: rarityBgSsr 4s ease-in-out infinite;
+        }
+
+        .outfit-card.sr .card-image {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(168, 168, 168, 0.08), rgba(192, 192, 192, 0.1));
+            animation: rarityBgSr 4.5s ease-in-out infinite;
+        }
+
+        .outfit-card.r .card-image {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), rgba(160, 82, 45, 0.08), rgba(205, 127, 50, 0.1));
+            animation: rarityBgR 5s ease-in-out infinite;
+        }
+
+        @keyframes rarityBgSsr {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes rarityBgSr {
+            0%, 100% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            50% { background-position: 100% 50%; filter: hue-rotate(10deg); }
+        }
+
+        @keyframes rarityBgR {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 卡片粒子特效容器 */
+        .card-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .outfit-card:hover .card-particles {
+            opacity: 1;
+        }
+
+        .card-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: cardParticleFloat 3s ease-in-out infinite;
+        }
+
+        .outfit-card.ssr .card-particle {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            box-shadow: 0 0 6px #FFD700;
+        }
+
+        .outfit-card.sr .card-particle {
+            background: linear-gradient(90deg, #C0C0C0, #A8A8A8);
+            box-shadow: 0 0 6px #C0C0C0;
+        }
+
+        .outfit-card.r .card-particle {
+            background: linear-gradient(90deg, #CD7F32, #A0522D);
+            box-shadow: 0 0 6px #CD7F32;
+        }
+
+        @keyframes cardParticleFloat {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-150px) translateX(30px); opacity: 0; }
+        }
+
+        /* 点击波纹效果 */
+        .card-ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+
+        .outfit-card.ssr .card-ripple {
+            background: rgba(255, 215, 0, 0.4);
+        }
+
+        .outfit-card.sr .card-ripple {
+            background: rgba(192, 192, 192, 0.4);
+        }
+
+        .outfit-card.r .card-ripple {
+            background: rgba(205, 127, 50, 0.4);
+        }
+
+        @keyframes rippleEffect {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Hover时边框光效加强 */
+        .outfit-card:hover::before {
+            opacity: 1;
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-glow);
+            border-color: var(--accent-secondary);
+        }
+
+        .outfit-card.ssr:hover {
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .outfit-card.sr:hover {
+            box-shadow: 0 10px 40px rgba(192, 192, 192, 0.3);
+        }
+
+        .outfit-card.r:hover {
+            box-shadow: 0 10px 40px rgba(205, 127, 50, 0.3);
         }
 
         .card-avatar {
@@ -2114,10 +2502,22 @@
         .sort-btn.active {
             color: #00FFD1;
             background: rgba(0, 255, 209, 0.1);
+            animation: sortPulse 0.5s ease-out;
         }
 
         .sort-btn .sort-icon {
             font-size: 0.9rem;
+        }
+
+        /* Day 22: Sort indicator animation */
+        @keyframes sortPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .sort-bar {
+            transition: all 0.3s ease;
         }
 
         /* ========== Enhanced Card Animations (Day 3) ========== */
@@ -2450,207 +2850,6 @@
             border-radius: 15px;
             font-size: 0.85rem;
             color: #00FFD1;
-        }
-        
-        /* ========== User Tags in Modal (Day 37) ========== */
-        .modal-section-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .add-tag-btn {
-            margin-left: auto;
-            padding: 0.25rem 0.6rem;
-            background: rgba(255, 107, 138, 0.15);
-            border: 1px solid rgba(255, 107, 138, 0.3);
-            border-radius: 12px;
-            color: #ff6b8a;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.2rem;
-        }
-        
-        .add-tag-btn:hover {
-            background: rgba(255, 107, 138, 0.25);
-            transform: scale(1.05);
-        }
-        
-        .modal-user-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.5rem;
-        }
-        
-        .user-agent-tag {
-            padding: 0.3rem 0.6rem;
-            background: rgba(107, 92, 231, 0.15);
-            border: 1px solid rgba(107, 92, 231, 0.3);
-            border-radius: 12px;
-            font-size: 0.8rem;
-            color: #B8B5FF;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            cursor: default;
-        }
-        
-        .user-agent-tag[data-tag-color="work"] { border-color: rgba(107, 92, 231, 0.5); color: #B8B5FF; background: rgba(107, 92, 231, 0.2); }
-        .user-agent-tag[data-tag-color="study"] { border-color: rgba(0, 184, 148, 0.5); color: #00b894; background: rgba(0, 184, 148, 0.2); }
-        .user-agent-tag[data-tag-color="fun"] { border-color: rgba(253, 121, 168, 0.5); color: #fd79a8; background: rgba(253, 121, 168, 0.2); }
-        .user-agent-tag[data-tag-color="daily"] { border-color: rgba(253, 203, 110, 0.5); color: #fdcb6e; background: rgba(253, 203, 110, 0.2); }
-        .user-agent-tag[data-tag-color="creative"] { border-color: rgba(225, 112, 85, 0.5); color: #e17055; background: rgba(225, 112, 85, 0.2); }
-        .user-agent-tag[data-tag-color="tech"] { border-color: rgba(9, 132, 227, 0.5); color: #0984e3; background: rgba(9, 132, 227, 0.2); }
-        .user-agent-tag[data-tag-color="social"] { border-color: rgba(0, 206, 201, 0.5); color: #00cec9; background: rgba(0, 206, 201, 0.2); }
-        .user-agent-tag[data-tag-color="productivity"] { border-color: rgba(108, 92, 231, 0.5); color: #a29bfe; background: rgba(108, 92, 231, 0.2); }
-        
-        .user-agent-tag .remove-tag {
-            width: 16px;
-            height: 16px;
-            border: none;
-            background: rgba(255, 107, 138, 0.2);
-            border-radius: 50%;
-            color: #ff6b8a;
-            font-size: 0.7rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        
-        .user-agent-tag .remove-tag:hover {
-            background: rgba(255, 107, 138, 0.4);
-            transform: scale(1.1);
-        }
-        
-        /* Tag Selector Popup */
-        .tag-selector {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 280px;
-            background: var(--bg-secondary);
-            border: 1px solid rgba(107, 92, 231, 0.3);
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            display: none;
-            overflow: hidden;
-        }
-        
-        .tag-selector.active {
-            display: block;
-            animation: fadeIn 0.2s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .tag-selector-header {
-            padding: 0.8rem 1rem;
-            background: rgba(107, 92, 231, 0.1);
-            border-bottom: 1px solid rgba(107, 92, 231, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-        
-        .tag-selector-close {
-            width: 24px;
-            height: 24px;
-            border: none;
-            background: rgba(255, 107, 138, 0.1);
-            border-radius: 50%;
-            color: #ff6b8a;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        
-        .tag-selector-body {
-            padding: 1rem;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .preset-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 0.8rem;
-        }
-        
-        .preset-tag-btn {
-            padding: 0.4rem 0.7rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .preset-tag-btn:hover {
-            background: rgba(107, 92, 231, 0.2);
-            border-color: rgba(107, 92, 231, 0.4);
-            color: #B8B5FF;
-        }
-        
-        .preset-tag-btn.selected {
-            background: rgba(107, 92, 231, 0.3);
-            border-color: rgba(107, 92, 231, 0.5);
-            color: #fff;
-        }
-        
-        .custom-tag-input {
-            display: flex;
-            gap: 0.5rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .custom-tag-input input {
-            flex: 1;
-            padding: 0.5rem 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            outline: none;
-        }
-        
-        .custom-tag-input input:focus {
-            border-color: rgba(107, 92, 231, 0.5);
-        }
-        
-        .custom-tag-add {
-            padding: 0.5rem 0.8rem;
-            background: rgba(0, 255, 209, 0.2);
-            border: 1px solid rgba(0, 255, 209, 0.3);
-            border-radius: 10px;
-            color: #00FFD1;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .custom-tag-add:hover {
-            background: rgba(0, 255, 209, 0.3);
-        }
-        
-        .no-user-tags {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-style: italic;
         }
 
         .modal-actions {
@@ -3401,146 +3600,6 @@
             margin-top: 0.3rem;
         }
 
-        /* ========== Storage Manager (Day 36) ========== */
-        .storage-meter {
-            background: rgba(107, 92, 231, 0.15);
-            border-radius: 10px;
-            padding: 0.8rem;
-            margin-top: 0.8rem;
-        }
-
-        .storage-meter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.6rem;
-        }
-
-        .storage-meter-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .storage-meter-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            color: var(--accent-secondary);
-        }
-
-        .storage-meter-bar {
-            height: 8px;
-            background: rgba(107, 92, 231, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .storage-meter-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease, background 0.3s;
-        }
-
-        .storage-meter-fill.normal {
-            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
-        }
-
-        .storage-meter-fill.warning {
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-        }
-
-        .storage-meter-fill.danger {
-            background: linear-gradient(90deg, #FF6B6B, #FF4757);
-            animation: storagePulse 1.5s infinite;
-        }
-
-        @keyframes storagePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .storage-detail-list {
-            margin-top: 1rem;
-        }
-
-        .storage-detail-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(156, 136, 255, 0.1);
-        }
-
-        .storage-detail-item:last-child {
-            border-bottom: none;
-        }
-
-        .storage-detail-name {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .storage-detail-size {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .storage-detail-percent {
-            font-size: 0.75rem;
-            color: var(--accent-primary);
-            margin-left: 0.5rem;
-        }
-
-        .storage-clean-card {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .storage-clean-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .storage-clean-title {
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--accent-warning);
-        }
-
-        .storage-clean-count {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--accent-warning);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-        }
-
-        .storage-clean-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.8rem;
-        }
-
-        .settings-btn-group.storage-clean-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .settings-btn-group.storage-clean-actions .settings-action-btn {
-            padding: 0.5rem 0.8rem;
-            font-size: 0.8rem;
-        }
-
         .settings-info-box {
             background: rgba(0, 255, 209, 0.1);
             border: 1px solid rgba(0, 255, 209, 0.2);
@@ -3553,6 +3612,321 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
             line-height: 1.5;
+        }
+
+        /* ========== System Status Panel (Day 21 - K8s Style) ========== */
+        .system-status-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .system-status-btn:hover {
+            background: rgba(107, 92, 231, 0.4);
+            transform: scale(1.1);
+        }
+
+        .system-status-btn.active {
+            background: rgba(107, 92, 231, 0.5);
+        }
+
+        .system-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00FFD1;
+            box-shadow: 0 0 10px #00FFD1;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .system-status-dot.offline {
+            background: #ff6b8a;
+            box-shadow: 0 0 10px #ff6b8a;
+        }
+
+        .system-status-dot.warning {
+            background: #FFD700;
+            box-shadow: 0 0 10px #FFD700;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        .system-status-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 380px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(13, 13, 26, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(0, 255, 209, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .system-status-panel.active {
+            transform: translateX(0);
+        }
+
+        .system-status-panel-header {
+            padding: 1.5rem;
+            background: rgba(0, 255, 209, 0.08);
+            border-bottom: 1px solid rgba(0, 255, 209, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .system-status-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00FFD1;
+        }
+
+        .system-status-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(0, 255, 209, 0.15);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .system-status-panel-close:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .system-status-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .system-status-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .system-status-section-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 209, 0.1);
+        }
+
+        .system-status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .system-status-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .system-status-value {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .system-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00FFD1;
+            box-shadow: 0 0 8px #00FFD1;
+        }
+
+        .indicator-dot.offline {
+            background: #ff6b8a;
+            box-shadow: 0 0 8px #ff6b8a;
+        }
+
+        .indicator-dot.warning {
+            background: #FFD700;
+            box-shadow: 0 0 8px #FFD700;
+        }
+
+        .indicator-text {
+            font-size: 0.85rem;
+            color: #00FFD1;
+        }
+
+        .indicator-text.offline {
+            color: #ff6b8a;
+        }
+
+        .indicator-text.warning {
+            color: #FFD700;
+        }
+
+        /* Storage Bar */
+        .storage-bar-container {
+            height: 8px;
+            background: rgba(107, 92, 231, 0.2);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .storage-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .storage-breakdown {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(107, 92, 231, 0.05);
+            border-radius: 10px;
+        }
+
+        .storage-breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .storage-breakdown-item span:nth-child(3) {
+            margin-left: auto;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-muted);
+        }
+
+        .breakdown-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Traffic Indicator */
+        .traffic-indicator {
+            margin-bottom: 0.8rem;
+        }
+
+        .traffic-bar-group {
+            height: 6px;
+            background: rgba(107, 92, 231, 0.15);
+            border-radius: 3px;
+            margin-bottom: 0.3rem;
+            overflow: hidden;
+        }
+
+        .traffic-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00FFD1, #6B5CE7);
+            border-radius: 3px;
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+
+        .traffic-bar.traffic-out {
+            background: linear-gradient(90deg, #ff6b8a, #FFD700);
+        }
+
+        .traffic-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Overview Grid */
+        .system-status-overview {
+            background: rgba(0, 255, 209, 0.05);
+            border: 1px solid rgba(0, 255, 209, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .overview-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #00FFD1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .overview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.8rem 0.5rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .overview-item.healthy .overview-icon {
+            color: #00FFD1;
+        }
+
+        .overview-item.warning .overview-icon {
+            color: #FFD700;
+        }
+
+        .overview-item.error .overview-icon {
+            color: #ff6b8a;
+        }
+
+        .overview-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .overview-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
         }
 
         .file-input-wrapper {
@@ -4011,28 +4385,6 @@
             font-weight: 600;
         }
 
-        .rarity-tag {
-            padding: 0.1rem 0.4rem;
-            font-size: 0.65rem;
-            border-radius: 8px;
-            margin-left: 0.3rem;
-        }
-
-        .rarity-tag.ssr {
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-        }
-
-        .rarity-tag.sr {
-            background: rgba(192, 192, 192, 0.2);
-            color: #c0c0c0;
-        }
-
-        .rarity-tag.r {
-            background: rgba(100, 181, 246, 0.2);
-            color: #64b5f6;
-        }
-
         .favorite-card-remove {
             width: 36px;
             height: 36px;
@@ -4052,292 +4404,6 @@
         .favorite-card-remove:hover {
             background: rgba(255, 107, 107, 0.2);
             transform: scale(1.1);
-        }
-        
-        /* ========== User Tags in Favorite Card (Day 37) ========== */
-        .favorite-card-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            margin-top: 0.4rem;
-        }
-        
-        .user-tag-chip {
-            padding: 0.15rem 0.5rem;
-            font-size: 0.65rem;
-            border-radius: 10px;
-            white-space: nowrap;
-            border: 1px solid;
-        }
-        
-        /* ========== Favorite Toolbar (Day 20) ========== */
-        .favorite-toolbar {
-            padding: 0.8rem 1rem;
-            background: rgba(255, 107, 138, 0.05);
-            border-bottom: 1px solid rgba(255, 107, 138, 0.15);
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-        }
-
-        .favorite-stats {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.75rem;
-            color: #888;
-            padding: 0.25rem 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-        }
-
-        .stat-item .count {
-            color: #ff6b8a;
-            font-weight: 600;
-        }
-
-        .stat-item.ssr .count { color: #ffd700; }
-        .stat-item.sr .count { color: #c0c0c0; }
-        .stat-item.r .count { color: #64b5f6; }
-
-        .favorite-controls {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .favorite-filter {
-            display: flex;
-            gap: 0.3rem;
-            flex: 1;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.35rem 0.7rem;
-            font-size: 0.75rem;
-            border: 1px solid rgba(255, 107, 138, 0.2);
-            background: transparent;
-            color: #888;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 107, 138, 0.1);
-            color: #ff6b8a;
-        }
-
-        .filter-btn.active {
-            background: rgba(255, 107, 138, 0.2);
-            color: #ff6b8a;
-            border-color: rgba(255, 107, 138, 0.4);
-        }
-
-        .favorite-sort select {
-            padding: 0.35rem 0.6rem;
-            font-size: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border-radius: 8px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .favorite-sort select:focus {
-            border-color: rgba(255, 107, 138, 0.4);
-        }
-
-        .favorite-view-toggle {
-            display: flex;
-            gap: 0.2rem;
-        }
-
-        .view-btn {
-            width: 32px;
-            height: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: transparent;
-            color: #888;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .view-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-
-        .view-btn.active {
-            background: rgba(255, 107, 138, 0.2);
-            color: #ff6b8a;
-            border-color: rgba(255, 107, 138, 0.4);
-        }
-        
-        /* ========== Tag Filter in Favorites (Day 37) ========== */
-        .favorite-tag-filter {
-            display: flex;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-            padding-top: 0.5rem;
-            border-top: 1px solid rgba(255, 107, 138, 0.1);
-            margin-top: 0.3rem;
-        }
-        
-        .tag-filter-btn {
-            padding: 0.25rem 0.6rem;
-            font-size: 0.7rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-muted);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .tag-filter-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-primary);
-        }
-        
-        .tag-filter-btn.active {
-            background: rgba(255, 107, 138, 0.25);
-            color: #ff6b8a;
-            border-color: rgba(255, 107, 138, 0.5);
-        }
-
-        /* Favorite Grid View */
-        .favorite-list.grid-view {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-        }
-
-        .favorite-list.grid-view .favorite-card {
-            flex-direction: column;
-            padding: 0.8rem;
-            text-align: center;
-            border-radius: 12px;
-        }
-
-        .favorite-list.grid-view .favorite-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .favorite-list.grid-view .favorite-card-avatar {
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-        }
-
-        .favorite-list.grid-view .favorite-card-info {
-            width: 100%;
-        }
-
-        .favorite-list.grid-view .favorite-card-name {
-            font-size: 0.85rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .favorite-list.grid-view .favorite-card-meta {
-            justify-content: center;
-            font-size: 0.7rem;
-        }
-
-        .favorite-list.grid-view .favorite-card-remove {
-            position: absolute;
-            top: 0.4rem;
-            right: 0.4rem;
-            width: 24px;
-            height: 24px;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .favorite-list.grid-view .favorite-card:hover .favorite-card-remove {
-            opacity: 1;
-        }
-
-        /* Favorite list view enhancements */
-        .favorite-list.list-view .favorite-card {
-            position: relative;
-        }
-
-        /* Light theme toolbar */
-        [data-theme="light"] .favorite-toolbar {
-            background: rgba(0, 0, 0, 0.03);
-            border-color: rgba(0, 0, 0, 0.08);
-        }
-
-        [data-theme="light"] .stat-item {
-            background: rgba(0, 0, 0, 0.03);
-        }
-
-        [data-theme="light"] .filter-btn {
-            border-color: rgba(0, 0, 0, 0.1);
-            color: #666;
-        }
-
-        [data-theme="light"] .filter-btn:hover {
-            background: rgba(255, 107, 138, 0.08);
-            color: #ff6b8a;
-        }
-
-        [data-theme="light"] .favorite-sort select {
-            border-color: rgba(0, 0, 0, 0.1);
-            background: rgba(0, 0, 0, 0.02);
-            color: #333;
-        }
-
-        [data-theme="light"] .view-btn {
-            border-color: rgba(0, 0, 0, 0.1);
-            color: #666;
-        }
-
-        [data-theme="light"] .view-btn:hover {
-            background: rgba(0, 0, 0, 0.03);
-            color: #333;
-        }
-
-        /* Mobile favorite toolbar */
-        @media (max-width: 480px) {
-            .favorite-toolbar {
-                padding: 0.6rem;
-            }
-
-            .favorite-filter {
-                order: 2;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .favorite-sort {
-                order: 1;
-            }
-
-            .favorite-view-toggle {
-                order: 3;
-            }
-
-            .favorite-list.grid-view {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.6rem;
-            }
         }
 
         /* Mobile favorite panel */
@@ -4694,10 +4760,72 @@
                 padding: 0.6rem;
             }
         }
+
+        /* ========== Keyboard Navigation (Day 35) ========== */
+        .outfit-card.keyboard-selected {
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px var(--accent-secondary), 
+                        0 8px 32px rgba(0, 255, 209, 0.3);
+            z-index: 10;
+        }
+
+        .outfit-card.keyboard-selected::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-secondary), var(--accent-primary), var(--accent-secondary));
+            border-radius: inherit;
+            z-index: -1;
+            animation: keyboardSelectPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes keyboardSelectPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .keyboard-nav-hint {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .keyboard-nav-hint.show {
+            opacity: 1;
+        }
+
+        .keyboard-nav-hint kbd {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-default);
+            font-family: monospace;
+            margin: 0 0.1rem;
+        }
     </style>
 </head>
 <body>
     <div class="particles" id="particles"></div>
+    
+    <!-- Keyboard Navigation Hint (Day 35) -->
+    <div class="keyboard-nav-hint" id="keyboardNavHint">
+        <kbd>J</kbd>/<kbd>↓</kbd> 下 <kbd>K</kbd>/<kbd>↑</kbd> 上 <kbd>Enter</kbd> 打开 <kbd>F</kbd> 收藏
+    </div>
 
     <header>
         <div class="logo">Agent Street</div>
@@ -4731,6 +4859,10 @@
             <button class="compare-btn" id="compareBtn" onclick="toggleComparePanel()" title="对比">
                 ⚖️
                 <span class="compare-badge" id="compareBadge" style="display: none;">0</span>
+            </button>
+            <!-- System Status Button (Day 21) -->
+            <button class="system-status-btn" id="systemStatusBtn" onclick="toggleSystemStatusPanel()" title="系统状态">
+                <span class="system-status-dot" id="systemStatusDot"></span>
             </button>
             <button class="settings-btn" id="settingsBtn" onclick="toggleSettingsPanel()">
                 📦
@@ -4799,31 +4931,6 @@
             </div>
             <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
         </div>
-        <!-- Day 20: Favorite Panel Toolbar -->
-        <div class="favorite-toolbar" id="favoriteToolbar">
-            <div class="favorite-stats" id="favoriteStats"></div>
-            <div class="favorite-controls">
-                <div class="favorite-filter" id="favoriteFilter">
-                    <button class="filter-btn active" data-rarity="all" onclick="filterFavorites('all')">全部</button>
-                    <button class="filter-btn" data-rarity="ssr" onclick="filterFavorites('ssr')">传奇</button>
-                    <button class="filter-btn" data-rarity="sr" onclick="filterFavorites('sr')">史诗</button>
-                    <button class="filter-btn" data-rarity="r" onclick="filterFavorites('r')">稀有</button>
-                </div>
-                <div class="favorite-sort">
-                    <select id="favoriteSortSelect" onchange="sortFavorites(this.value)">
-                        <option value="default">默认排序</option>
-                        <option value="score-desc">时尚值 ↓</option>
-                        <option value="score-asc">时尚值 ↑</option>
-                        <option value="name-asc">名称 A-Z</option>
-                        <option value="name-desc">名称 Z-A</option>
-                    </select>
-                </div>
-                <div class="favorite-view-toggle">
-                    <button class="view-btn active" data-view="list" onclick="toggleFavoriteView('list')" title="列表视图">☰</button>
-                    <button class="view-btn" data-view="grid" onclick="toggleFavoriteView('grid')" title="网格视图">⊞</button>
-                </div>
-            </div>
-        </div>
         <div class="favorite-panel-body" id="favoritePanelBody">
             <!-- Favorite items will be populated -->
         </div>
@@ -4869,6 +4976,147 @@
         </div>
     </div>
 
+    <!-- System Status Panel (Day 21 - K8s Style) -->
+    <div class="system-status-panel" id="systemStatusPanel">
+        <div class="system-status-panel-header">
+            <div class="system-status-panel-title">
+                <span>🖥️</span> 系统状态
+            </div>
+            <button class="system-status-panel-close" onclick="toggleSystemStatusPanel()">✕</button>
+        </div>
+        <div class="system-status-panel-body">
+            <!-- 运行时长 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">⏱️ 运行信息</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">运行时长</div>
+                    <div class="system-status-value" id="systemUptime">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">当前时间</div>
+                    <div class="system-status-value" id="systemTime">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">访问次数</div>
+                    <div class="system-status-value" id="systemVisits">0</div>
+                </div>
+            </div>
+
+            <!-- API 健康状态 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">🔗 API 状态</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">后端连接</div>
+                    <div class="system-status-indicator">
+                        <span class="indicator-dot" id="apiStatusDot"></span>
+                        <span class="indicator-text" id="apiStatusText">检测中...</span>
+                    </div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">响应延迟</div>
+                    <div class="system-status-value" id="apiLatency">--</div>
+                </div>
+            </div>
+
+            <!-- 存储使用 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">💾 存储使用</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">本地存储</div>
+                    <div class="system-status-value" id="storageUsed">--</div>
+                </div>
+                <div class="storage-bar-container">
+                    <div class="storage-bar" id="storageBar"></div>
+                </div>
+                <div class="storage-breakdown" id="storageBreakdown">
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #6B5CE7;"></span>
+                        <span>收藏</span>
+                        <span id="storageFavorites">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #00FFD1;"></span>
+                        <span>浏览历史</span>
+                        <span id="storageRecent">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #FFD700;"></span>
+                        <span>成就</span>
+                        <span id="storageAchievements">0 KB</span>
+                    </div>
+                    <div class="storage-breakdown-item">
+                        <span class="breakdown-dot" style="background: #ff6b8a;"></span>
+                        <span>其他</span>
+                        <span id="storageOther">0 KB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent 数据 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">🤖 Agent 数据</div>
+                <div class="system-status-item">
+                    <div class="system-status-label">在线 Agent</div>
+                    <div class="system-status-value" id="totalAgents">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">我的收藏</div>
+                    <div class="system-status-value" id="myFavorites">--</div>
+                </div>
+                <div class="system-status-item">
+                    <div class="system-status-label">我的关注</div>
+                    <div class="system-status-value" id="myFollows">--</div>
+                </div>
+            </div>
+
+            <!-- 实时流量 -->
+            <div class="system-status-section">
+                <div class="system-status-section-title">📡 实时流量</div>
+                <div class="traffic-indicator">
+                    <div class="traffic-bar-group">
+                        <div class="traffic-bar" id="trafficIn"></div>
+                    </div>
+                    <div class="traffic-label">
+                        <span>↓ 流入</span>
+                        <span id="trafficInRate">0 KB/s</span>
+                    </div>
+                </div>
+                <div class="traffic-indicator">
+                    <div class="traffic-bar-group">
+                        <div class="traffic-bar traffic-out" id="trafficOut"></div>
+                    </div>
+                    <div class="traffic-label">
+                        <span>↑ 流出</span>
+                        <span id="trafficOutRate">0 KB/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 健康状态总览 -->
+            <div class="system-status-overview">
+                <div class="overview-title">📊 健康状态总览</div>
+                <div class="overview-grid">
+                    <div class="overview-item" id="overviewUptime">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">服务</div>
+                    </div>
+                    <div class="overview-item" id="overviewStorage">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">存储</div>
+                    </div>
+                    <div class="overview-item" id="overviewApi">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">API</div>
+                    </div>
+                    <div class="overview-item" id="overviewNetwork">
+                        <div class="overview-icon">✓</div>
+                        <div class="overview-label">网络</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Panel (Day 10) -->
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-panel-header">
@@ -4878,61 +5126,6 @@
             <button class="settings-panel-close" onclick="toggleSettingsPanel()">✕</button>
         </div>
         <div class="settings-panel-body">
-            <!-- 存储管理 (Day 36) -->
-            <div class="settings-section">
-                <div class="settings-section-title">💾 存储管理</div>
-                
-                <!-- 存储使用概览 -->
-                <div class="settings-card">
-                    <div class="settings-card-title">📊 存储使用情况</div>
-                    <div class="storage-meter">
-                        <div class="storage-meter-header">
-                            <span class="storage-meter-label">localStorage 已用</span>
-                            <span class="storage-meter-value" id="storageUsedDisplay">0 KB</span>
-                        </div>
-                        <div class="storage-meter-bar">
-                            <div class="storage-meter-fill normal" id="storageMeterFill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="storage-detail-list" id="storageDetailList">
-                        <!-- 动态生成 -->
-                    </div>
-                </div>
-
-                <!-- 智能清理 (Day 36) -->
-                <div class="storage-clean-card" id="cleanableCard" style="display: none;">
-                    <div class="storage-clean-header">
-                        <span class="storage-clean-title">🧹 可清理数据</span>
-                        <span class="storage-clean-count" id="cleanableCount">0 项</span>
-                    </div>
-                    <div class="storage-clean-desc" id="cleanableDesc">发现过期或冗余数据，清理可释放存储空间</div>
-                    <div class="settings-btn-group storage-clean-actions">
-                        <button class="settings-action-btn secondary" onclick="showCleanDetails()">
-                            <span>📋</span> 查看详情
-                        </button>
-                        <button class="settings-action-btn primary" onclick="smartClean()">
-                            <span>✨</span> 一键清理
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 快速清理选项 -->
-                <div class="settings-card">
-                    <div class="settings-card-title">🎯 快速清理</div>
-                    <div class="settings-btn-group storage-clean-actions">
-                        <button class="settings-action-btn secondary" onclick="clearSearchHistory()">
-                            <span>🔍</span> 搜索历史
-                        </button>
-                        <button class="settings-action-btn secondary" onclick="clearNotifications()">
-                            <span>🔔</span> 通知
-                        </button>
-                        <button class="settings-action-btn secondary" onclick="clearRecentlyViewed()">
-                            <span>👁️</span> 浏览记录
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <!-- 数据统计 -->
             <div class="settings-section">
                 <div class="settings-section-title">📊 数据统计</div>
@@ -5010,17 +5203,27 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
+        <div class="hint-section-title">🔍 导航</div>
+        <div><kbd>J</kbd>/<kbd>↓</kbd> 下一卡片</div>
+        <div><kbd>K</kbd>/<kbd>↑</kbd> 上一卡片</div>
+        <div><kbd>Enter</kbd> 打开详情</div>
+        <div class="hint-section-title">⚡ 操作</div>
         <div><kbd>/</kbd> 搜索</div>
-        <div><kbd>T</kbd> 主题</div>
-        <div><kbd>N</kbd> 通知</div>
-        <div><kbd>R</kbd> 浏览</div>
-        <div><kbd>K</kbd> 榜单</div>
-        <div><kbd>S</kbd> 设置</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>C</kbd> 对比</div>
+        <div class="hint-section-title">📱 面板</div>
+        <div><kbd>L</kbd> 收藏夹</div>
+        <div><kbd>I</kbd> 成就</div>
+        <div><kbd>R</kbd> 历史</div>
+        <div><kbd>N</kbd> 通知</div>
+        <div><kbd>T</kbd> 主题</div>
+        <div><kbd>K</kbd> 榜单</div>
+        <div><kbd>S</kbd> 设置</div>
+        <div><kbd>⇧D</kbd> 状态</div>
+        <div class="hint-section-title">🔚 其他</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
     </div>
@@ -5182,6 +5385,9 @@
                     <button class="sort-btn" data-sort="hot" onclick="handleSort('hot')">
                         <span class="sort-icon">🔥</span>热度
                     </button>
+                    <button class="sort-btn" data-sort="favorites" onclick="handleSort('favorites')">
+                        <span class="sort-icon">💎</span>收藏最多
+                    </button>
                 </div>
             </div>
 
@@ -5230,35 +5436,6 @@
                     </div>
                     <div class="modal-tags" id="modal-tags">
                         <!-- Tags will be populated -->
-                    </div>
-                </div>
-                
-                <!-- Day 37: User Custom Tags Section -->
-                <div class="modal-section" id="userTagsSection" style="display: none;">
-                    <div class="modal-section-title">
-                        <span>📌</span> 我的标签
-                        <button class="add-tag-btn" id="addTagBtn" onclick="showTagSelector()">
-                            <span>+</span> 添加标签
-                        </button>
-                    </div>
-                    <div class="modal-user-tags" id="modal-user-tags">
-                        <!-- User tags will be populated -->
-                    </div>
-                    <!-- Tag Selector Popup -->
-                    <div class="tag-selector" id="tagSelector">
-                        <div class="tag-selector-header">
-                            <span>选择标签</span>
-                            <button class="tag-selector-close" onclick="hideTagSelector()">✕</button>
-                        </div>
-                        <div class="tag-selector-body">
-                            <div class="preset-tags" id="presetTagsList">
-                                <!-- Preset tags will be populated -->
-                            </div>
-                            <div class="custom-tag-input">
-                                <input type="text" id="customTagInput" placeholder="输入自定义标签..." maxlength="10">
-                                <button class="custom-tag-add" onclick="addCustomTagToAgent()">添加</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -5320,6 +5497,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Back to Top Button (Day 39) -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="回到顶部">↑</button>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
@@ -5653,27 +5833,21 @@
         let likedAgents = JSON.parse(localStorage.getItem('likedAgents') || '[]'); // 点赞记录
         let followedAgents = JSON.parse(localStorage.getItem('followedAgents') || '[]'); // 关注记录 (Day 4)
         let favoriteAgents = JSON.parse(localStorage.getItem('favoriteAgents') || '[]'); // 收藏记录 (Day 6)
-        let agentTags = JSON.parse(localStorage.getItem('agentTags') || '{}'); // Agent自定义标签 (Day 37) {agentId: ['工作', '学习', ...]}
-        
-        // Day 37: 预设标签系统
-        const PRESET_TAGS = [
-            { id: 'work', label: '💼 工作', color: '#6B5CE7' },
-            { id: 'study', label: '📚 学习', color: '#00b894' },
-            { id: 'fun', label: '🎮 娱乐', color: '#fd79a8' },
-            { id: 'daily', label: '🏠 日常', color: '#fdcb6e' },
-            { id: 'creative', label: '🎨 创意', color: '#e17055' },
-            { id: 'tech', label: '🔧 技术', color: '#0984e3' },
-            { id: 'social', label: '💬 社交', color: '#00cec9' },
-            { id: 'productivity', label: '⚡ 效率', color: '#6c5ce7' }
-        ];
-        
-        let userCustomTags = JSON.parse(localStorage.getItem('userCustomTags') || '[]'); // 用户自定义标签
-        let favoriteTagFilter = localStorage.getItem('favoriteTagFilter') || 'all'; // 收藏面板标签筛选
-
         let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]'); // 最近浏览 (Day 9)
         const MAX_RECENTLY_VIEWED = 10; // 最多保存10条浏览历史
         let currentModalAgent = null; // 当前弹窗中的Agent (Day 4)
         let currentReviewRating = 0; // 当前选择的评分 (Day 18)
+        
+        // Keyboard Navigation State (Day 35)
+        let selectedCardIndex = -1; // 当前键盘选中的卡片索引
+        let isKeyboardNavigating = false; // 是否处于键盘导航模式
+
+        // ========== Lazy Loading State (Day 39) ==========
+        const LAZY_BATCH_SIZE = 12; // 每次懒加载显示的卡片数量
+        let visibleCardCount = LAZY_BATCH_SIZE; // 当前可见的卡片数量
+        let lazyLoadedCards = new Set(); // 已懒加载的卡片索引集合
+        let lazyObserver = null; // IntersectionObserver 实例
+        let isLazyLoading = false; // 是否正在加载更多
 
         // ========== Review System (Day 18) ==========
         let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
@@ -5828,134 +6002,6 @@
             badge.style.display = count > 0 ? 'flex' : 'none';
         }
 
-        // ========== Agent Custom Tags System (Day 37) ==========
-        
-        /**
-         * 保存标签数据到localStorage
-         */
-        function saveAgentTags() {
-            localStorage.setItem('agentTags', JSON.stringify(agentTags));
-        }
-        
-        /**
-         * 保存用户自定义标签
-         */
-        function saveUserCustomTags() {
-            localStorage.setItem('userCustomTags', JSON.stringify(userCustomTags));
-        }
-        
-        /**
-         * 获取Agent的所有标签（预设+自定义）
-         */
-        function getAgentTags(agentId) {
-            const tags = agentTags[agentId] || [];
-            // 合并预设标签名称
-            return tags.map(tagId => {
-                const preset = PRESET_TAGS.find(p => p.id === tagId);
-                return preset ? preset.label : tagId;
-            });
-        }
-        
-        /**
-         * 获取Agent的标签ID列表
-         */
-        function getAgentTagIds(agentId) {
-            return agentTags[agentId] || [];
-        }
-        
-        /**
-         * 为Agent添加标签
-         */
-        function addTagToAgent(agentId, tagId) {
-            if (!agentTags[agentId]) {
-                agentTags[agentId] = [];
-            }
-            if (!agentTags[agentId].includes(tagId)) {
-                agentTags[agentId].push(tagId);
-                saveAgentTags();
-                return true;
-            }
-            return false;
-        }
-        
-        /**
-         * 从Agent移除标签
-         */
-        function removeTagFromAgent(agentId, tagId) {
-            if (agentTags[agentId]) {
-                const index = agentTags[agentId].indexOf(tagId);
-                if (index > -1) {
-                    agentTags[agentId].splice(index, 1);
-                    if (agentTags[agentId].length === 0) {
-                        delete agentTags[agentId];
-                    }
-                    saveAgentTags();
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        /**
-         * 获取所有已使用的标签（合并预设和自定义）
-         */
-        function getAllUsedTags() {
-            const usedTagIds = new Set();
-            Object.values(agentTags).forEach(tags => {
-                tags.forEach(tag => usedTagIds.add(tag));
-            });
-            
-            // 转换为包含完整信息的标签列表
-            return Array.from(usedTagIds).map(tagId => {
-                const preset = PRESET_TAGS.find(p => p.id === tagId);
-                if (preset) return preset;
-                // 自定义标签
-                return { id: tagId, label: `🏷️ ${tagId}`, color: '#888' };
-            });
-        }
-        
-        /**
-         * 添加用户自定义标签
-         */
-        function addCustomTag(tagName) {
-            const trimmed = tagName.trim();
-            if (!trimmed || userCustomTags.includes(trimmed)) {
-                return null;
-            }
-            userCustomTags.push(trimmed);
-            saveUserCustomTags();
-            return trimmed;
-        }
-        
-        /**
-         * 删除用户自定义标签
-         */
-        function deleteCustomTag(tagName) {
-            const index = userCustomTags.indexOf(tagName);
-            if (index > -1) {
-                userCustomTags.splice(index, 1);
-                saveUserCustomTags();
-                
-                // 从所有Agent中移除此标签
-                Object.keys(agentTags).forEach(agentId => {
-                    const tagIndex = agentTags[agentId].indexOf(tagName);
-                    if (tagIndex > -1) {
-                        agentTags[agentId].splice(tagIndex, 1);
-                    }
-                });
-                saveAgentTags();
-                return true;
-            }
-            return false;
-        }
-        
-        /**
-         * 获取某标签下的Agent数量
-         */
-        function getTagAgentCount(tagId) {
-            return Object.values(agentTags).filter(tags => tags.includes(tagId)).length;
-        }
-        
         // ========== Favorite System (Day 6) ==========
         function updateFavoriteBadge() {
             const badge = document.getElementById('favoriteBadge');
@@ -6097,15 +6143,8 @@
             }
         }
 
-        // ========== Favorite Panel State (Day 20) ==========
-        let favoriteViewMode = localStorage.getItem('favoriteViewMode') || 'list';
-        let favoriteFilterRarity = localStorage.getItem('favoriteFilterRarity') || 'all';
-        let favoriteSortOrder = localStorage.getItem('favoriteSortOrder') || 'default';
-
         function renderFavoritePanel() {
             const body = document.getElementById('favoritePanelBody');
-            const statsContainer = document.getElementById('favoriteStats');
-            const toolbar = document.getElementById('favoriteToolbar');
             
             if (favoriteAgents.length === 0) {
                 body.innerHTML = `
@@ -6115,12 +6154,10 @@
                         <div class="favorite-empty-hint">点击Agent卡片中的❤️来收藏</div>
                     </div>
                 `;
-                statsContainer.innerHTML = '';
-                toolbar.innerHTML = '';
                 return;
             }
 
-            let favoriteList = favoriteAgents.map(id => {
+            const favoriteList = favoriteAgents.map(id => {
                 const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
                 return agent;
             }).filter(Boolean);
@@ -6133,75 +6170,11 @@
                         <div class="favorite-empty-hint">去首页探索更多Agent吧</div>
                     </div>
                 `;
-                statsContainer.innerHTML = '';
-                toolbar.innerHTML = '';
                 return;
             }
 
-            // Calculate stats
-            const ssrCount = favoriteList.filter(a => a.rarity === 'ssr').length;
-            const srCount = favoriteList.filter(a => a.rarity === 'sr').length;
-            const rCount = favoriteList.filter(a => a.rarity === 'r').length;
-            
-            statsContainer.innerHTML = `
-                <span class="stat-item"><span class="count">${favoriteList.length}</span> 总计</span>
-                <span class="stat-item ssr"><span class="count">${ssrCount}</span> 传奇</span>
-                <span class="stat-item sr"><span class="count">${srCount}</span> 史诗</span>
-                <span class="stat-item r"><span class="count">${rCount}</span> 稀有</span>
-            `;
-
-            // Day 37: Render tag filter bar
-            renderFavoriteTagFilter();
-
-            // Apply tag filter first (Day 37)
-            if (favoriteTagFilter !== 'all') {
-                favoriteList = favoriteList.filter(agent => {
-                    const agentTagIds = getAgentTagIds(agent.id);
-                    return agentTagIds.includes(favoriteTagFilter);
-                });
-            }
-
-            // Apply rarity filter
-            if (favoriteFilterRarity !== 'all') {
-                favoriteList = favoriteList.filter(a => a.rarity === favoriteFilterRarity);
-            }
-
-            // Apply sort
-            switch (favoriteSortOrder) {
-                case 'score-desc':
-                    favoriteList.sort((a, b) => (b.fashion_score || 0) - (a.fashion_score || 0));
-                    break;
-                case 'score-asc':
-                    favoriteList.sort((a, b) => (a.fashion_score || 0) - (b.fashion_score || 0));
-                    break;
-                case 'name-asc':
-                    favoriteList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-                    break;
-                case 'name-desc':
-                    favoriteList.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
-                    break;
-            }
-
-            if (favoriteList.length === 0) {
-                body.innerHTML = `
-                    <div class="favorite-empty">
-                        <div class="favorite-empty-icon">🔍</div>
-                        <div class="favorite-empty-text">没有找到匹配的收藏</div>
-                        <div class="favorite-empty-hint">试试切换筛选条件</div>
-                    </div>
-                `;
-                return;
-            }
-
-            const viewClass = favoriteViewMode === 'grid' ? 'grid-view' : 'list-view';
-            let html = `<div class="favorite-list ${viewClass}">`;
+            let html = '<div class="favorite-list">';
             favoriteList.forEach(agent => {
-                const rarityLabel = agent.rarity === 'ssr' ? '传奇' : agent.rarity === 'sr' ? '史诗' : '稀有';
-                // Day 37: Get user tags for this agent
-                const agentTagsHtml = getAgentTags(agent.id).map(tag => 
-                    `<span class="user-tag-chip" style="background: ${getTagColor(tag)}">${tag}</span>`
-                ).join('');
-                
                 html += `
                     <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
                         <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
@@ -6210,9 +6183,7 @@
                             <div class="favorite-card-meta">
                                 <span class="favorite-card-score">${agent.fashion_score}</span>
                                 <span>时尚值</span>
-                                <span class="rarity-tag ${agent.rarity}">${rarityLabel}</span>
                             </div>
-                            ${agentTagsHtml ? `<div class="favorite-card-tags">${agentTagsHtml}</div>` : ''}
                         </div>
                         <button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>
                     </div>
@@ -6220,96 +6191,6 @@
             });
             html += '</div>';
             body.innerHTML = html;
-
-            // Update view toggle buttons
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.view === favoriteViewMode);
-            });
-
-            // Update filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.rarity === favoriteFilterRarity);
-            });
-        }
-        
-        // Day 37: Render tag filter bar in favorites
-        function renderFavoriteTagFilter() {
-            const toolbar = document.getElementById('favoriteToolbar');
-            const allUsedTags = getAllUsedTags();
-            
-            if (allUsedTags.length === 0) {
-                return; // No tags to filter, keep default toolbar
-            }
-            
-            let tagFilterHtml = `
-                <div class="favorite-tag-filter">
-                    <button class="tag-filter-btn ${favoriteTagFilter === 'all' ? 'active' : ''}" 
-                            data-tag="all" onclick="filterByUserTag('all')">
-                        🏷️ 全部
-                    </button>
-            `;
-            
-            allUsedTags.forEach(tag => {
-                tagFilterHtml += `
-                    <button class="tag-filter-btn ${favoriteTagFilter === tag.id ? 'active' : ''}" 
-                            data-tag="${tag.id}" onclick="filterByUserTag('${tag.id}')"
-                            style="${favoriteTagFilter === tag.id ? `background: ${tag.color}; border-color: ${tag.color};` : ''}">
-                        ${tag.label}
-                    </button>
-                `;
-            });
-            
-            tagFilterHtml += '</div>';
-            
-            // Insert after stats
-            const statsContainer = document.getElementById('favoriteStats');
-            const existingTagFilter = document.querySelector('.favorite-tag-filter');
-            if (existingTagFilter) {
-                existingTagFilter.remove();
-            }
-            statsContainer.insertAdjacentHTML('afterend', tagFilterHtml);
-        }
-        
-        // Day 37: Filter favorites by user tag
-        function filterByUserTag(tagId) {
-            favoriteTagFilter = tagId;
-            localStorage.setItem('favoriteTagFilter', tagId);
-            renderFavoritePanel();
-        }
-        
-        // Day 37: Get tag color for display
-        function getTagColor(tagLabel) {
-            const preset = PRESET_TAGS.find(p => p.label === tagLabel);
-            if (preset) return preset.color + '33'; // Add transparency
-            return '#88888833';
-        }
-        
-        // Day 37: Get tag border color for display
-        function getTagBorderColor(tagLabel) {
-            const preset = PRESET_TAGS.find(p => p.label === tagLabel);
-            if (preset) return preset.color;
-            return '#888888';
-        }
-
-        // Day 20: Filter favorites by rarity
-        function filterFavorites(rarity) {
-            favoriteFilterRarity = rarity;
-            localStorage.setItem('favoriteFilterRarity', rarity);
-            renderFavoritePanel();
-        }
-
-        // Day 20: Sort favorites
-        function sortFavorites(order) {
-            favoriteSortOrder = order;
-            localStorage.setItem('favoriteSortOrder', order);
-            renderFavoritePanel();
-        }
-
-        // Day 20: Toggle view mode
-        function toggleFavoriteView(view) {
-            favoriteViewMode = view;
-            localStorage.setItem('favoriteViewMode', view);
-            renderFavoritePanel();
         }
 
         function toggleFavorite(agentId) {
@@ -6493,6 +6374,79 @@
             }
         }
 
+        // ========== Card Particle Effects (Day 24) ==========
+        
+        // 创建卡片粒子效果
+        function createCardParticles(card) {
+            const container = card.querySelector('.card-particles');
+            if (!container) return;
+            
+            // 清除现有粒子
+            container.innerHTML = '';
+            
+            // 根据稀有度确定粒子数量
+            const rarity = card.dataset.rarity;
+            const particleCount = rarity === 'ssr' ? 8 : rarity === 'sr' ? 6 : 4;
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'card-particle';
+                
+                // 随机位置
+                particle.style.left = Math.random() * 80 + 10 + '%';
+                particle.style.top = Math.random() * 60 + 40 + '%';
+                
+                // 随机延迟和持续时间
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 创建点击波纹效果
+        function createCardRipple(event, card) {
+            const rect = card.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            const ripple = document.createElement('div');
+            ripple.className = 'card-ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = '50px';
+            ripple.style.height = '50px';
+            ripple.style.marginLeft = '-25px';
+            ripple.style.marginTop = '-25px';
+            
+            card.appendChild(ripple);
+            
+            // 动画结束后移除
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+        
+        // 初始化所有卡片的粒子效果
+        function initCardParticles() {
+            const cards = document.querySelectorAll('.outfit-card');
+            cards.forEach(card => {
+                // 鼠标悬停时创建粒子
+                card.addEventListener('mouseenter', () => {
+                    createCardParticles(card);
+                });
+                
+                // 鼠标离开时清除粒子
+                card.addEventListener('mouseleave', () => {
+                    const container = card.querySelector('.card-particles');
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                });
+            });
+        }
+        
         // ========== Render Functions ==========
         function renderLoading() {
             return `
@@ -6508,49 +6462,6 @@
                     <div class="error-icon">⚠️</div>
                     <div class="error-message">${message}</div>
                     <button class="retry-btn" onclick="loadTabData('${currentTab}')">重试</button>
-                </div>
-            `;
-        }
-
-        function renderAgentCard(agent, index = 0) {
-            const rarityClass = `rarity-${agent.rarity}`;
-            const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
-            const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
-            const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
-            const isLiked = likedAgents.includes(agent.id);
-            const heartClass = isLiked ? '❤️' : '🤍';
-            const isFavorited = favoriteAgents.includes(agent.id);
-            const starClass = isFavorited ? '⭐' : '☆';
-            // Day 7: 高亮搜索关键词
-            const displayName = highlightText(agent.name, currentSearch);
-
-            return `
-                <div class="outfit-card visible" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}')">
-                    <div class="card-image">
-                        <span class="card-avatar">${agent.avatar}</span>
-                        <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <span class="card-name">${displayName}</span>
-                            <span class="card-score">${agent.score}</span>
-                        </div>
-                        <div class="card-outfit">${itemsHtml}</div>
-                        <div class="card-footer">
-                            <div class="card-tags">${tagsHtml}</div>
-                            <div class="card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
-                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
-                                    ${heartClass} <span class="like-count">${agent.likes}</span>
-                                </button>
-                                <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
-                                    ${starClass}
-                                </button>
-                                <button class="compare-card-btn" onclick="addToCompare('${agent.id}'); event.stopPropagation();" title="添加对比">
-                                    ⚖️
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             `;
         }
@@ -6594,6 +6505,13 @@
                 case 'hot':
                     // 热度 - 按点赞数
                     return sorted.sort((a, b) => b.likes - a.likes);
+                case 'favorites':
+                    // Day 22: 收藏数 - 按被收藏次数（从 localStorage 获取收藏数）
+                    const favoriteCountMap = {};
+                    favoriteAgents.forEach(favId => {
+                        favoriteCountMap[favId] = (favoriteCountMap[favId] || 0) + 1;
+                    });
+                    return sorted.sort((a, b) => (favoriteCountMap[b.id] || 0) - (favoriteCountMap[a.id] || 0));
                 default:
                     // 默认 - 综合排序（保持原顺序）
                     return sorted;
@@ -6645,18 +6563,281 @@
                 countEl.classList.remove('updating');
             }, 50);
 
-            // 渲染过滤后的结果
+            // 渲染过滤后的结果 - 使用懒加载 (Day 39)
             const container = document.getElementById('outfits-container');
             if (filtered.length === 0) {
                 container.innerHTML = renderNoResults();
             } else {
-                container.innerHTML = filtered.map((agent, index) => renderAgentCard(agent, index)).join('');
+                // 重置懒加载状态
+                visibleCardCount = LAZY_BATCH_SIZE;
+                lazyLoadedCards.clear();
+                isLazyLoading = false;
+                
+                // 只渲染第一批卡片
+                const firstBatch = filtered.slice(0, visibleCardCount);
+                container.innerHTML = firstBatch.map((agent, index) => 
+                    renderAgentCard(agent, index, true)
+                ).join('');
+                
+                // 添加加载更多区域
+                if (filtered.length > visibleCardCount) {
+                    container.innerHTML += renderLoadMore(filtered.length, visibleCardCount);
+                }
+                
+                // 初始化懒加载观察器
+                initLazyObserver();
             }
 
             agentsData = filtered;
             
+            // 重置键盘导航状态 (Day 35)
+            clearCardSelection();
+            selectedCardIndex = -1;
+            isKeyboardNavigating = false;
+
+            // 添加入场动画（只对可见卡片生效）
+            animateCardsIn();
+        }
+
+        // ========== Lazy Loading Functions (Day 39) ==========
+        
+        /**
+         * 渲染懒加载卡片
+         */
+        function renderAgentCard(agent, index = 0, lazy = false) {
+            const rarityClass = `rarity-${agent.rarity}`;
+            const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
+            const itemsHtml = agent.items.slice(0, 5).map(item => `<div class="mini-item">${item}</div>`).join('');
+            const tagsHtml = agent.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+            const isLiked = likedAgents.includes(agent.id);
+            const heartClass = isLiked ? '❤️' : '🤍';
+            const isFavorited = favoriteAgents.includes(agent.id);
+            const starClass = isFavorited ? '⭐' : '☆';
+            // Day 7: 高亮搜索关键词
+            const displayName = highlightText(agent.name, currentSearch);
+            
+            // 懒加载模式添加特殊类
+            const visibilityClass = lazy ? 'lazy-visible' : '';
+
+            return `
+                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
+                    <div class="card-image">
+                        <div class="card-particles"></div>
+                        <span class="card-avatar">${agent.avatar}</span>
+                        <span class="card-rarity ${rarityClass}">${rarityLabel}</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-name">${displayName}</span>
+                            <span class="card-score">${agent.score}</span>
+                        </div>
+                        <div class="card-outfit">${itemsHtml}</div>
+                        <div class="card-footer">
+                            <div class="card-tags">${tagsHtml}</div>
+                            <div class="card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${agent.id}', event)" data-agent-id="${agent.id}">
+                                    ${heartClass} <span class="like-count">${agent.likes}</span>
+                                </button>
+                                <button class="favorite-card-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${agent.id}'); event.stopPropagation();" title="收藏">
+                                    ${starClass}
+                                </button>
+                                <button class="compare-card-btn" onclick="addToCompare('${agent.id}'); event.stopPropagation();" title="添加对比">
+                                    ⚖️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        /**
+         * 渲染加载更多按钮区域
+         */
+        function renderLoadMore(total, loaded) {
+            const remaining = total - loaded;
+            const progress = Math.round((loaded / total) * 100);
+            return `
+                <div class="load-more-container" id="loadMoreContainer">
+                    <div class="loading-progress">
+                        <span>已加载 <strong>${loaded}</strong> / <strong>${total}</strong></span>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreCards()">
+                        加载更多 (${remaining}个)
+                    </button>
+                    <button class="load-more-btn" onclick="loadAllCards()" style="background: rgba(107,92,231,0.3);">
+                        🔮 加载全部
+                    </button>
+                </div>
+            `;
+        }
+        
+        /**
+         * 加载更多卡片
+         */
+        function loadMoreCards() {
+            if (isLazyLoading) return;
+            
+            const container = document.getElementById('outfits-container');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            
+            if (!loadMoreBtn || !container) return;
+            
+            isLazyLoading = true;
+            loadMoreBtn.classList.add('loading');
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.innerHTML = '加载中...';
+            
+            // 模拟加载延迟（实际项目中可能从API获取）
+            setTimeout(() => {
+                const nextBatch = agentsData.slice(visibleCardCount, visibleCardCount + LAZY_BATCH_SIZE);
+                const startIndex = visibleCardCount;
+                
+                // 生成新卡片HTML
+                const newCardsHtml = nextBatch.map((agent, i) => 
+                    renderAgentCard(agent, startIndex + i, true)
+                ).join('');
+                
+                // 在加载更多按钮前插入新卡片
+                loadMoreContainer.insertAdjacentHTML('beforebegin', newCardsHtml);
+                
+                // 更新已加载数量
+                visibleCardCount += nextBatch.length;
+                lazyLoadedCards.add(visibleCardCount);
+                
+                // 移除旧加载更多按钮
+                loadMoreContainer.remove();
+                
+                // 添加新的加载更多按钮
+                if (visibleCardCount < agentsData.length) {
+                    container.innerHTML += renderLoadMore(agentsData.length, visibleCardCount);
+                }
+                
+                // 为新卡片添加入场动画
+                const newCards = container.querySelectorAll('.outfit-card');
+                newCards.forEach((card, i) => {
+                    if (!card.classList.contains('lazy-visible')) {
+                        card.classList.add('lazy-visible');
+                        card.style.animationDelay = `${i * 30}ms`;
+                    }
+                });
+                
+                // 初始化新卡片的粒子效果
+                initCardParticles();
+                
+                isLazyLoading = false;
+                
+                // 显示卡片计数提示
+                showCardsCounter(visibleCardCount, agentsData.length);
+            }, 500);
+        }
+        
+        /**
+         * 加载全部卡片
+         */
+        function loadAllCards() {
+            if (isLazyLoading) return;
+            
+            const container = document.getElementById('outfits-container');
+            if (!container) return;
+            
+            isLazyLoading = true;
+            
+            // 直接渲染所有卡片
+            container.innerHTML = agentsData.map((agent, index) => 
+                renderAgentCard(agent, index, true)
+            ).join('');
+            
+            visibleCardCount = agentsData.length;
+            
             // 添加入场动画
             animateCardsIn();
+            
+            // 初始化所有卡片的粒子效果
+            initCardParticles();
+            
+            isLazyLoading = false;
+            
+            showToast(`已加载全部 ${agentsData.length} 个Agent`);
+        }
+        
+        /**
+         * 初始化懒加载观察器（IntersectionObserver）
+         */
+        function initLazyObserver() {
+            if (lazyObserver) {
+                lazyObserver.disconnect();
+            }
+            
+            lazyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        if (!card.classList.contains('lazy-visible')) {
+                            card.classList.add('lazy-visible');
+                        }
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0.1
+            });
+            
+            // 观察所有懒加载卡片
+            document.querySelectorAll('.outfit-card.lazy-hidden').forEach(card => {
+                lazyObserver.observe(card);
+            });
+        }
+        
+        /**
+         * 显示卡片计数提示
+         */
+        function showCardsCounter(loaded, total) {
+            let counter = document.getElementById('cardsCounter');
+            if (!counter) {
+                counter = document.createElement('div');
+                counter.id = 'cardsCounter';
+                counter.className = 'cards-counter';
+                document.body.appendChild(counter);
+            }
+            
+            counter.innerHTML = `已显示 <span>${loaded}</span> / <span>${total}</span>`;
+            counter.classList.add('visible');
+            
+            setTimeout(() => {
+                counter.classList.remove('visible');
+            }, 2000);
+        }
+        
+        /**
+         * 回到顶部
+         */
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        /**
+         * 初始化滚动监听
+         */
+        function initScrollListener() {
+            const backToTop = document.getElementById('backToTop');
+            if (!backToTop) return;
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
         }
 
         function animateCardsIn() {
@@ -7167,6 +7348,11 @@
                 allAgentsData = agents;
                 agentsData = agents;
 
+                // 重置键盘导航状态 (Day 35)
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
+
                 // 渲染标签筛选 (Day 7)
                 renderTagFilters();
 
@@ -7249,160 +7435,10 @@
 
             // 加载评论 (Day 18)
             loadAgentReviews(agent.id);
-            
-            // Day 37: 加载用户标签
-            loadUserTagsForAgent(agent.id);
 
             // 显示弹窗
             modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // 防止背景滚动
-        }
-        
-        // Day 37: Load user tags for agent in modal
-        function loadUserTagsForAgent(agentId) {
-            const userTagsSection = document.getElementById('userTagsSection');
-            const userTagsContainer = document.getElementById('modal-user-tags');
-            const userTagIds = getAgentTagIds(agentId);
-            
-            // 如果是收藏的Agent才显示用户标签功能
-            if (favoriteAgents.includes(agentId)) {
-                userTagsSection.style.display = 'block';
-                
-                if (userTagIds.length === 0) {
-                    userTagsContainer.innerHTML = '<span class="no-user-tags">还没有添加标签</span>';
-                } else {
-                    const tagsHtml = userTagIds.map(tagId => {
-                        const preset = PRESET_TAGS.find(p => p.id === tagId);
-                        const label = preset ? preset.label : `🏷️ ${tagId}`;
-                        const color = preset ? preset.color : '#888';
-                        const colorClass = preset ? `data-tag-color="${preset.id}"` : '';
-                        return `
-                            <div class="user-agent-tag" ${colorClass} style="border-color: ${color}44;">
-                                ${label}
-                                <button class="remove-tag" onclick="removeTagFromAgentUI('${agentId}', '${tagId}')">✕</button>
-                            </div>
-                        `;
-                    }).join('');
-                    userTagsContainer.innerHTML = tagsHtml;
-                }
-            } else {
-                userTagsSection.style.display = 'none';
-            }
-            
-            // 初始化预设标签列表
-            initPresetTagsList(agentId);
-        }
-        
-        // Day 37: Initialize preset tags list in selector
-        function initPresetTagsList(agentId) {
-            const presetTagsList = document.getElementById('presetTagsList');
-            const currentTags = getAgentTagIds(agentId);
-            
-            const tagsHtml = PRESET_TAGS.map(tag => {
-                const isSelected = currentTags.includes(tag.id);
-                return `
-                    <button class="preset-tag-btn ${isSelected ? 'selected' : ''}" 
-                            data-tag-id="${tag.id}"
-                            onclick="togglePresetTag('${agentId}', '${tag.id}')"
-                            style="${isSelected ? `background: ${tag.color}33; border-color: ${tag.color}; color: ${tag.color};` : ''}">
-                        ${tag.label}
-                    </button>
-                `;
-            }).join('');
-            
-            presetTagsList.innerHTML = tagsHtml;
-        }
-        
-        // Day 37: Toggle preset tag
-        function togglePresetTag(agentId, tagId) {
-            const currentTags = getAgentTagIds(agentId);
-            
-            if (currentTags.includes(tagId)) {
-                removeTagFromAgent(agentId, tagId);
-            } else {
-                addTagToAgent(agentId, tagId);
-            }
-            
-            // 更新UI
-            loadUserTagsForAgent(agentId);
-            initPresetTagsList(agentId);
-            
-            // 如果收藏面板打开，更新收藏面板
-            if (document.getElementById('favoritePanel').classList.contains('active')) {
-                renderFavoritePanel();
-            }
-        }
-        
-        // Day 37: Add custom tag to agent
-        function addCustomTagToAgent() {
-            if (!currentModalAgent) return;
-            
-            const input = document.getElementById('customTagInput');
-            const tagName = input.value.trim();
-            
-            if (!tagName) return;
-            
-            // 添加自定义标签
-            addCustomTag(tagName);
-            
-            // 添加到当前Agent
-            addTagToAgent(currentModalAgent.id, tagName);
-            
-            // 清空输入框
-            input.value = '';
-            
-            // 更新UI
-            loadUserTagsForAgent(currentModalAgent.id);
-            initPresetTagsList(currentModalAgent.id);
-            
-            // 如果收藏面板打开，更新收藏面板
-            if (document.getElementById('favoritePanel').classList.contains('active')) {
-                renderFavoritePanel();
-            }
-            
-            showToast('已添加标签');
-        }
-        
-        // Day 37: Remove tag from agent UI
-        function removeTagFromAgentUI(agentId, tagId) {
-            removeTagFromAgent(agentId, tagId);
-            loadUserTagsForAgent(agentId);
-            initPresetTagsList(agentId);
-            
-            // 如果收藏面板打开，更新收藏面板
-            if (document.getElementById('favoritePanel').classList.contains('active')) {
-                renderFavoritePanel();
-            }
-            
-            showToast('已移除标签');
-        }
-        
-        // Day 37: Show tag selector
-        function showTagSelector() {
-            const selector = document.getElementById('tagSelector');
-            selector.classList.add('active');
-            
-            // 添加点击外部关闭
-            setTimeout(() => {
-                document.addEventListener('click', handleOutsideClick);
-            }, 0);
-        }
-        
-        // Day 37: Hide tag selector
-        function hideTagSelector() {
-            const selector = document.getElementById('tagSelector');
-            selector.classList.remove('active');
-            document.removeEventListener('click', handleOutsideClick);
-        }
-        
-        // Day 37: Handle click outside to close selector
-        function handleOutsideClick(e) {
-            const selector = document.getElementById('tagSelector');
-            const addBtn = document.getElementById('addTagBtn');
-            
-            if (!selector.contains(e.target) && !addBtn.contains(e.target)) {
-                hideTagSelector();
-            }
         }
 
         // ========== Review Functions (Day 18) ==========
@@ -7853,6 +7889,8 @@
             updateSettingsStats(); // Day 10: 初始化设置面板统计
             updateNotificationBadge(); // Day 11: 初始化通知角标
             initCompareList(); // Day 15: 初始化对比列表
+            initSystemStatusIndicator(); // Day 21: 初始化系统状态指示器
+            initScrollListener(); // Day 39: 初始化滚动监听（回到顶部按钮）
             
             createParticles();
             setupTabListeners();
@@ -7873,9 +7911,12 @@
             
             // 检查成就 (Day 5)
             checkAchievements();
+            
+            // 初始化卡片粒子效果 (Day 24)
+            setTimeout(initCardParticles, 100);
         }
 
-        // ========== Keyboard Shortcuts (Day 6, Day 8) ==========
+        // ========== Keyboard Shortcuts (Day 6, Day 8, Day 35) ==========
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
                 // 忽略在输入框中的快捷键
@@ -7889,78 +7930,200 @@
                     document.querySelector('.search-input')?.focus();
                 }
 
+                // ========== Card Keyboard Navigation (Day 35) ==========
+                // 检查是否在导航相关快捷键
+                const isNavKey = ['j', 'J', 'k', 'K', 'ArrowDown', 'ArrowUp', 'Enter', 'f', 'F'].includes(e.key);
+                
+                // J 或 ↓ - 下一张卡片
+                if (e.key === 'j' || e.key === 'J' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateCard('down');
+                    return;
+                }
+
+                // K 或 ↑ - 上一张卡片
+                if (e.key === 'k' || e.key === 'K' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateCard('up');
+                    return;
+                }
+
+                // Enter - 打开选中卡片详情
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    openSelectedCard();
+                    return;
+                }
+
+                // F - 收藏/取消收藏选中卡片
+                if (e.key === 'f' || e.key === 'F') {
+                    if (selectedCardIndex >= 0 && selectedCardIndex < agentsData.length) {
+                        const agent = agentsData[selectedCardIndex];
+                        toggleFavorite(agent.id);
+                    } else if (currentModalAgent) {
+                        toggleFavorite(currentModalAgent.id);
+                    }
+                    return;
+                }
+
                 // 't' 或 'T' - 切换主题 (Day 8)
                 if (e.key === 't' || e.key === 'T') {
                     toggleTheme();
+                    return;
                 }
 
                 // 'n' 或 'N' - 切换通知面板 (Day 11)
                 if (e.key === 'n' || e.key === 'N') {
                     toggleNotificationPanel();
+                    return;
                 }
 
                 // 'r' 或 'R' - 切换最近浏览面板 (Day 9)
                 if (e.key === 'r' || e.key === 'R') {
                     toggleRecentPanel();
+                    return;
                 }
 
                 // 's' 或 'S' - 切换设置面板 (Day 10)
                 if (e.key === 's' || e.key === 'S') {
                     toggleSettingsPanel();
-                }
-
-                // 'f' 或 'F' - 收藏当前查看的Agent
-                if (e.key === 'f' || e.key === 'F') {
-                    if (currentModalAgent) {
-                        toggleFavorite(currentModalAgent.id);
-                    }
+                    return;
                 }
 
                 // 'c' 或 'C' - 切换对比面板 (Day 15)
                 if (e.key === 'c' || e.key === 'C') {
                     toggleComparePanel();
+                    return;
                 }
 
-                // 'k' 或 'K' - 切换排行榜面板 (Day 19)
-                if (e.key === 'k' || e.key === 'K') {
-                    toggleLeaderboardPanel();
+                // 'l' 或 'L' - 切换收藏面板 (Day 6)
+                if (e.key === 'l' || e.key === 'L') {
+                    toggleFavoritePanel();
+                    return;
+                }
+
+                // 'i' 或 'I' - 切换成就面板 (Day 5)
+                if (e.key === 'i' || e.key === 'I') {
+                    toggleAchievementPanel();
+                    return;
+                }
+
+                // 'k' 或 'K' - 切换排行榜面板 (Day 19) - 注意：需要排除j/k导航
+                // (已在上面处理)
+
+                // 'Shift+D' - 切换系统状态面板 (Day 21)
+                if (e.key === 'D' && e.shiftKey) {
+                    toggleSystemStatusPanel();
+                    return;
                 }
 
                 // '?' - 显示/隐藏快捷键帮助
                 if (e.key === '?') {
                     showKeyboardHint();
+                    return;
                 }
 
                 // 'Escape' - 关闭弹窗/面板
                 if (e.key === 'Escape') {
-                    const modal = document.getElementById('agent-modal');
-                    const achievementPanel = document.getElementById('achievementPanel');
-                    const favoritePanel = document.getElementById('favoritePanel');
-                    const recentPanel = document.getElementById('recentPanel'); // Day 9
-                    const settingsPanel = document.getElementById('settingsPanel'); // Day 10
-                    const comparePanel = document.getElementById('comparePanel'); // Day 15
-                    const compareModal = document.getElementById('compareModalOverlay'); // Day 15
-                    const keyboardHint = document.getElementById('keyboardHint');
-
-                    if (keyboardHint.classList.contains('show')) {
-                        keyboardHint.classList.remove('show');
-                    } else if (compareModal && compareModal.classList.contains('active')) { // Day 15
-                        closeCompareModal();
-                    } else if (modal.classList.contains('active')) {
-                        closeModal();
-                    } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
-                        toggleComparePanel();
-                    } else if (favoritePanel.classList.contains('active')) {
-                        toggleFavoritePanel();
-                    } else if (recentPanel.classList.contains('active')) { // Day 9
-                        toggleRecentPanel();
-                    } else if (settingsPanel.classList.contains('active')) { // Day 10
-                        toggleSettingsPanel();
-                    } else if (achievementPanel.classList.contains('active')) {
-                        toggleAchievementPanel();
-                    }
+                    handleEscape();
                 }
             });
+        }
+
+        // ========== Card Navigation Functions (Day 35) ==========
+        function navigateCard(direction) {
+            if (agentsData.length === 0) return;
+
+            // 移除之前的选中状态
+            clearCardSelection();
+
+            // 如果是第一次导航，初始化索引
+            if (selectedCardIndex < 0) {
+                selectedCardIndex = 0;
+            } else {
+                // 移动索引
+                if (direction === 'down') {
+                    selectedCardIndex = Math.min(selectedCardIndex + 1, agentsData.length - 1);
+                } else {
+                    selectedCardIndex = Math.max(selectedCardIndex - 1, 0);
+                }
+            }
+
+            // 标记新的选中卡片
+            selectCard(selectedCardIndex);
+            
+            // 显示导航提示
+            showKeyboardNavHint();
+        }
+
+        function selectCard(index) {
+            const cards = document.querySelectorAll('.outfit-card');
+            if (cards[index]) {
+                cards[index].classList.add('keyboard-selected');
+                cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                isKeyboardNavigating = true;
+            }
+        }
+
+        function clearCardSelection() {
+            const selectedCards = document.querySelectorAll('.outfit-card.keyboard-selected');
+            selectedCards.forEach(card => card.classList.remove('keyboard-selected'));
+        }
+
+        function openSelectedCard() {
+            if (selectedCardIndex >= 0 && selectedCardIndex < agentsData.length) {
+                const agent = agentsData[selectedCardIndex];
+                openAgentModal(agent.id);
+            }
+        }
+
+        function showKeyboardNavHint() {
+            const hint = document.getElementById('keyboardNavHint');
+            if (hint) {
+                hint.classList.add('show');
+                // 3秒后自动隐藏
+                clearTimeout(window.keyboardHintTimeout);
+                window.keyboardHintTimeout = setTimeout(() => {
+                    hint.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        function handleEscape() {
+            const modal = document.getElementById('agent-modal');
+            const achievementPanel = document.getElementById('achievementPanel');
+            const favoritePanel = document.getElementById('favoritePanel');
+            const recentPanel = document.getElementById('recentPanel'); // Day 9
+            const settingsPanel = document.getElementById('settingsPanel'); // Day 10
+            const comparePanel = document.getElementById('comparePanel'); // Day 15
+            const compareModal = document.getElementById('compareModalOverlay'); // Day 15
+            const systemStatusPanel = document.getElementById('systemStatusPanel'); // Day 21
+            const keyboardHint = document.getElementById('keyboardHint');
+
+            if (keyboardHint.classList.contains('show')) {
+                keyboardHint.classList.remove('show');
+            } else if (compareModal && compareModal.classList.contains('active')) { // Day 15
+                closeCompareModal();
+            } else if (modal.classList.contains('active')) {
+                closeModal();
+            } else if (comparePanel && comparePanel.classList.contains('active')) { // Day 15
+                toggleComparePanel();
+            } else if (systemStatusPanel && systemStatusPanel.classList.contains('active')) { // Day 21
+                toggleSystemStatusPanel();
+            } else if (favoritePanel.classList.contains('active')) {
+                toggleFavoritePanel();
+            } else if (recentPanel.classList.contains('active')) { // Day 9
+                toggleRecentPanel();
+            } else if (settingsPanel.classList.contains('active')) { // Day 10
+                toggleSettingsPanel();
+            } else if (achievementPanel.classList.contains('active')) {
+                toggleAchievementPanel();
+            } else {
+                // 如果所有面板都关闭，清除键盘选中状态
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
+            }
         }
 
         // ========== Settings Panel Functions (Day 10) ==========
@@ -7971,6 +8134,7 @@
             const settingsPanel = document.getElementById('settingsPanel');
             const notificationPanel = document.getElementById('notificationPanel');
             const leaderboardPanel = document.getElementById('leaderboardPanel');
+            const systemStatusPanel = document.getElementById('systemStatusPanel');
             const overlay = document.getElementById('panelOverlay');
             const achievementBtn = document.getElementById('achievementBtn');
             const favoriteBtn = document.getElementById('favoriteBtn');
@@ -7978,6 +8142,7 @@
             const settingsBtn = document.getElementById('settingsBtn');
             const notificationBtn = document.getElementById('notificationBtn');
             const leaderboardBtn = document.getElementById('leaderboardBtn');
+            const systemStatusBtn = document.getElementById('systemStatusBtn');
 
             achievementPanel.classList.remove('active');
             favoritePanel.classList.remove('active');
@@ -7985,6 +8150,7 @@
             settingsPanel.classList.remove('active');
             notificationPanel.classList.remove('active');
             leaderboardPanel.classList.remove('active');
+            systemStatusPanel.classList.remove('active');
             overlay.classList.remove('active');
             
             achievementBtn.classList.remove('active');
@@ -7993,6 +8159,231 @@
             settingsBtn.classList.remove('active');
             notificationBtn.classList.remove('active');
             leaderboardBtn.classList.remove('active');
+            systemStatusBtn.classList.remove('active');
+        }
+
+        // ========== System Status Panel Functions (Day 21 - K8s Style) ==========
+        let systemStartTime = Date.now();
+        let systemStatusInterval = null;
+
+        function toggleSystemStatusPanel() {
+            const panel = document.getElementById('systemStatusPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('systemStatusBtn');
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                startSystemStatusMonitor();
+                updateSystemStatus();
+            } else {
+                stopSystemStatusMonitor();
+            }
+        }
+
+        function startSystemStatusMonitor() {
+            if (systemStatusInterval) clearInterval(systemStatusInterval);
+            // 更新频率：每秒更新时间，每10秒检测API
+            systemStatusInterval = setInterval(() => {
+                updateSystemStatusTime();
+                // 每10秒更新一次完整状态
+                if (Math.random() < 0.1) {
+                    updateSystemStatus();
+                }
+            }, 1000);
+            updateSystemStatus();
+        }
+
+        function stopSystemStatusMonitor() {
+            if (systemStatusInterval) {
+                clearInterval(systemStatusInterval);
+                systemStatusInterval = null;
+            }
+        }
+
+        function updateSystemStatus() {
+            // 更新运行信息
+            updateSystemStatusTime();
+            
+            // 更新访问次数
+            const visits = userStats.totalVisits || 0;
+            document.getElementById('systemVisits').textContent = visits;
+
+            // 更新 Agent 数据
+            document.getElementById('totalAgents').textContent = '50+';
+            document.getElementById('myFavorites').textContent = favoriteAgents.length;
+            document.getElementById('myFollows').textContent = followedAgents.length;
+
+            // 更新存储使用
+            updateStorageUsage();
+
+            // 检测 API 状态
+            checkApiStatus();
+
+            // 更新流量指示器
+            updateTrafficIndicator();
+
+            // 更新健康状态总览
+            updateHealthOverview();
+        }
+
+        function updateSystemStatusTime() {
+            // 运行时长
+            const uptime = Date.now() - systemStartTime;
+            const hours = Math.floor(uptime / 3600000);
+            const minutes = Math.floor((uptime % 3600000) / 60000);
+            const seconds = Math.floor((uptime % 60000) / 1000);
+            document.getElementById('systemUptime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // 当前时间
+            const now = new Date();
+            document.getElementById('systemTime').textContent = 
+                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+        }
+
+        function updateStorageUsage() {
+            // 计算 localStorage 各部分大小
+            const sizes = {
+                favorites: getStorageSize('favoriteAgents'),
+                recent: getStorageSize('recentlyViewed'),
+                achievements: getStorageSize('unlockedAchievements'),
+                other: getStorageSize('likedAgents') + getStorageSize('followedAgents') + getStorageSize('userStats')
+            };
+
+            const totalSize = sizes.favorites + sizes.recent + sizes.achievements + sizes.other;
+            const maxSize = 5 * 1024; // 假设 5MB 配额
+
+            document.getElementById('storageFavorites').textContent = formatBytes(sizes.favorites);
+            document.getElementById('storageRecent').textContent = formatBytes(sizes.recent);
+            document.getElementById('storageAchievements').textContent = formatBytes(sizes.achievements);
+            document.getElementById('storageOther').textContent = formatBytes(sizes.other);
+
+            document.getElementById('storageUsed').textContent = formatBytes(totalSize);
+
+            // 更新存储条
+            const percentage = Math.min((totalSize / maxSize) * 100, 100);
+            const storageBar = document.getElementById('storageBar');
+            storageBar.style.width = percentage + '%';
+            
+            // 根据使用率改变颜色
+            if (percentage > 80) {
+                storageBar.style.background = 'linear-gradient(90deg, #ff6b8a, #FFD700)';
+            } else if (percentage > 50) {
+                storageBar.style.background = 'linear-gradient(90deg, #FFD700, #6B5CE7)';
+            } else {
+                storageBar.style.background = 'linear-gradient(90deg, #6B5CE7, #00FFD1)';
+            }
+        }
+
+        function getStorageSize(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? new Blob([data]).size : 0;
+            } catch {
+                return 0;
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        async function checkApiStatus() {
+            const apiStatusDot = document.getElementById('apiStatusDot');
+            const apiStatusText = document.getElementById('apiStatusText');
+            const apiLatency = document.getElementById('apiLatency');
+            const statusDot = document.getElementById('systemStatusDot');
+            const overviewApi = document.getElementById('overviewApi');
+
+            const startTime = performance.now();
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/health`, {
+                    method: 'GET',
+                    signal: AbortSignal.timeout(3000)
+                });
+                
+                const latency = Math.round(performance.now() - startTime);
+                
+                if (response.ok) {
+                    apiStatusDot.className = 'indicator-dot';
+                    apiStatusText.className = 'indicator-text';
+                    apiStatusText.textContent = '在线';
+                    apiLatency.textContent = latency + 'ms';
+                    statusDot.className = 'system-status-dot';
+                    overviewApi.className = 'overview-item healthy';
+                    overviewApi.querySelector('.overview-icon').textContent = '✓';
+                } else {
+                    throw new Error('API response not ok');
+                }
+            } catch {
+                apiStatusDot.className = 'indicator-dot offline';
+                apiStatusText.className = 'indicator-text offline';
+                apiStatusText.textContent = '离线（Mock模式）';
+                apiLatency.textContent = '--';
+                statusDot.className = 'system-status-dot warning';
+                overviewApi.className = 'overview-item warning';
+                overviewApi.querySelector('.overview-icon').textContent = '⚠';
+            }
+        }
+
+        function updateTrafficIndicator() {
+            // 模拟流量数据
+            const trafficIn = 10 + Math.random() * 50;
+            const trafficOut = 5 + Math.random() * 30;
+
+            document.getElementById('trafficIn').style.width = Math.min(trafficIn, 100) + '%';
+            document.getElementById('trafficOut').style.width = Math.min(trafficOut, 100) + '%';
+            document.getElementById('trafficInRate').textContent = formatBytes(trafficIn * 1024) + '/s';
+            document.getElementById('trafficOutRate').textContent = formatBytes(trafficOut * 1024) + '/s';
+        }
+
+        function updateHealthOverview() {
+            const overviewUptime = document.getElementById('overviewUptime');
+            const overviewStorage = document.getElementById('overviewStorage');
+            const overviewNetwork = document.getElementById('overviewNetwork');
+
+            // 服务状态 - 总是正常
+            overviewUptime.className = 'overview-item healthy';
+            overviewUptime.querySelector('.overview-icon').textContent = '✓';
+
+            // 存储状态
+            const totalSize = getStorageSize('favoriteAgents') + getStorageSize('recentlyViewed') + 
+                             getStorageSize('unlockedAchievements') + getStorageSize('likedAgents') +
+                             getStorageSize('followedAgents') + getStorageSize('userStats');
+            const maxSize = 5 * 1024;
+            const usagePercent = (totalSize / maxSize) * 100;
+            
+            if (usagePercent > 80) {
+                overviewStorage.className = 'overview-item warning';
+                overviewStorage.querySelector('.overview-icon').textContent = '⚠';
+            } else {
+                overviewStorage.className = 'overview-item healthy';
+                overviewStorage.querySelector('.overview-icon').textContent = '✓';
+            }
+
+            // 网络状态 - 根据 API 状态
+            const apiText = document.getElementById('apiStatusText').textContent;
+            if (apiText === '在线') {
+                overviewNetwork.className = 'overview-item healthy';
+                overviewNetwork.querySelector('.overview-icon').textContent = '✓';
+            } else {
+                overviewNetwork.className = 'overview-item warning';
+                overviewNetwork.querySelector('.overview-icon').textContent = '⚠';
+            }
+        }
+
+        // 初始化系统状态指示器
+        function initSystemStatusIndicator() {
+            const statusDot = document.getElementById('systemStatusDot');
+            // 默认状态
+            statusDot.className = 'system-status-dot';
         }
 
         // ========== Leaderboard Panel Functions (Day 19) ==========
@@ -8631,285 +9022,6 @@
             }
         }
 
-        // ========== Storage Manager (Day 36) ==========
-        
-        // 存储键定义
-        const STORAGE_KEYS = {
-            'theme': { name: '🎨 主题设置', icon: '🎨', priority: 'keep' },
-            'likedAgents': { name: '❤️ 点赞记录', icon: '❤️', priority: 'keep' },
-            'followedAgents': { name: '🤝 关注列表', icon: '🤝', priority: 'keep' },
-            'favoriteAgents': { name: '⭐ 收藏夹', icon: '⭐', priority: 'keep' },
-            'unlockedAchievements': { name: '🏆 成就徽章', icon: '🏆', priority: 'keep' },
-            'userStats': { name: '📊 用户统计', icon: '📊', priority: 'keep' },
-            'recentlyViewed': { name: '👁️ 最近浏览', icon: '👁️', priority: 'cleanable', maxAge: 7 },
-            'searchHistory': { name: '🔍 搜索历史', icon: '🔍', priority: 'cleanable', maxAge: 30 },
-            'notifications': { name: '🔔 通知记录', icon: '🔔', priority: 'cleanable', maxAge: 7 },
-            'compareList': { name: '⚖️ 对比列表', icon: '⚖️', priority: 'cleanable', maxAge: 30 },
-            'favoriteViewMode': { name: '📱 视图偏好', icon: '📱', priority: 'keep' },
-            'favoriteFilterRarity': { name: '🔎 筛选偏好', icon: '🔎', priority: 'keep' },
-            'favoriteSortOrder': { name: '📑 排序偏好', icon: '📑', priority: 'keep' },
-            'accessToken': { name: '🔑 访问令牌', icon: '🔑', priority: 'keep' },
-            'refreshToken': { name: '🔄 刷新令牌', icon: '🔄', priority: 'keep' },
-            'tokenExpiry': { name: '⏰ 令牌过期', icon: '⏰', priority: 'keep' },
-            'agentReviews': { name: '💬 评论数据', icon: '💬', priority: 'keep' }
-        };
-
-        // 计算单个键的存储大小
-        function getStorageSize(key) {
-            const value = localStorage.getItem(key);
-            if (!value) return 0;
-            // 字符数 * 2（UTF-16编码每个字符2字节）+ key的长度
-            return (value.length * 2 + key.length * 2);
-        }
-
-        // 格式化字节大小
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 B';
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-        }
-
-        // 获取总存储使用情况
-        function getTotalStorageUsage() {
-            let total = 0;
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                total += getStorageSize(key);
-            }
-            return total;
-        }
-
-        // 获取存储详情列表
-        function getStorageDetails() {
-            const details = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const size = getStorageSize(key);
-                const info = STORAGE_KEYS[key] || { name: key, icon: '📦', priority: 'unknown' };
-                details.push({
-                    key,
-                    name: info.name,
-                    icon: info.icon,
-                    size,
-                    priority: info.priority,
-                    maxAge: info.maxAge
-                });
-            }
-            return details.sort((a, b) => b.size - a.size);
-        }
-
-        // 检查可清理的数据
-        function getCleanableData() {
-            const cleanable = [];
-            const now = Date.now();
-            const DAY = 24 * 60 * 60 * 1000;
-
-            for (const [key, info] of Object.entries(STORAGE_KEYS)) {
-                if (info.priority !== 'cleanable') continue;
-                
-                const value = localStorage.getItem(key);
-                if (!value) continue;
-
-                try {
-                    const data = JSON.parse(value);
-                    let canClean = false;
-                    let reason = '';
-
-                    if (info.maxAge && data.timestamp) {
-                        const age = (now - data.timestamp) / DAY;
-                        if (age > info.maxAge) {
-                            canClean = true;
-                            reason = `超过${info.maxAge}天未更新`;
-                        }
-                    }
-
-                    if (info.maxAge && Array.isArray(data) && data.length > 0) {
-                        // 检查数组中是否有时间戳字段
-                        const hasTimestamp = data.some(item => item.timestamp || item.time);
-                        if (hasTimestamp) {
-                            const oldest = Math.min(...data.map(item => item.timestamp || item.time || now));
-                            const age = (now - oldest) / DAY;
-                            if (age > info.maxAge) {
-                                canClean = true;
-                                reason = `数据超过${info.maxAge}天`;
-                            }
-                        }
-                    }
-
-                    if (canClean) {
-                        cleanable.push({
-                            key,
-                            name: info.name,
-                            icon: info.icon,
-                            size: getStorageSize(key),
-                            reason
-                        });
-                    }
-                } catch (e) {
-                    // 非JSON数据，跳过时间检查
-                }
-            }
-
-            // 检查通知数量（超过50条）
-            const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-            if (notifications.length > 50) {
-                cleanable.push({
-                    key: 'notifications',
-                    name: '🔔 通知记录',
-                    icon: '🔔',
-                    size: getStorageSize('notifications'),
-                    reason: `${notifications.length}条通知超过50条限制`
-                });
-            }
-
-            // 检查搜索历史（超过20条）
-            const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-            if (searchHistory.length > 20) {
-                cleanable.push({
-                    key: 'searchHistory',
-                    name: '🔍 搜索历史',
-                    icon: '🔍',
-                    size: getStorageSize('searchHistory'),
-                    reason: `${searchHistory.length}条超过20条限制`
-                });
-            }
-
-            return cleanable;
-        }
-
-        // 更新存储管理UI
-        function updateStorageUI() {
-            const total = getTotalStorageUsage();
-            const maxStorage = 5 * 1024 * 1024; // 假设5MB限制
-            const percent = Math.min((total / maxStorage) * 100, 100);
-
-            // 更新存储使用显示
-            document.getElementById('storageUsedDisplay').textContent = formatBytes(total);
-
-            // 更新进度条
-            const fill = document.getElementById('storageMeterFill');
-            fill.style.width = percent + '%';
-            fill.className = 'storage-meter-fill';
-            if (percent > 80) {
-                fill.classList.add('danger');
-            } else if (percent > 50) {
-                fill.classList.add('warning');
-            } else {
-                fill.classList.add('normal');
-            }
-
-            // 更新存储详情列表
-            const details = getStorageDetails();
-            const listContainer = document.getElementById('storageDetailList');
-            listContainer.innerHTML = details.slice(0, 6).map(item => `
-                <div class="storage-detail-item">
-                    <span class="storage-detail-name">
-                        ${item.icon} ${item.name}
-                    </span>
-                    <span>
-                        <span class="storage-detail-size">${formatBytes(item.size)}</span>
-                        <span class="storage-detail-percent">${(item.size / total * 100).toFixed(1)}%</span>
-                    </span>
-                </div>
-            `).join('');
-
-            // 检查可清理数据
-            const cleanable = getCleanableData();
-            const cleanableCard = document.getElementById('cleanableCard');
-            if (cleanable.length > 0) {
-                cleanableCard.style.display = 'block';
-                document.getElementById('cleanableCount').textContent = cleanable.length + ' 项';
-                const totalCleanableSize = cleanable.reduce((sum, item) => sum + item.size, 0);
-                document.getElementById('cleanableDesc').textContent = 
-                    `可释放 ${formatBytes(totalCleanableSize)} 存储空间`;
-            } else {
-                cleanableCard.style.display = 'none';
-            }
-        }
-
-        // 显示清理详情
-        function showCleanDetails() {
-            const cleanable = getCleanableData();
-            if (cleanable.length === 0) {
-                showToast('✨ 没有需要清理的数据');
-                return;
-            }
-
-            const totalSize = cleanable.reduce((sum, item) => sum + item.size, 0);
-            const list = cleanable.map(item => 
-                `${item.icon} ${item.name}: ${item.reason}`
-            ).join('\n');
-
-            alert(`🧹 可清理数据汇总\n\n${list}\n\n总计: ${formatBytes(totalSize)}`);
-        }
-
-        // 智能清理
-        function smartClean() {
-            const cleanable = getCleanableData();
-            if (cleanable.length === 0) {
-                showToast('✨ 没有需要清理的数据');
-                return;
-            }
-
-            if (!confirm(`确定要清理 ${cleanable.length} 项数据吗？\n这将释放约 ${formatBytes(cleanable.reduce((sum, item) => sum + item.size, 0))} 空间`)) {
-                return;
-            }
-
-            let cleanedCount = 0;
-            cleanable.forEach(item => {
-                if (item.key === 'notifications') {
-                    // 只保留最近20条
-                    notifications = notifications.slice(-20);
-                    localStorage.setItem('notifications', JSON.stringify(notifications));
-                    cleanedCount++;
-                } else if (item.key === 'searchHistory') {
-                    // 只保留最近10条
-                    const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-                    const trimmed = history.slice(-10);
-                    localStorage.setItem('searchHistory', JSON.stringify(trimmed));
-                    cleanedCount++;
-                } else {
-                    localStorage.removeItem(item.key);
-                    cleanedCount++;
-                }
-            });
-
-            updateStorageUI();
-            showToast(`✨ 已清理 ${cleanedCount} 项数据`);
-        }
-
-        // 清除通知（快速清理）
-        function clearNotifications() {
-            if (notifications.length === 0) {
-                showToast('✨ 没有通知需要清理');
-                return;
-            }
-            if (confirm(`确定要清空 ${notifications.length} 条通知吗？`)) {
-                notifications = [];
-                localStorage.setItem('notifications', JSON.stringify(notifications));
-                updateNotificationBadge();
-                updateStorageUI();
-                showToast('🔔 通知已清空');
-            }
-        }
-
-        // 清除浏览记录（快速清理）
-        function clearRecentlyViewed() {
-            if (recentlyViewed.length === 0) {
-                showToast('✨ 没有浏览记录需要清理');
-                return;
-            }
-            if (confirm(`确定要清空 ${recentlyViewed.length} 条浏览记录吗？`)) {
-                recentlyViewed = [];
-                localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
-                updateRecentBadge();
-                updateStorageUI();
-                showToast('👁️ 浏览记录已清空');
-            }
-        }
-
-        // 修改 toggleSettingsPanel 以包含存储管理更新
         function toggleSettingsPanel() {
             const panel = document.getElementById('settingsPanel');
             const overlay = document.getElementById('panelOverlay');
@@ -8920,7 +9032,6 @@
             
             if (panel.classList.contains('active')) {
                 updateSettingsStats();
-                updateStorageUI(); // Day 36: 更新存储管理UI
             }
         }
 
