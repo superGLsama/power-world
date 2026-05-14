@@ -1223,6 +1223,221 @@
             margin-top: -100px;
         }
 
+        /* ========== Batch Selection & Actions Toolbar (Day 40) ========== */
+        
+        /* 批量操作工具栏 */
+        .batch-toolbar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-overlay);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-active);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .batch-toolbar.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        .batch-toolbar-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 16px;
+            border-right: 1px solid var(--border-default);
+        }
+        
+        .batch-toolbar-info .count {
+            font-weight: 700;
+            color: var(--accent-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .batch-toolbar-info .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .batch-toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .batch-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid var(--border-default);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .batch-action-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 92, 231, 0.3);
+        }
+        
+        .batch-action-btn.favorite:hover {
+            background: linear-gradient(135deg, #ff6b8a, #ff4757);
+            border-color: #ff6b8a;
+        }
+        
+        .batch-action-btn.like:hover {
+            background: linear-gradient(135deg, #ff6b8a, #ff8a9a);
+            border-color: #ff6b8a;
+        }
+        
+        .batch-action-btn.compare:hover {
+            background: linear-gradient(135deg, #6B5CE7, #9c88ff);
+            border-color: #6B5CE7;
+        }
+        
+        .batch-action-btn.share:hover {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            border-color: #00b894;
+        }
+        
+        .batch-action-btn.copy:hover {
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            border-color: #0984e3;
+        }
+        
+        .batch-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-default);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            margin-left: 4px;
+        }
+        
+        .batch-close-btn:hover {
+            background: rgba(255, 107, 138, 0.2);
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        
+        /* 批量选择模式 - 卡片样式 */
+        .batch-select-mode .outfit-card {
+            cursor: pointer;
+        }
+        
+        .batch-select-mode .outfit-card::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            background: rgba(13, 13, 26, 0.5);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        
+        .batch-select-mode .outfit-card.selected::after {
+            content: '✓';
+            border-color: var(--accent-secondary);
+            background: var(--accent-secondary);
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .batch-select-mode .outfit-card.selected {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 20px rgba(0, 255, 209, 0.3);
+        }
+        
+        /* 批量选择按钮 */
+        .batch-select-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+        }
+        
+        .batch-select-btn:hover {
+            background: rgba(0, 255, 209, 0.1);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+        }
+        
+        .batch-select-btn.active {
+            background: var(--accent-secondary);
+            border-color: var(--accent-secondary);
+            color: #000;
+        }
+        
+        /* 全选按钮样式 */
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 12px;
+            padding-left: 12px;
+            border-left: 1px solid var(--border-default);
+        }
+        
+        .select-all-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--accent-secondary);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .select-all-btn:hover {
+            background: var(--accent-secondary);
+            color: #000;
+        }
+        
         /* ========== Card Rarity Particle Effects (Day 24) ========== */
         
         /* 稀有度动态边框光效 */
@@ -5388,6 +5603,15 @@
                     <button class="sort-btn" data-sort="favorites" onclick="handleSort('favorites')">
                         <span class="sort-icon">💎</span>收藏最多
                     </button>
+                    <!-- Batch Selection Button (Day 40) -->
+                    <button class="batch-select-btn" id="batchSelectBtn" onclick="toggleBatchSelectMode()">
+                        <span id="batchSelectIcon">☐</span> 批量选择
+                    </button>
+                    <div class="select-all-container" id="selectAllContainer" style="display: none;">
+                        <button class="select-all-btn" onclick="selectAllVisibleCards()">
+                            全选
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -5396,6 +5620,29 @@
             </div>
         </div>
     </main>
+
+    <!-- Batch Actions Toolbar (Day 40) -->
+    <div class="batch-toolbar" id="batchToolbar">
+        <div class="batch-toolbar-info">
+            <span class="count" id="batchSelectedCount">0</span>
+            <span class="label">已选</span>
+        </div>
+        <div class="batch-toolbar-actions">
+            <button class="batch-action-btn favorite" onclick="batchToggleFavorite()" title="批量收藏">
+                ⭐ 收藏
+            </button>
+            <button class="batch-action-btn like" onclick="batchToggleLike()" title="批量点赞">
+                ❤️ 点赞
+            </button>
+            <button class="batch-action-btn compare" onclick="batchAddToCompare()" title="批量对比">
+                ⚖️ 对比
+            </button>
+            <button class="batch-action-btn copy" onclick="batchCopyInfo()" title="复制信息">
+                📋 复制
+            </button>
+        </div>
+        <button class="batch-close-btn" onclick="exitBatchSelectMode()" title="退出批量选择">✕</button>
+    </div>
 
     <div id="agent-modal" class="modal-overlay">
         <div class="modal-content">
@@ -5848,6 +6095,11 @@
         let lazyLoadedCards = new Set(); // 已懒加载的卡片索引集合
         let lazyObserver = null; // IntersectionObserver 实例
         let isLazyLoading = false; // 是否正在加载更多
+
+        // ========== Batch Selection State (Day 40) ==========
+        let isBatchSelectMode = false; // 是否处于批量选择模式
+        let selectedAgents = new Set(); // 已选择的 Agent ID 集合
+        const MAX_BATCH_SELECT = 20; // 最大批量选择数量
 
         // ========== Review System (Day 18) ==========
         let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
@@ -6620,7 +6872,7 @@
             const visibilityClass = lazy ? 'lazy-visible' : '';
 
             return `
-                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
+                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="handleCardClick('${agent.id}', event)" onmousedown="createCardRipple(event, this)">
                     <div class="card-image">
                         <div class="card-particles"></div>
                         <span class="card-avatar">${agent.avatar}</span>
@@ -6836,6 +7088,284 @@
                     backToTop.classList.add('visible');
                 } else {
                     backToTop.classList.remove('visible');
+                }
+            });
+        }
+
+        // ========== Batch Selection Functions (Day 40) ==========
+        
+        /**
+         * 统一处理卡片点击事件
+         */
+        function handleCardClick(agentId, event) {
+            if (isBatchSelectMode) {
+                toggleCardSelection(agentId, event);
+            } else {
+                openAgentModal(agentId);
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
+            }
+        }
+        
+        /**
+         * 切换批量选择模式
+         */
+        function toggleBatchSelectMode() {
+            isBatchSelectMode = !isBatchSelectMode;
+            const container = document.getElementById('outfits-container');
+            const toolbar = document.getElementById('batchToolbar');
+            const batchBtn = document.getElementById('batchSelectBtn');
+            const batchIcon = document.getElementById('batchSelectIcon');
+            const selectAllContainer = document.getElementById('selectAllContainer');
+            
+            if (isBatchSelectMode) {
+                container.classList.add('batch-select-mode');
+                toolbar.classList.add('active');
+                batchBtn.classList.add('active');
+                batchIcon.textContent = '☑';
+                batchBtn.innerHTML = `<span id="batchSelectIcon">☑</span> 选择中`;
+                selectAllContainer.style.display = 'flex';
+                showToast('已进入批量选择模式，点击卡片选择');
+            } else {
+                exitBatchSelectMode();
+            }
+        }
+        
+        /**
+         * 退出批量选择模式
+         */
+        function exitBatchSelectMode() {
+            isBatchSelectMode = false;
+            selectedAgents.clear();
+            
+            const container = document.getElementById('outfits-container');
+            const toolbar = document.getElementById('batchToolbar');
+            const batchBtn = document.getElementById('batchSelectBtn');
+            const selectAllContainer = document.getElementById('selectAllContainer');
+            
+            container.classList.remove('batch-select-mode');
+            toolbar.classList.remove('active');
+            batchBtn.classList.remove('active');
+            batchBtn.innerHTML = `<span id="batchSelectIcon">☐</span> 批量选择`;
+            selectAllContainer.style.display = 'none';
+            
+            // 移除所有选中状态
+            document.querySelectorAll('.outfit-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            updateBatchToolbar();
+        }
+        
+        /**
+         * 切换卡片选中状态（批量选择模式下）
+         */
+        function toggleCardSelection(agentId, event) {
+            if (!isBatchSelectMode) return;
+            
+            event.stopPropagation();
+            
+            if (selectedAgents.has(agentId)) {
+                selectedAgents.delete(agentId);
+            } else {
+                if (selectedAgents.size >= MAX_BATCH_SELECT) {
+                    showToast(`最多只能选择 ${MAX_BATCH_SELECT} 个Agent`);
+                    return;
+                }
+                selectedAgents.add(agentId);
+            }
+            
+            // 更新卡片选中状态
+            const card = document.querySelector(`.outfit-card[data-agent-id="${agentId}"]`);
+            if (card) {
+                card.classList.toggle('selected', selectedAgents.has(agentId));
+            }
+            
+            updateBatchToolbar();
+        }
+        
+        /**
+         * 更新批量工具栏状态
+         */
+        function updateBatchToolbar() {
+            const countEl = document.getElementById('batchSelectedCount');
+            countEl.textContent = selectedAgents.size;
+        }
+        
+        /**
+         * 全选当前可见卡片
+         */
+        function selectAllVisibleCards() {
+            const cards = document.querySelectorAll('.outfit-card');
+            let added = 0;
+            
+            cards.forEach(card => {
+                const agentId = card.dataset.agentId;
+                if (!selectedAgents.has(agentId) && selectedAgents.size < MAX_BATCH_SELECT) {
+                    selectedAgents.add(agentId);
+                    card.classList.add('selected');
+                    added++;
+                }
+            });
+            
+            updateBatchToolbar();
+            
+            if (added > 0) {
+                showToast(`已选中 ${added} 个Agent`);
+            } else if (selectedAgents.size >= MAX_BATCH_SELECT) {
+                showToast(`已达最大选择数量 (${MAX_BATCH_SELECT})`);
+            }
+        }
+        
+        /**
+         * 批量收藏/取消收藏
+         */
+        function batchToggleFavorite() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let removed = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (favoriteAgents.includes(agentId)) {
+                    favoriteAgents = favoriteAgents.filter(id => id !== agentId);
+                    removed++;
+                } else {
+                    favoriteAgents.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveFavoriteAgents();
+            updateFavoriteBadge();
+            
+            if (added > 0) showToast(`已收藏 ${added} 个Agent`);
+            if (removed > 0) showToast(`已取消收藏 ${removed} 个Agent`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量点赞/取消点赞
+         */
+        function batchToggleLike() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let removed = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (likedAgents.includes(agentId)) {
+                    likedAgents = likedAgents.filter(id => id !== agentId);
+                    removed++;
+                } else {
+                    likedAgents.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveLikedAgents();
+            
+            if (added > 0) showToast(`已点赞 ${added} 个Agent`);
+            if (removed > 0) showToast(`已取消点赞 ${removed} 个Agent`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量添加到对比列表
+         */
+        function batchAddToCompare() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let skipped = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (compareList.includes(agentId)) {
+                    skipped++;
+                } else if (compareList.length >= MAX_COMPARE) {
+                    skipped++;
+                } else {
+                    compareList.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveCompareList();
+            updateCompareBadge();
+            
+            if (added > 0) showToast(`已将 ${added} 个Agent添加到对比列表`);
+            if (skipped > 0) showToast(`${skipped} 个Agent已在对比列表或已达上限`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量复制信息到剪贴板
+         */
+        function batchCopyInfo() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            const agents = Array.from(selectedAgents).map(id => 
+                agentsData.find(a => a.id === id) || allAgentsData.find(a => a.id === id)
+            ).filter(Boolean);
+            
+            const info = agents.map((agent, index) => {
+                const rarity = (agent.rarity || 'R').toUpperCase();
+                return `${index + 1}. ${agent.avatar} ${agent.name} [${rarity}] - 时尚值: ${agent.score || 0}`;
+            }).join('\n');
+            
+            const text = `Agent Street 精选Agent:\n${info}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`已复制 ${agents.length} 个Agent信息到剪贴板`);
+            }).catch(() => {
+                showToast('复制失败，请手动复制');
+            });
+        }
+        
+        /**
+         * 刷新卡片显示（更新点赞/收藏状态）
+         */
+        function refreshCardsDisplay() {
+            selectedAgents.forEach(agentId => {
+                const card = document.querySelector(`.outfit-card[data-agent-id="${agentId}"]`);
+                if (card) {
+                    const agent = agentsData.find(a => a.id === agentId) || allAgentsData.find(a => a.id === agentId);
+                    if (agent) {
+                        const isLiked = likedAgents.includes(agentId);
+                        const isFavorited = favoriteAgents.includes(agentId);
+                        
+                        const likeBtn = card.querySelector('.like-btn');
+                        const favBtn = card.querySelector('.favorite-card-btn');
+                        
+                        if (likeBtn) {
+                            likeBtn.classList.toggle('liked', isLiked);
+                            likeBtn.innerHTML = `${isLiked ? '❤️' : '🤍'} <span class="like-count">${agent.likes}</span>`;
+                        }
+                        
+                        if (favBtn) {
+                            favBtn.classList.toggle('favorited', isFavorited);
+                            favBtn.textContent = isFavorited ? '⭐' : '☆';
+                        }
+                    }
                 }
             });
         }
