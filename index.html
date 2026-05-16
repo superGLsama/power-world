@@ -4415,6 +4415,114 @@
             font-weight: 600;
         }
 
+        /* ========== Favorite Stats & Export (Day 42) ========== */
+        .favorite-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .favorite-stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .favorite-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .favorite-stat-value.ssr { color: #FFD700; }
+        .favorite-stat-value.sr { color: #C0C0C0; }
+        .favorite-stat-value.r { color: #CD7F32; }
+
+        .favorite-stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .favorite-stat-item.score {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .favorite-stat-item.score .favorite-stat-value {
+            color: #00FFD1;
+        }
+
+        .favorite-stat-item.score .avg-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .favorite-stat-item.score .total-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .favorite-export-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .favorite-export-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(0, 255, 209, 0.15);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 8px;
+            color: #00FFD1;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .favorite-export-btn:hover {
+            background: rgba(0, 255, 209, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .favorite-export-btn:active {
+            transform: translateY(0);
+        }
+
+        .favorite-rarity-bar {
+            display: flex;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .favorite-rarity-bar .bar-segment {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .favorite-rarity-bar .bar-segment.ssr { background: linear-gradient(90deg, #FFD700, #FFA500); }
+        .favorite-rarity-bar .bar-segment.sr { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+        .favorite-rarity-bar .bar-segment.r { background: linear-gradient(90deg, #CD7F32, #8B4513); }
+
         /* ========== Recent Viewed Panel (Day 9) ========== */
         .recent-panel {
             position: fixed;
@@ -5298,6 +5406,44 @@
                 </div>
             </div>
             <div class="favorite-count" id="favoriteCountDisplay"></div>
+        </div>
+        <!-- Favorite Stats Panel (Day 42) -->
+        <div class="favorite-stats" id="favoriteStats">
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value ssr" id="favoriteSsrCount">0</div>
+                <div class="favorite-stat-label">SSR</div>
+            </div>
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value sr" id="favoriteSrCount">0</div>
+                <div class="favorite-stat-label">SR</div>
+            </div>
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value r" id="favoriteRCount">0</div>
+                <div class="favorite-stat-label">R</div>
+            </div>
+            <div class="favorite-stat-item score">
+                <div class="avg-score">
+                    <div class="favorite-stat-value" id="favoriteAvgScore">0</div>
+                    <div class="favorite-stat-label">平均时尚值</div>
+                </div>
+                <div class="total-score">
+                    <div class="favorite-stat-value" id="favoriteTotalScore">0</div>
+                    <div class="favorite-stat-label">总时尚值</div>
+                </div>
+            </div>
+        </div>
+        <div class="favorite-rarity-bar" id="favoriteRarityBar">
+            <div class="bar-segment ssr" id="rarityBarSsr" style="width: 0%"></div>
+            <div class="bar-segment sr" id="rarityBarSr" style="width: 0%"></div>
+            <div class="bar-segment r" id="rarityBarR" style="width: 0%"></div>
+        </div>
+        <div class="favorite-export-actions">
+            <button class="favorite-export-btn" onclick="exportFavorites('json')">
+                📥 JSON
+            </button>
+            <button class="favorite-export-btn" onclick="exportFavorites('markdown')">
+                📄 Markdown
+            </button>
         </div>
         <div class="favorite-panel-body" id="favoritePanelBody">
             <!-- Favorite items will be populated -->
@@ -6553,6 +6699,9 @@
             const sortedFiltered = getSortedFilteredFavorites();
             const favoriteList = sortedFiltered.agents;
             
+            // 更新统计显示 (Day 42)
+            updateFavoriteStats();
+            
             // 更新计数显示
             updateFavoriteCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
             
@@ -6678,6 +6827,130 @@
             } else {
                 countEl.innerHTML = `显示 <span>${filtered}</span> / <span>${total}</span> 个`;
             }
+        }
+
+        // ========== Favorite Stats & Export (Day 42) ==========
+        function updateFavoriteStats() {
+            const stats = getFavoriteStats();
+            
+            // 更新稀有度计数
+            document.getElementById('favoriteSsrCount').textContent = stats.ssr;
+            document.getElementById('favoriteSrCount').textContent = stats.sr;
+            document.getElementById('favoriteRCount').textContent = stats.r;
+            
+            // 更新时尚值统计
+            document.getElementById('favoriteAvgScore').textContent = stats.avgScore;
+            document.getElementById('favoriteTotalScore').textContent = stats.totalScore;
+            
+            // 更新稀有度分布条
+            const total = stats.ssr + stats.sr + stats.r;
+            if (total > 0) {
+                document.getElementById('rarityBarSsr').style.width = `${(stats.ssr / total * 100).toFixed(1)}%`;
+                document.getElementById('rarityBarSr').style.width = `${(stats.sr / total * 100).toFixed(1)}%`;
+                document.getElementById('rarityBarR').style.width = `${(stats.r / total * 100).toFixed(1)}%`;
+            } else {
+                document.getElementById('rarityBarSsr').style.width = '0%';
+                document.getElementById('rarityBarSr').style.width = '0%';
+                document.getElementById('rarityBarR').style.width = '0%';
+            }
+        }
+
+        function getFavoriteStats() {
+            const favoriteAgentsData = favoriteAgents.map(id => {
+                return allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+            }).filter(Boolean);
+
+            const ssr = favoriteAgentsData.filter(a => a.rarity === 'ssr').length;
+            const sr = favoriteAgentsData.filter(a => a.rarity === 'sr').length;
+            const r = favoriteAgentsData.filter(a => a.rarity === 'r').length;
+            
+            const totalScore = favoriteAgentsData.reduce((sum, a) => sum + (a.fashion_score || 0), 0);
+            const avgScore = favoriteAgentsData.length > 0 ? Math.round(totalScore / favoriteAgentsData.length) : 0;
+
+            return { ssr, sr, r, totalScore, avgScore, total: favoriteAgentsData.length };
+        }
+
+        function exportFavorites(format) {
+            const favoriteAgentsData = favoriteAgents.map(id => {
+                return allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+            }).filter(Boolean);
+
+            if (favoriteAgentsData.length === 0) {
+                showToast('收藏为空，无法导出');
+                return;
+            }
+
+            const stats = getFavoriteStats();
+            let content, filename, mimeType;
+
+            if (format === 'json') {
+                const exportData = {
+                    exportTime: new Date().toISOString(),
+                    totalCount: favoriteAgentsData.length,
+                    stats: {
+                        ssr: stats.ssr,
+                        sr: stats.sr,
+                        r: stats.r,
+                        avgScore: stats.avgScore,
+                        totalScore: stats.totalScore
+                    },
+                    agents: favoriteAgentsData.map(a => ({
+                        id: a.id,
+                        name: a.name,
+                        rarity: a.rarity,
+                        fashion_score: a.fashion_score,
+                        category: a.category || '',
+                        description: a.description || ''
+                    }))
+                };
+                content = JSON.stringify(exportData, null, 2);
+                filename = `agent-street-favorites-${new Date().toISOString().slice(0,10)}.json`;
+                mimeType = 'application/json';
+            } else if (format === 'markdown') {
+                const lines = [
+                    '# 🎮 Agent Street 我的收藏',
+                    '',
+                    `> 导出时间：${new Date().toLocaleString('zh-CN')}`,
+                    '',
+                    '## 📊 收藏统计',
+                    '',
+                    `| 稀有度 | 数量 |`,
+                    `|--------|------|`,
+                    `| 🟡 SSR | ${stats.ssr} |`,
+                    `| ⚪ SR  | ${stats.sr} |`,
+                    `| 🟤 R   | ${stats.r} |`,
+                    '',
+                    `**总时尚值：** ${stats.totalScore}  |  **平均时尚值：** ${stats.avgScore}`,
+                    '',
+                    '## 🤖 收藏列表',
+                    '',
+                ];
+                
+                favoriteAgentsData.forEach((a, i) => {
+                    const rarityIcon = a.rarity === 'ssr' ? '🟡' : a.rarity === 'sr' ? '⚪' : '🟤';
+                    lines.push(`${i + 1}. ${rarityIcon} **${a.name}** - 时尚值: ${a.fashion_score || 0}`);
+                    if (a.category) lines.push(`   - 分类: ${a.category}`);
+                    if (a.description) lines.push(`   - ${a.description.substring(0, 50)}...`);
+                    lines.push('');
+                });
+                
+                content = lines.join('\n');
+                filename = `agent-street-favorites-${new Date().toISOString().slice(0,10)}.md`;
+                mimeType = 'text/markdown';
+            }
+
+            // 创建下载
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`已导出 ${format.toUpperCase()} 格式`);
         }
 
         function toggleFavorite(agentId) {
