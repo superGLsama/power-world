@@ -1223,6 +1223,221 @@
             margin-top: -100px;
         }
 
+        /* ========== Batch Selection & Actions Toolbar (Day 40) ========== */
+        
+        /* 批量操作工具栏 */
+        .batch-toolbar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-overlay);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-active);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .batch-toolbar.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        .batch-toolbar-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 16px;
+            border-right: 1px solid var(--border-default);
+        }
+        
+        .batch-toolbar-info .count {
+            font-weight: 700;
+            color: var(--accent-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .batch-toolbar-info .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .batch-toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .batch-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid var(--border-default);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .batch-action-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 92, 231, 0.3);
+        }
+        
+        .batch-action-btn.favorite:hover {
+            background: linear-gradient(135deg, #ff6b8a, #ff4757);
+            border-color: #ff6b8a;
+        }
+        
+        .batch-action-btn.like:hover {
+            background: linear-gradient(135deg, #ff6b8a, #ff8a9a);
+            border-color: #ff6b8a;
+        }
+        
+        .batch-action-btn.compare:hover {
+            background: linear-gradient(135deg, #6B5CE7, #9c88ff);
+            border-color: #6B5CE7;
+        }
+        
+        .batch-action-btn.share:hover {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            border-color: #00b894;
+        }
+        
+        .batch-action-btn.copy:hover {
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            border-color: #0984e3;
+        }
+        
+        .batch-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-default);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            margin-left: 4px;
+        }
+        
+        .batch-close-btn:hover {
+            background: rgba(255, 107, 138, 0.2);
+            border-color: var(--accent-danger);
+            color: var(--accent-danger);
+        }
+        
+        /* 批量选择模式 - 卡片样式 */
+        .batch-select-mode .outfit-card {
+            cursor: pointer;
+        }
+        
+        .batch-select-mode .outfit-card::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            background: rgba(13, 13, 26, 0.5);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        
+        .batch-select-mode .outfit-card.selected::after {
+            content: '✓';
+            border-color: var(--accent-secondary);
+            background: var(--accent-secondary);
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .batch-select-mode .outfit-card.selected {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 20px rgba(0, 255, 209, 0.3);
+        }
+        
+        /* 批量选择按钮 */
+        .batch-select-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+        }
+        
+        .batch-select-btn:hover {
+            background: rgba(0, 255, 209, 0.1);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+        }
+        
+        .batch-select-btn.active {
+            background: var(--accent-secondary);
+            border-color: var(--accent-secondary);
+            color: #000;
+        }
+        
+        /* 全选按钮样式 */
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 12px;
+            padding-left: 12px;
+            border-left: 1px solid var(--border-default);
+        }
+        
+        .select-all-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--accent-secondary);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .select-all-btn:hover {
+            background: var(--accent-secondary);
+            color: #000;
+        }
+        
         /* ========== Card Rarity Particle Effects (Day 24) ========== */
         
         /* 稀有度动态边框光效 */
@@ -4096,6 +4311,218 @@
             color: #666;
         }
 
+        /* ========== Favorite Sort & Filter (Day 41) ========== */
+        .favorite-controls {
+            padding: 1rem;
+            background: rgba(255, 107, 138, 0.05);
+            border-bottom: 1px solid rgba(255, 107, 138, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .favorite-sort {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            color: #B8B5FF;
+            min-width: 40px;
+        }
+
+        #favoriteSortSelect {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            background: rgba(107, 92, 231, 0.2);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #favoriteSortSelect:hover {
+            background: rgba(107, 92, 231, 0.3);
+        }
+
+        #favoriteSortSelect:focus {
+            outline: none;
+            border-color: rgba(107, 92, 231, 0.6);
+        }
+
+        .favorite-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.3rem 0.7rem;
+            background: rgba(107, 92, 231, 0.15);
+            border: 1px solid rgba(107, 92, 231, 0.2);
+            border-radius: 15px;
+            color: #B8B5FF;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            background: rgba(107, 92, 231, 0.25);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(90deg, rgba(255, 107, 138, 0.3), rgba(107, 92, 231, 0.3));
+            border-color: rgba(255, 107, 138, 0.5);
+            color: #fff;
+        }
+
+        .filter-pill[data-rarity="ssr"].active {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .filter-pill[data-rarity="sr"].active {
+            background: linear-gradient(90deg, rgba(192, 192, 192, 0.3), rgba(160, 160, 160, 0.2));
+            border-color: rgba(192, 192, 192, 0.5);
+        }
+
+        .filter-pill[data-rarity="r"].active {
+            background: linear-gradient(90deg, rgba(205, 127, 50, 0.3), rgba(160, 82, 45, 0.2));
+            border-color: rgba(205, 127, 50, 0.5);
+        }
+
+        .favorite-count {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            padding-top: 0.25rem;
+            border-top: 1px dashed rgba(107, 92, 231, 0.1);
+        }
+
+        .favorite-count span {
+            color: #ff6b8a;
+            font-weight: 600;
+        }
+
+        /* ========== Favorite Stats & Export (Day 42) ========== */
+        .favorite-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .favorite-stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .favorite-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .favorite-stat-value.ssr { color: #FFD700; }
+        .favorite-stat-value.sr { color: #C0C0C0; }
+        .favorite-stat-value.r { color: #CD7F32; }
+
+        .favorite-stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .favorite-stat-item.score {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .favorite-stat-item.score .favorite-stat-value {
+            color: #00FFD1;
+        }
+
+        .favorite-stat-item.score .avg-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .favorite-stat-item.score .total-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .favorite-export-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .favorite-export-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(0, 255, 209, 0.15);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 8px;
+            color: #00FFD1;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .favorite-export-btn:hover {
+            background: rgba(0, 255, 209, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .favorite-export-btn:active {
+            transform: translateY(0);
+        }
+
+        .favorite-rarity-bar {
+            display: flex;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .favorite-rarity-bar .bar-segment {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .favorite-rarity-bar .bar-segment.ssr { background: linear-gradient(90deg, #FFD700, #FFA500); }
+        .favorite-rarity-bar .bar-segment.sr { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+        .favorite-rarity-bar .bar-segment.r { background: linear-gradient(90deg, #CD7F32, #8B4513); }
+
         /* ========== Recent Viewed Panel (Day 9) ========== */
         .recent-panel {
             position: fixed;
@@ -4385,6 +4812,34 @@
             font-weight: 600;
         }
 
+        .favorite-card-rarity {
+            padding: 0.1rem 0.4rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .favorite-card-rarity:empty {
+            display: none;
+        }
+
+        /* Rarity colors in favorites */
+        .favorite-card-meta .favorite-card-rarity[textContent="SSR"],
+        .favorite-card[onclick*="'ssr'"] .favorite-card-rarity {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .favorite-card[onclick*="'sr'"] .favorite-card-rarity {
+            background: linear-gradient(90deg, #C0C0C0, #A0A0A0);
+            color: #000;
+        }
+
+        .favorite-card[onclick*="'r'"] .favorite-card-rarity {
+            background: linear-gradient(90deg, #CD7F32, #A0522D);
+            color: #fff;
+        }
+
         .favorite-card-remove {
             width: 36px;
             height: 36px;
@@ -4494,6 +4949,195 @@
             .filter-btn {
                 flex-shrink: 0;
             }
+        }
+
+        /* ========== Recent View Stats & Export (Day 43) ========== */
+
+        .recent-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(100, 181, 246, 0.1);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .recent-stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .recent-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .recent-stat-value.ssr { color: #FFD700; }
+        .recent-stat-value.sr { color: #C0C0C0; }
+        .recent-stat-value.r { color: #CD7F32; }
+
+        .recent-stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recent-stat-item.score {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .recent-stat-item.score .recent-stat-value {
+            color: #64b5f6;
+        }
+
+        .recent-stat-item.score .avg-score,
+        .recent-stat-item.score .total-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .recent-rarity-bar {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+            display: flex;
+        }
+
+        .recent-rarity-bar .bar-segment {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .recent-rarity-bar .bar-segment.ssr { background: linear-gradient(90deg, #FFD700, #FFA500); }
+        .recent-rarity-bar .bar-segment.sr { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+        .recent-rarity-bar .bar-segment.r { background: linear-gradient(90deg, #CD7F32, #8B4513); }
+
+        .recent-export-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .recent-export-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(100, 181, 246, 0.15);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            color: #64b5f6;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .recent-export-btn:hover {
+            background: rgba(100, 181, 246, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .recent-export-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Recent Sort & Filter Controls (Day 43) */
+        .recent-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(100, 181, 246, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(100, 181, 246, 0.2);
+        }
+
+        .recent-sort {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recent-sort .control-label,
+        .recent-filter .control-label {
+            font-size: 0.75rem;
+            color: #888;
+            min-width: 40px;
+        }
+
+        .recent-sort select {
+            flex: 1;
+            padding: 0.4rem 0.6rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .recent-sort select:focus {
+            border-color: rgba(100, 181, 246, 0.6);
+        }
+
+        .recent-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .recent-filter-pill {
+            padding: 0.25rem 0.6rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            border-radius: 12px;
+            color: #B8B5FF;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-filter-pill:hover {
+            background: rgba(100, 181, 246, 0.1);
+        }
+
+        .recent-filter-pill.active {
+            background: linear-gradient(90deg, rgba(100, 181, 246, 0.4), rgba(102, 165, 245, 0.4));
+            border-color: rgba(100, 181, 246, 0.5);
+        }
+
+        .recent-filter-pill[data-rarity="ssr"].active { border-color: #FFD700; color: #FFD700; }
+        .recent-filter-pill[data-rarity="sr"].active { border-color: #C0C0C0; color: #C0C0C0; }
+        .recent-filter-pill[data-rarity="r"].active { border-color: #CD7F32; color: #CD7F32; }
+
+        .recent-count {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: center;
+            padding: 0.25rem;
         }
 
         /* ========== Agent Review System (Day 18) ========== */
@@ -4923,13 +5567,72 @@
         </div>
     </div>
 
-    <!-- Favorite Panel (Day 6) -->
+    <!-- Favorite Panel (Day 6, Day 41) -->
     <div class="favorite-panel" id="favoritePanel">
         <div class="favorite-panel-header">
             <div class="favorite-panel-title">
                 <span>❤️</span> 我的收藏
             </div>
             <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
+        </div>
+        <!-- Favorite Sort & Filter Controls (Day 41) -->
+        <div class="favorite-controls" id="favoriteControls">
+            <div class="favorite-sort">
+                <span class="control-label">排序:</span>
+                <select id="favoriteSortSelect" onchange="applyFavoriteSort()">
+                    <option value="time">按添加时间</option>
+                    <option value="rarity">按稀有度</option>
+                    <option value="score">按时尚值</option>
+                </select>
+            </div>
+            <div class="favorite-filter">
+                <span class="control-label">稀有度:</span>
+                <div class="filter-pills">
+                    <button class="filter-pill active" data-rarity="all" onclick="applyFavoriteFilter('all')">全部</button>
+                    <button class="filter-pill" data-rarity="ssr" onclick="applyFavoriteFilter('ssr')">SSR</button>
+                    <button class="filter-pill" data-rarity="sr" onclick="applyFavoriteFilter('sr')">SR</button>
+                    <button class="filter-pill" data-rarity="r" onclick="applyFavoriteFilter('r')">R</button>
+                </div>
+            </div>
+            <div class="favorite-count" id="favoriteCountDisplay"></div>
+        </div>
+        <!-- Favorite Stats Panel (Day 42) -->
+        <div class="favorite-stats" id="favoriteStats">
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value ssr" id="favoriteSsrCount">0</div>
+                <div class="favorite-stat-label">SSR</div>
+            </div>
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value sr" id="favoriteSrCount">0</div>
+                <div class="favorite-stat-label">SR</div>
+            </div>
+            <div class="favorite-stat-item">
+                <div class="favorite-stat-value r" id="favoriteRCount">0</div>
+                <div class="favorite-stat-label">R</div>
+            </div>
+            <div class="favorite-stat-item score">
+                <div class="avg-score">
+                    <div class="favorite-stat-value" id="favoriteAvgScore">0</div>
+                    <div class="favorite-stat-label">平均时尚值</div>
+                </div>
+                <div class="total-score">
+                    <div class="favorite-stat-value" id="favoriteTotalScore">0</div>
+                    <div class="favorite-stat-label">总时尚值</div>
+                </div>
+            </div>
+        </div>
+        <div class="favorite-rarity-bar" id="favoriteRarityBar">
+            <div class="bar-segment ssr" id="rarityBarSsr" style="width: 0%"></div>
+            <div class="bar-segment sr" id="rarityBarSr" style="width: 0%"></div>
+            <div class="bar-segment r" id="rarityBarR" style="width: 0%"></div>
+        </div>
+        <div class="favorite-export-actions">
+            <button class="favorite-export-btn" onclick="exportFavorites('json')">
+                📥 JSON
+            </button>
+            <button class="favorite-export-btn" onclick="exportFavorites('markdown')">
+                📄 Markdown
+            </button>
         </div>
         <div class="favorite-panel-body" id="favoritePanelBody">
             <!-- Favorite items will be populated -->
@@ -4946,6 +5649,65 @@
                 <button class="recent-clear-btn" id="clearRecentBtn" onclick="clearRecentlyViewed()">清空</button>
                 <button class="recent-panel-close" onclick="toggleRecentPanel()">✕</button>
             </div>
+        </div>
+        <!-- Recent Stats Panel (Day 43) -->
+        <div class="recent-stats" id="recentStats">
+            <div class="recent-stat-item">
+                <div class="recent-stat-value ssr" id="recentSsrCount">0</div>
+                <div class="recent-stat-label">SSR</div>
+            </div>
+            <div class="recent-stat-item">
+                <div class="recent-stat-value sr" id="recentSrCount">0</div>
+                <div class="recent-stat-label">SR</div>
+            </div>
+            <div class="recent-stat-item">
+                <div class="recent-stat-value r" id="recentRCount">0</div>
+                <div class="recent-stat-label">R</div>
+            </div>
+            <div class="recent-stat-item score">
+                <div class="avg-score">
+                    <div class="recent-stat-value" id="recentAvgScore">0</div>
+                    <div class="recent-stat-label">平均时尚值</div>
+                </div>
+                <div class="total-score">
+                    <div class="recent-stat-value" id="recentTotalScore">0</div>
+                    <div class="recent-stat-label">总时尚值</div>
+                </div>
+            </div>
+        </div>
+        <div class="recent-rarity-bar" id="recentRarityBar">
+            <div class="bar-segment ssr" id="recentRarityBarSsr" style="width: 0%"></div>
+            <div class="bar-segment sr" id="recentRarityBarSr" style="width: 0%"></div>
+            <div class="bar-segment r" id="recentRarityBarR" style="width: 0%"></div>
+        </div>
+        <!-- Recent Sort & Filter Controls (Day 43) -->
+        <div class="recent-controls" id="recentControls">
+            <div class="recent-sort">
+                <span class="control-label">排序:</span>
+                <select id="recentSortSelect" onchange="applyRecentSort()">
+                    <option value="time">按浏览时间</option>
+                    <option value="rarity">按稀有度</option>
+                    <option value="score">按时尚值</option>
+                </select>
+            </div>
+            <div class="recent-filter">
+                <span class="control-label">稀有度:</span>
+                <div class="filter-pills">
+                    <button class="recent-filter-pill active" data-rarity="all" onclick="applyRecentFilter('all')">全部</button>
+                    <button class="recent-filter-pill" data-rarity="ssr" onclick="applyRecentFilter('ssr')">SSR</button>
+                    <button class="recent-filter-pill" data-rarity="sr" onclick="applyRecentFilter('sr')">SR</button>
+                    <button class="recent-filter-pill" data-rarity="r" onclick="applyRecentFilter('r')">R</button>
+                </div>
+            </div>
+            <div class="recent-count" id="recentCountDisplay"></div>
+        </div>
+        <div class="recent-export-actions">
+            <button class="recent-export-btn" onclick="exportRecent('json')">
+                📥 JSON
+            </button>
+            <button class="recent-export-btn" onclick="exportRecent('markdown')">
+                📄 Markdown
+            </button>
         </div>
         <div class="recent-panel-body" id="recentPanelBody">
             <!-- Recent items will be populated -->
@@ -5388,6 +6150,15 @@
                     <button class="sort-btn" data-sort="favorites" onclick="handleSort('favorites')">
                         <span class="sort-icon">💎</span>收藏最多
                     </button>
+                    <!-- Batch Selection Button (Day 40) -->
+                    <button class="batch-select-btn" id="batchSelectBtn" onclick="toggleBatchSelectMode()">
+                        <span id="batchSelectIcon">☐</span> 批量选择
+                    </button>
+                    <div class="select-all-container" id="selectAllContainer" style="display: none;">
+                        <button class="select-all-btn" onclick="selectAllVisibleCards()">
+                            全选
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -5396,6 +6167,29 @@
             </div>
         </div>
     </main>
+
+    <!-- Batch Actions Toolbar (Day 40) -->
+    <div class="batch-toolbar" id="batchToolbar">
+        <div class="batch-toolbar-info">
+            <span class="count" id="batchSelectedCount">0</span>
+            <span class="label">已选</span>
+        </div>
+        <div class="batch-toolbar-actions">
+            <button class="batch-action-btn favorite" onclick="batchToggleFavorite()" title="批量收藏">
+                ⭐ 收藏
+            </button>
+            <button class="batch-action-btn like" onclick="batchToggleLike()" title="批量点赞">
+                ❤️ 点赞
+            </button>
+            <button class="batch-action-btn compare" onclick="batchAddToCompare()" title="批量对比">
+                ⚖️ 对比
+            </button>
+            <button class="batch-action-btn copy" onclick="batchCopyInfo()" title="复制信息">
+                📋 复制
+            </button>
+        </div>
+        <button class="batch-close-btn" onclick="exitBatchSelectMode()" title="退出批量选择">✕</button>
+    </div>
 
     <div id="agent-modal" class="modal-overlay">
         <div class="modal-content">
@@ -5849,6 +6643,11 @@
         let lazyObserver = null; // IntersectionObserver 实例
         let isLazyLoading = false; // 是否正在加载更多
 
+        // ========== Batch Selection State (Day 40) ==========
+        let isBatchSelectMode = false; // 是否处于批量选择模式
+        let selectedAgents = new Set(); // 已选择的 Agent ID 集合
+        const MAX_BATCH_SELECT = 20; // 最大批量选择数量
+
         // ========== Review System (Day 18) ==========
         let reviews = JSON.parse(localStorage.getItem('agentReviews') || '{}'); // 评论数据 {agentId: [{rating, content, author, time}]}
         const REVIEW_AUTHORS = ['时尚达人', '潮流先锋', '品味玩家', '风格博主', '穿搭专家', 'cool_guy', 'stylish_one', 'trendy_ai', 'fashion_lover', 'vibe_check']; // 随机用户名池
@@ -6055,10 +6854,30 @@
                         <div class="recent-empty-hint">点击Agent卡片即可记录浏览</div>
                     </div>
                 `;
+                updateRecentCountDisplay(0, 0);
                 return;
             }
 
-            const recentList = recentlyViewed.map(agent => {
+            // Apply sorting and filtering (Day 43)
+            const sortedFiltered = getSortedFilteredRecent();
+            const recentListData = sortedFiltered.agents;
+
+            // Update stats and count display
+            updateRecentStats();
+            updateRecentCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
+
+            if (recentListData.length === 0) {
+                body.innerHTML = `
+                    <div class="recent-empty">
+                        <div class="recent-empty-icon">🔍</div>
+                        <div class="recent-empty-text">没有符合条件的浏览记录</div>
+                        <div class="recent-empty-hint">试试调整筛选条件</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const recentList = recentListData.map(agent => {
                 const rarityClass = `rarity-${agent.rarity.toLowerCase()}`;
                 return `
                     <div class="recent-card" onclick="openModal('${agent.id}')">
@@ -6086,12 +6905,13 @@
                 recentlyViewed.splice(index, 1);
             }
             
-            // Add to the beginning
+            // Add to the beginning with timestamp
             recentlyViewed.unshift({
                 id: agent.id,
                 name: agent.name,
                 avatar: agent.avatar,
-                rarity: agent.rarity
+                rarity: agent.rarity,
+                viewedAt: new Date().toISOString()
             });
             
             // Limit the size
@@ -6111,6 +6931,7 @@
                 localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
                 updateRecentBadge();
                 renderRecentPanel();
+                updateRecentStats();
             }
         }
 
@@ -6121,6 +6942,198 @@
             localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
             updateRecentBadge();
             renderRecentPanel();
+            updateRecentStats();
+        }
+
+        // ========== Recent View Stats & Export (Day 43) ==========
+
+        // State for sorting and filtering
+        let recentSortType = 'time';
+        let recentFilterRarity = 'all';
+
+        function updateRecentStats() {
+            const stats = getRecentStats();
+            
+            // Update stat values
+            document.getElementById('recentSsrCount').textContent = stats.ssr;
+            document.getElementById('recentSrCount').textContent = stats.sr;
+            document.getElementById('recentRCount').textContent = stats.r;
+            document.getElementById('recentAvgScore').textContent = stats.avgScore;
+            document.getElementById('recentTotalScore').textContent = stats.totalScore;
+
+            // Update rarity bar
+            const total = stats.total;
+            if (total > 0) {
+                document.getElementById('recentRarityBarSsr').style.width = `${(stats.ssr / total * 100).toFixed(1)}%`;
+                document.getElementById('recentRarityBarSr').style.width = `${(stats.sr / total * 100).toFixed(1)}%`;
+                document.getElementById('recentRarityBarR').style.width = `${(stats.r / total * 100).toFixed(1)}%`;
+            } else {
+                document.getElementById('recentRarityBarSsr').style.width = '0%';
+                document.getElementById('recentRarityBarSr').style.width = '0%';
+                document.getElementById('recentRarityBarR').style.width = '0%';
+            }
+        }
+
+        function getRecentStats() {
+            const recentAgentsData = recentlyViewed.map(agent => {
+                return allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+            });
+
+            const ssr = recentAgentsData.filter(a => a.rarity === 'ssr').length;
+            const sr = recentAgentsData.filter(a => a.rarity === 'sr').length;
+            const r = recentAgentsData.filter(a => a.rarity === 'r').length;
+            
+            const totalScore = recentAgentsData.reduce((sum, a) => sum + (a.fashion_score || 0), 0);
+            const avgScore = recentAgentsData.length > 0 ? Math.round(totalScore / recentAgentsData.length) : 0;
+
+            return { ssr, sr, r, totalScore, avgScore, total: recentAgentsData.length };
+        }
+
+        function getSortedFilteredRecent() {
+            let filtered = [...recentlyViewed];
+            
+            // Apply rarity filter
+            if (recentFilterRarity !== 'all') {
+                filtered = filtered.filter(agent => {
+                    const fullAgent = allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+                    return fullAgent.rarity === recentFilterRarity;
+                });
+            }
+
+            // Apply sort
+            filtered.sort((a, b) => {
+                const agentA = allAgentsData.find(x => x.id === a.id) || agentsData.find(x => x.id === a.id) || a;
+                const agentB = allAgentsData.find(x => x.id === b.id) || agentsData.find(x => x.id === b.id) || b;
+
+                switch (recentSortType) {
+                    case 'rarity':
+                        const rarityOrder = { ssr: 3, sr: 2, r: 1 };
+                        return (rarityOrder[agentB.rarity] || 0) - (rarityOrder[agentA.rarity] || 0);
+                    case 'score':
+                        return (agentB.fashion_score || 0) - (agentA.fashion_score || 0);
+                    case 'time':
+                    default:
+                        return 0; // Already in chronological order (most recent first)
+                }
+            });
+
+            return { agents: filtered, total: recentlyViewed.length, filtered: filtered.length };
+        }
+
+        function applyRecentSort() {
+            recentSortType = document.getElementById('recentSortSelect').value;
+            renderRecentPanel();
+        }
+
+        function applyRecentFilter(rarity) {
+            recentFilterRarity = rarity;
+            
+            // Update filter pill styles
+            document.querySelectorAll('.recent-filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.dataset.rarity === rarity) {
+                    pill.classList.add('active');
+                }
+            });
+            
+            renderRecentPanel();
+        }
+
+        function updateRecentCountDisplay(total, filtered) {
+            const countDisplay = document.getElementById('recentCountDisplay');
+            if (total === 0) {
+                countDisplay.textContent = '';
+            } else if (filtered < total) {
+                countDisplay.textContent = `显示 ${filtered} / ${total} 个`;
+            } else {
+                countDisplay.textContent = `共 ${total} 个浏览记录`;
+            }
+        }
+
+        function exportRecent(format) {
+            const recentAgentsData = recentlyViewed.map(agent => {
+                return allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+            });
+
+            if (recentAgentsData.length === 0) {
+                showToast('浏览记录为空，无法导出');
+                return;
+            }
+
+            const stats = getRecentStats();
+            let content, filename, mimeType;
+
+            if (format === 'json') {
+                const exportData = {
+                    exportTime: new Date().toISOString(),
+                    totalCount: recentAgentsData.length,
+                    stats: {
+                        ssr: stats.ssr,
+                        sr: stats.sr,
+                        r: stats.r,
+                        avgScore: stats.avgScore,
+                        totalScore: stats.totalScore
+                    },
+                    agents: recentAgentsData.map((a, i) => ({
+                        id: a.id,
+                        name: a.name,
+                        rarity: a.rarity,
+                        fashion_score: a.fashion_score || 0,
+                        category: a.category || '',
+                        description: a.description || '',
+                        viewedAt: recentlyViewed[i]?.viewedAt || null
+                    }))
+                };
+                content = JSON.stringify(exportData, null, 2);
+                filename = `agent-street-recent-${new Date().toISOString().slice(0,10)}.json`;
+                mimeType = 'application/json';
+            } else if (format === 'markdown') {
+                const lines = [
+                    '# 🕐 Agent Street 最近浏览',
+                    '',
+                    `> 导出时间：${new Date().toLocaleString('zh-CN')}`,
+                    '',
+                    '## 📊 浏览统计',
+                    '',
+                    `| 稀有度 | 数量 |`,
+                    `|--------|------|`,
+                    `| 🟡 SSR | ${stats.ssr} |`,
+                    `| ⚪ SR  | ${stats.sr} |`,
+                    `| 🟤 R   | ${stats.r} |`,
+                    '',
+                    `**总时尚值：** ${stats.totalScore}  |  **平均时尚值：** ${stats.avgScore}`,
+                    '',
+                    '## 🔍 浏览列表',
+                    '',
+                ];
+                
+                recentAgentsData.forEach((a, i) => {
+                    const rarityIcon = a.rarity === 'ssr' ? '🟡' : a.rarity === 'sr' ? '⚪' : '🟤';
+                    const viewedAt = recentlyViewed[i]?.viewedAt ? new Date(recentlyViewed[i].viewedAt).toLocaleString('zh-CN') : '未知';
+                    lines.push(`${i + 1}. ${rarityIcon} **${a.name}** - 时尚值: ${a.fashion_score || 0}`);
+                    lines.push(`   - 浏览时间: ${viewedAt}`);
+                    if (a.category) lines.push(`   - 分类: ${a.category}`);
+                    if (a.description) lines.push(`   - ${a.description.substring(0, 50)}...`);
+                    lines.push('');
+                });
+                
+                content = lines.join('\n');
+                filename = `agent-street-recent-${new Date().toISOString().slice(0,10)}.md`;
+                mimeType = 'text/markdown';
+            }
+
+            // Create download
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast(`📥 已导出为 ${format.toUpperCase()}`);
         }
 
         function toggleFavoritePanel() {
@@ -6144,6 +7157,16 @@
         }
 
         function renderFavoritePanel() {
+            // 应用排序和筛选 (Day 41)
+            const sortedFiltered = getSortedFilteredFavorites();
+            const favoriteList = sortedFiltered.agents;
+            
+            // 更新统计显示 (Day 42)
+            updateFavoriteStats();
+            
+            // 更新计数显示
+            updateFavoriteCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
+            
             const body = document.getElementById('favoritePanelBody');
             
             if (favoriteAgents.length === 0) {
@@ -6157,17 +7180,12 @@
                 return;
             }
 
-            const favoriteList = favoriteAgents.map(id => {
-                const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
-                return agent;
-            }).filter(Boolean);
-
             if (favoriteList.length === 0) {
                 body.innerHTML = `
                     <div class="favorite-empty">
-                        <div class="favorite-empty-icon">💫</div>
-                        <div class="favorite-empty-text">收藏的Agent暂时不在列表中</div>
-                        <div class="favorite-empty-hint">去首页探索更多Agent吧</div>
+                        <div class="favorite-empty-icon">🔍</div>
+                        <div class="favorite-empty-text">没有符合条件的收藏</div>
+                        <div class="favorite-empty-hint">试试调整筛选条件</div>
                     </div>
                 `;
                 return;
@@ -6175,12 +7193,14 @@
 
             let html = '<div class="favorite-list">';
             favoriteList.forEach(agent => {
+                const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
                 html += `
                     <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
                         <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
                         <div class="favorite-card-info">
                             <div class="favorite-card-name">${agent.name}</div>
                             <div class="favorite-card-meta">
+                                <span class="favorite-card-rarity">${rarityLabel}</span>
                                 <span class="favorite-card-score">${agent.fashion_score}</span>
                                 <span>时尚值</span>
                             </div>
@@ -6191,6 +7211,208 @@
             });
             html += '</div>';
             body.innerHTML = html;
+        }
+
+        // ========== Favorite Sort & Filter Functions (Day 41) ==========
+        let favoriteSortType = 'time';
+        let favoriteFilterRarity = 'all';
+
+        function getSortedFilteredFavorites() {
+            // 获取所有收藏的 Agent
+            const favoriteList = favoriteAgents.map(id => {
+                const agent = allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+                if (agent) {
+                    // 添加收藏时的索引用于按时间排序
+                    agent._favoriteIndex = favoriteAgents.indexOf(id);
+                }
+                return agent;
+            }).filter(Boolean);
+
+            // 筛选
+            let filtered = favoriteList;
+            if (favoriteFilterRarity !== 'all') {
+                filtered = favoriteList.filter(a => a.rarity === favoriteFilterRarity);
+            }
+
+            // 排序
+            let sorted = [...filtered];
+            switch (favoriteSortType) {
+                case 'rarity':
+                    // SSR > SR > R
+                    const rarityOrder = { 'ssr': 0, 'sr': 1, 'r': 2 };
+                    sorted.sort((a, b) => (rarityOrder[a.rarity] || 3) - (rarityOrder[b.rarity] || 3));
+                    break;
+                case 'score':
+                    sorted.sort((a, b) => (b.fashion_score || 0) - (a.fashion_score || 0));
+                    break;
+                case 'time':
+                default:
+                    // 按收藏时间倒序（最新的在前）
+                    sorted.sort((a, b) => a._favoriteIndex - b._favoriteIndex);
+                    break;
+            }
+
+            return {
+                agents: sorted,
+                total: favoriteList.length,
+                filtered: sorted.length
+            };
+        }
+
+        function applyFavoriteSort() {
+            const select = document.getElementById('favoriteSortSelect');
+            favoriteSortType = select.value;
+            renderFavoritePanel();
+        }
+
+        function applyFavoriteFilter(rarity) {
+            favoriteFilterRarity = rarity;
+            
+            // 更新筛选按钮状态
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                if (btn.dataset.rarity === rarity) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            renderFavoritePanel();
+        }
+
+        function updateFavoriteCountDisplay(total, filtered) {
+            const countEl = document.getElementById('favoriteCountDisplay');
+            if (total === 0) {
+                countEl.innerHTML = '';
+            } else if (favoriteFilterRarity === 'all') {
+                countEl.innerHTML = `共 <span>${total}</span> 个收藏`;
+            } else {
+                countEl.innerHTML = `显示 <span>${filtered}</span> / <span>${total}</span> 个`;
+            }
+        }
+
+        // ========== Favorite Stats & Export (Day 42) ==========
+        function updateFavoriteStats() {
+            const stats = getFavoriteStats();
+            
+            // 更新稀有度计数
+            document.getElementById('favoriteSsrCount').textContent = stats.ssr;
+            document.getElementById('favoriteSrCount').textContent = stats.sr;
+            document.getElementById('favoriteRCount').textContent = stats.r;
+            
+            // 更新时尚值统计
+            document.getElementById('favoriteAvgScore').textContent = stats.avgScore;
+            document.getElementById('favoriteTotalScore').textContent = stats.totalScore;
+            
+            // 更新稀有度分布条
+            const total = stats.ssr + stats.sr + stats.r;
+            if (total > 0) {
+                document.getElementById('rarityBarSsr').style.width = `${(stats.ssr / total * 100).toFixed(1)}%`;
+                document.getElementById('rarityBarSr').style.width = `${(stats.sr / total * 100).toFixed(1)}%`;
+                document.getElementById('rarityBarR').style.width = `${(stats.r / total * 100).toFixed(1)}%`;
+            } else {
+                document.getElementById('rarityBarSsr').style.width = '0%';
+                document.getElementById('rarityBarSr').style.width = '0%';
+                document.getElementById('rarityBarR').style.width = '0%';
+            }
+        }
+
+        function getFavoriteStats() {
+            const favoriteAgentsData = favoriteAgents.map(id => {
+                return allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+            }).filter(Boolean);
+
+            const ssr = favoriteAgentsData.filter(a => a.rarity === 'ssr').length;
+            const sr = favoriteAgentsData.filter(a => a.rarity === 'sr').length;
+            const r = favoriteAgentsData.filter(a => a.rarity === 'r').length;
+            
+            const totalScore = favoriteAgentsData.reduce((sum, a) => sum + (a.fashion_score || 0), 0);
+            const avgScore = favoriteAgentsData.length > 0 ? Math.round(totalScore / favoriteAgentsData.length) : 0;
+
+            return { ssr, sr, r, totalScore, avgScore, total: favoriteAgentsData.length };
+        }
+
+        function exportFavorites(format) {
+            const favoriteAgentsData = favoriteAgents.map(id => {
+                return allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+            }).filter(Boolean);
+
+            if (favoriteAgentsData.length === 0) {
+                showToast('收藏为空，无法导出');
+                return;
+            }
+
+            const stats = getFavoriteStats();
+            let content, filename, mimeType;
+
+            if (format === 'json') {
+                const exportData = {
+                    exportTime: new Date().toISOString(),
+                    totalCount: favoriteAgentsData.length,
+                    stats: {
+                        ssr: stats.ssr,
+                        sr: stats.sr,
+                        r: stats.r,
+                        avgScore: stats.avgScore,
+                        totalScore: stats.totalScore
+                    },
+                    agents: favoriteAgentsData.map(a => ({
+                        id: a.id,
+                        name: a.name,
+                        rarity: a.rarity,
+                        fashion_score: a.fashion_score,
+                        category: a.category || '',
+                        description: a.description || ''
+                    }))
+                };
+                content = JSON.stringify(exportData, null, 2);
+                filename = `agent-street-favorites-${new Date().toISOString().slice(0,10)}.json`;
+                mimeType = 'application/json';
+            } else if (format === 'markdown') {
+                const lines = [
+                    '# 🎮 Agent Street 我的收藏',
+                    '',
+                    `> 导出时间：${new Date().toLocaleString('zh-CN')}`,
+                    '',
+                    '## 📊 收藏统计',
+                    '',
+                    `| 稀有度 | 数量 |`,
+                    `|--------|------|`,
+                    `| 🟡 SSR | ${stats.ssr} |`,
+                    `| ⚪ SR  | ${stats.sr} |`,
+                    `| 🟤 R   | ${stats.r} |`,
+                    '',
+                    `**总时尚值：** ${stats.totalScore}  |  **平均时尚值：** ${stats.avgScore}`,
+                    '',
+                    '## 🤖 收藏列表',
+                    '',
+                ];
+                
+                favoriteAgentsData.forEach((a, i) => {
+                    const rarityIcon = a.rarity === 'ssr' ? '🟡' : a.rarity === 'sr' ? '⚪' : '🟤';
+                    lines.push(`${i + 1}. ${rarityIcon} **${a.name}** - 时尚值: ${a.fashion_score || 0}`);
+                    if (a.category) lines.push(`   - 分类: ${a.category}`);
+                    if (a.description) lines.push(`   - ${a.description.substring(0, 50)}...`);
+                    lines.push('');
+                });
+                
+                content = lines.join('\n');
+                filename = `agent-street-favorites-${new Date().toISOString().slice(0,10)}.md`;
+                mimeType = 'text/markdown';
+            }
+
+            // 创建下载
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`已导出 ${format.toUpperCase()} 格式`);
         }
 
         function toggleFavorite(agentId) {
@@ -6620,7 +7842,7 @@
             const visibilityClass = lazy ? 'lazy-visible' : '';
 
             return `
-                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="openAgentModal('${agent.id}'); clearCardSelection(); selectedCardIndex = -1; isKeyboardNavigating = false;" onmousedown="createCardRipple(event, this)">
+                <div class="outfit-card ${rarityClass} ${visibilityClass}" data-agent-id="${agent.id}" data-rarity="${agent.rarity}" data-index="${index}" style="animation-delay: ${index * 50}ms;" onclick="handleCardClick('${agent.id}', event)" onmousedown="createCardRipple(event, this)">
                     <div class="card-image">
                         <div class="card-particles"></div>
                         <span class="card-avatar">${agent.avatar}</span>
@@ -6836,6 +8058,284 @@
                     backToTop.classList.add('visible');
                 } else {
                     backToTop.classList.remove('visible');
+                }
+            });
+        }
+
+        // ========== Batch Selection Functions (Day 40) ==========
+        
+        /**
+         * 统一处理卡片点击事件
+         */
+        function handleCardClick(agentId, event) {
+            if (isBatchSelectMode) {
+                toggleCardSelection(agentId, event);
+            } else {
+                openAgentModal(agentId);
+                clearCardSelection();
+                selectedCardIndex = -1;
+                isKeyboardNavigating = false;
+            }
+        }
+        
+        /**
+         * 切换批量选择模式
+         */
+        function toggleBatchSelectMode() {
+            isBatchSelectMode = !isBatchSelectMode;
+            const container = document.getElementById('outfits-container');
+            const toolbar = document.getElementById('batchToolbar');
+            const batchBtn = document.getElementById('batchSelectBtn');
+            const batchIcon = document.getElementById('batchSelectIcon');
+            const selectAllContainer = document.getElementById('selectAllContainer');
+            
+            if (isBatchSelectMode) {
+                container.classList.add('batch-select-mode');
+                toolbar.classList.add('active');
+                batchBtn.classList.add('active');
+                batchIcon.textContent = '☑';
+                batchBtn.innerHTML = `<span id="batchSelectIcon">☑</span> 选择中`;
+                selectAllContainer.style.display = 'flex';
+                showToast('已进入批量选择模式，点击卡片选择');
+            } else {
+                exitBatchSelectMode();
+            }
+        }
+        
+        /**
+         * 退出批量选择模式
+         */
+        function exitBatchSelectMode() {
+            isBatchSelectMode = false;
+            selectedAgents.clear();
+            
+            const container = document.getElementById('outfits-container');
+            const toolbar = document.getElementById('batchToolbar');
+            const batchBtn = document.getElementById('batchSelectBtn');
+            const selectAllContainer = document.getElementById('selectAllContainer');
+            
+            container.classList.remove('batch-select-mode');
+            toolbar.classList.remove('active');
+            batchBtn.classList.remove('active');
+            batchBtn.innerHTML = `<span id="batchSelectIcon">☐</span> 批量选择`;
+            selectAllContainer.style.display = 'none';
+            
+            // 移除所有选中状态
+            document.querySelectorAll('.outfit-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            updateBatchToolbar();
+        }
+        
+        /**
+         * 切换卡片选中状态（批量选择模式下）
+         */
+        function toggleCardSelection(agentId, event) {
+            if (!isBatchSelectMode) return;
+            
+            event.stopPropagation();
+            
+            if (selectedAgents.has(agentId)) {
+                selectedAgents.delete(agentId);
+            } else {
+                if (selectedAgents.size >= MAX_BATCH_SELECT) {
+                    showToast(`最多只能选择 ${MAX_BATCH_SELECT} 个Agent`);
+                    return;
+                }
+                selectedAgents.add(agentId);
+            }
+            
+            // 更新卡片选中状态
+            const card = document.querySelector(`.outfit-card[data-agent-id="${agentId}"]`);
+            if (card) {
+                card.classList.toggle('selected', selectedAgents.has(agentId));
+            }
+            
+            updateBatchToolbar();
+        }
+        
+        /**
+         * 更新批量工具栏状态
+         */
+        function updateBatchToolbar() {
+            const countEl = document.getElementById('batchSelectedCount');
+            countEl.textContent = selectedAgents.size;
+        }
+        
+        /**
+         * 全选当前可见卡片
+         */
+        function selectAllVisibleCards() {
+            const cards = document.querySelectorAll('.outfit-card');
+            let added = 0;
+            
+            cards.forEach(card => {
+                const agentId = card.dataset.agentId;
+                if (!selectedAgents.has(agentId) && selectedAgents.size < MAX_BATCH_SELECT) {
+                    selectedAgents.add(agentId);
+                    card.classList.add('selected');
+                    added++;
+                }
+            });
+            
+            updateBatchToolbar();
+            
+            if (added > 0) {
+                showToast(`已选中 ${added} 个Agent`);
+            } else if (selectedAgents.size >= MAX_BATCH_SELECT) {
+                showToast(`已达最大选择数量 (${MAX_BATCH_SELECT})`);
+            }
+        }
+        
+        /**
+         * 批量收藏/取消收藏
+         */
+        function batchToggleFavorite() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let removed = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (favoriteAgents.includes(agentId)) {
+                    favoriteAgents = favoriteAgents.filter(id => id !== agentId);
+                    removed++;
+                } else {
+                    favoriteAgents.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveFavoriteAgents();
+            updateFavoriteBadge();
+            
+            if (added > 0) showToast(`已收藏 ${added} 个Agent`);
+            if (removed > 0) showToast(`已取消收藏 ${removed} 个Agent`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量点赞/取消点赞
+         */
+        function batchToggleLike() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let removed = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (likedAgents.includes(agentId)) {
+                    likedAgents = likedAgents.filter(id => id !== agentId);
+                    removed++;
+                } else {
+                    likedAgents.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveLikedAgents();
+            
+            if (added > 0) showToast(`已点赞 ${added} 个Agent`);
+            if (removed > 0) showToast(`已取消点赞 ${removed} 个Agent`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量添加到对比列表
+         */
+        function batchAddToCompare() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            let added = 0;
+            let skipped = 0;
+            
+            selectedAgents.forEach(agentId => {
+                if (compareList.includes(agentId)) {
+                    skipped++;
+                } else if (compareList.length >= MAX_COMPARE) {
+                    skipped++;
+                } else {
+                    compareList.push(agentId);
+                    added++;
+                }
+            });
+            
+            saveCompareList();
+            updateCompareBadge();
+            
+            if (added > 0) showToast(`已将 ${added} 个Agent添加到对比列表`);
+            if (skipped > 0) showToast(`${skipped} 个Agent已在对比列表或已达上限`);
+            
+            // 刷新卡片显示
+            refreshCardsDisplay();
+        }
+        
+        /**
+         * 批量复制信息到剪贴板
+         */
+        function batchCopyInfo() {
+            if (selectedAgents.size === 0) {
+                showToast('请先选择Agent');
+                return;
+            }
+            
+            const agents = Array.from(selectedAgents).map(id => 
+                agentsData.find(a => a.id === id) || allAgentsData.find(a => a.id === id)
+            ).filter(Boolean);
+            
+            const info = agents.map((agent, index) => {
+                const rarity = (agent.rarity || 'R').toUpperCase();
+                return `${index + 1}. ${agent.avatar} ${agent.name} [${rarity}] - 时尚值: ${agent.score || 0}`;
+            }).join('\n');
+            
+            const text = `Agent Street 精选Agent:\n${info}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`已复制 ${agents.length} 个Agent信息到剪贴板`);
+            }).catch(() => {
+                showToast('复制失败，请手动复制');
+            });
+        }
+        
+        /**
+         * 刷新卡片显示（更新点赞/收藏状态）
+         */
+        function refreshCardsDisplay() {
+            selectedAgents.forEach(agentId => {
+                const card = document.querySelector(`.outfit-card[data-agent-id="${agentId}"]`);
+                if (card) {
+                    const agent = agentsData.find(a => a.id === agentId) || allAgentsData.find(a => a.id === agentId);
+                    if (agent) {
+                        const isLiked = likedAgents.includes(agentId);
+                        const isFavorited = favoriteAgents.includes(agentId);
+                        
+                        const likeBtn = card.querySelector('.like-btn');
+                        const favBtn = card.querySelector('.favorite-card-btn');
+                        
+                        if (likeBtn) {
+                            likeBtn.classList.toggle('liked', isLiked);
+                            likeBtn.innerHTML = `${isLiked ? '❤️' : '🤍'} <span class="like-count">${agent.likes}</span>`;
+                        }
+                        
+                        if (favBtn) {
+                            favBtn.classList.toggle('favorited', isFavorited);
+                            favBtn.textContent = isFavorited ? '⭐' : '☆';
+                        }
+                    }
                 }
             });
         }

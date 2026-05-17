@@ -4951,6 +4951,195 @@
             }
         }
 
+        /* ========== Recent View Stats & Export (Day 43) ========== */
+
+        .recent-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(100, 181, 246, 0.1);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .recent-stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .recent-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .recent-stat-value.ssr { color: #FFD700; }
+        .recent-stat-value.sr { color: #C0C0C0; }
+        .recent-stat-value.r { color: #CD7F32; }
+
+        .recent-stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recent-stat-item.score {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .recent-stat-item.score .recent-stat-value {
+            color: #64b5f6;
+        }
+
+        .recent-stat-item.score .avg-score,
+        .recent-stat-item.score .total-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .recent-rarity-bar {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+            display: flex;
+        }
+
+        .recent-rarity-bar .bar-segment {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .recent-rarity-bar .bar-segment.ssr { background: linear-gradient(90deg, #FFD700, #FFA500); }
+        .recent-rarity-bar .bar-segment.sr { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+        .recent-rarity-bar .bar-segment.r { background: linear-gradient(90deg, #CD7F32, #8B4513); }
+
+        .recent-export-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .recent-export-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(100, 181, 246, 0.15);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            color: #64b5f6;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .recent-export-btn:hover {
+            background: rgba(100, 181, 246, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .recent-export-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Recent Sort & Filter Controls (Day 43) */
+        .recent-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(100, 181, 246, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(100, 181, 246, 0.2);
+        }
+
+        .recent-sort {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recent-sort .control-label,
+        .recent-filter .control-label {
+            font-size: 0.75rem;
+            color: #888;
+            min-width: 40px;
+        }
+
+        .recent-sort select {
+            flex: 1;
+            padding: 0.4rem 0.6rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .recent-sort select:focus {
+            border-color: rgba(100, 181, 246, 0.6);
+        }
+
+        .recent-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .recent-filter-pill {
+            padding: 0.25rem 0.6rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            border-radius: 12px;
+            color: #B8B5FF;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-filter-pill:hover {
+            background: rgba(100, 181, 246, 0.1);
+        }
+
+        .recent-filter-pill.active {
+            background: linear-gradient(90deg, rgba(100, 181, 246, 0.4), rgba(102, 165, 245, 0.4));
+            border-color: rgba(100, 181, 246, 0.5);
+        }
+
+        .recent-filter-pill[data-rarity="ssr"].active { border-color: #FFD700; color: #FFD700; }
+        .recent-filter-pill[data-rarity="sr"].active { border-color: #C0C0C0; color: #C0C0C0; }
+        .recent-filter-pill[data-rarity="r"].active { border-color: #CD7F32; color: #CD7F32; }
+
+        .recent-count {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: center;
+            padding: 0.25rem;
+        }
+
         /* ========== Agent Review System (Day 18) ========== */
         .modal-section.reviews {
             margin-top: 1rem;
@@ -5460,6 +5649,65 @@
                 <button class="recent-clear-btn" id="clearRecentBtn" onclick="clearRecentlyViewed()">清空</button>
                 <button class="recent-panel-close" onclick="toggleRecentPanel()">✕</button>
             </div>
+        </div>
+        <!-- Recent Stats Panel (Day 43) -->
+        <div class="recent-stats" id="recentStats">
+            <div class="recent-stat-item">
+                <div class="recent-stat-value ssr" id="recentSsrCount">0</div>
+                <div class="recent-stat-label">SSR</div>
+            </div>
+            <div class="recent-stat-item">
+                <div class="recent-stat-value sr" id="recentSrCount">0</div>
+                <div class="recent-stat-label">SR</div>
+            </div>
+            <div class="recent-stat-item">
+                <div class="recent-stat-value r" id="recentRCount">0</div>
+                <div class="recent-stat-label">R</div>
+            </div>
+            <div class="recent-stat-item score">
+                <div class="avg-score">
+                    <div class="recent-stat-value" id="recentAvgScore">0</div>
+                    <div class="recent-stat-label">平均时尚值</div>
+                </div>
+                <div class="total-score">
+                    <div class="recent-stat-value" id="recentTotalScore">0</div>
+                    <div class="recent-stat-label">总时尚值</div>
+                </div>
+            </div>
+        </div>
+        <div class="recent-rarity-bar" id="recentRarityBar">
+            <div class="bar-segment ssr" id="recentRarityBarSsr" style="width: 0%"></div>
+            <div class="bar-segment sr" id="recentRarityBarSr" style="width: 0%"></div>
+            <div class="bar-segment r" id="recentRarityBarR" style="width: 0%"></div>
+        </div>
+        <!-- Recent Sort & Filter Controls (Day 43) -->
+        <div class="recent-controls" id="recentControls">
+            <div class="recent-sort">
+                <span class="control-label">排序:</span>
+                <select id="recentSortSelect" onchange="applyRecentSort()">
+                    <option value="time">按浏览时间</option>
+                    <option value="rarity">按稀有度</option>
+                    <option value="score">按时尚值</option>
+                </select>
+            </div>
+            <div class="recent-filter">
+                <span class="control-label">稀有度:</span>
+                <div class="filter-pills">
+                    <button class="recent-filter-pill active" data-rarity="all" onclick="applyRecentFilter('all')">全部</button>
+                    <button class="recent-filter-pill" data-rarity="ssr" onclick="applyRecentFilter('ssr')">SSR</button>
+                    <button class="recent-filter-pill" data-rarity="sr" onclick="applyRecentFilter('sr')">SR</button>
+                    <button class="recent-filter-pill" data-rarity="r" onclick="applyRecentFilter('r')">R</button>
+                </div>
+            </div>
+            <div class="recent-count" id="recentCountDisplay"></div>
+        </div>
+        <div class="recent-export-actions">
+            <button class="recent-export-btn" onclick="exportRecent('json')">
+                📥 JSON
+            </button>
+            <button class="recent-export-btn" onclick="exportRecent('markdown')">
+                📄 Markdown
+            </button>
         </div>
         <div class="recent-panel-body" id="recentPanelBody">
             <!-- Recent items will be populated -->
@@ -6606,10 +6854,30 @@
                         <div class="recent-empty-hint">点击Agent卡片即可记录浏览</div>
                     </div>
                 `;
+                updateRecentCountDisplay(0, 0);
                 return;
             }
 
-            const recentList = recentlyViewed.map(agent => {
+            // Apply sorting and filtering (Day 43)
+            const sortedFiltered = getSortedFilteredRecent();
+            const recentListData = sortedFiltered.agents;
+
+            // Update stats and count display
+            updateRecentStats();
+            updateRecentCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
+
+            if (recentListData.length === 0) {
+                body.innerHTML = `
+                    <div class="recent-empty">
+                        <div class="recent-empty-icon">🔍</div>
+                        <div class="recent-empty-text">没有符合条件的浏览记录</div>
+                        <div class="recent-empty-hint">试试调整筛选条件</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const recentList = recentListData.map(agent => {
                 const rarityClass = `rarity-${agent.rarity.toLowerCase()}`;
                 return `
                     <div class="recent-card" onclick="openModal('${agent.id}')">
@@ -6637,12 +6905,13 @@
                 recentlyViewed.splice(index, 1);
             }
             
-            // Add to the beginning
+            // Add to the beginning with timestamp
             recentlyViewed.unshift({
                 id: agent.id,
                 name: agent.name,
                 avatar: agent.avatar,
-                rarity: agent.rarity
+                rarity: agent.rarity,
+                viewedAt: new Date().toISOString()
             });
             
             // Limit the size
@@ -6662,6 +6931,7 @@
                 localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
                 updateRecentBadge();
                 renderRecentPanel();
+                updateRecentStats();
             }
         }
 
@@ -6672,6 +6942,198 @@
             localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
             updateRecentBadge();
             renderRecentPanel();
+            updateRecentStats();
+        }
+
+        // ========== Recent View Stats & Export (Day 43) ==========
+
+        // State for sorting and filtering
+        let recentSortType = 'time';
+        let recentFilterRarity = 'all';
+
+        function updateRecentStats() {
+            const stats = getRecentStats();
+            
+            // Update stat values
+            document.getElementById('recentSsrCount').textContent = stats.ssr;
+            document.getElementById('recentSrCount').textContent = stats.sr;
+            document.getElementById('recentRCount').textContent = stats.r;
+            document.getElementById('recentAvgScore').textContent = stats.avgScore;
+            document.getElementById('recentTotalScore').textContent = stats.totalScore;
+
+            // Update rarity bar
+            const total = stats.total;
+            if (total > 0) {
+                document.getElementById('recentRarityBarSsr').style.width = `${(stats.ssr / total * 100).toFixed(1)}%`;
+                document.getElementById('recentRarityBarSr').style.width = `${(stats.sr / total * 100).toFixed(1)}%`;
+                document.getElementById('recentRarityBarR').style.width = `${(stats.r / total * 100).toFixed(1)}%`;
+            } else {
+                document.getElementById('recentRarityBarSsr').style.width = '0%';
+                document.getElementById('recentRarityBarSr').style.width = '0%';
+                document.getElementById('recentRarityBarR').style.width = '0%';
+            }
+        }
+
+        function getRecentStats() {
+            const recentAgentsData = recentlyViewed.map(agent => {
+                return allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+            });
+
+            const ssr = recentAgentsData.filter(a => a.rarity === 'ssr').length;
+            const sr = recentAgentsData.filter(a => a.rarity === 'sr').length;
+            const r = recentAgentsData.filter(a => a.rarity === 'r').length;
+            
+            const totalScore = recentAgentsData.reduce((sum, a) => sum + (a.fashion_score || 0), 0);
+            const avgScore = recentAgentsData.length > 0 ? Math.round(totalScore / recentAgentsData.length) : 0;
+
+            return { ssr, sr, r, totalScore, avgScore, total: recentAgentsData.length };
+        }
+
+        function getSortedFilteredRecent() {
+            let filtered = [...recentlyViewed];
+            
+            // Apply rarity filter
+            if (recentFilterRarity !== 'all') {
+                filtered = filtered.filter(agent => {
+                    const fullAgent = allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+                    return fullAgent.rarity === recentFilterRarity;
+                });
+            }
+
+            // Apply sort
+            filtered.sort((a, b) => {
+                const agentA = allAgentsData.find(x => x.id === a.id) || agentsData.find(x => x.id === a.id) || a;
+                const agentB = allAgentsData.find(x => x.id === b.id) || agentsData.find(x => x.id === b.id) || b;
+
+                switch (recentSortType) {
+                    case 'rarity':
+                        const rarityOrder = { ssr: 3, sr: 2, r: 1 };
+                        return (rarityOrder[agentB.rarity] || 0) - (rarityOrder[agentA.rarity] || 0);
+                    case 'score':
+                        return (agentB.fashion_score || 0) - (agentA.fashion_score || 0);
+                    case 'time':
+                    default:
+                        return 0; // Already in chronological order (most recent first)
+                }
+            });
+
+            return { agents: filtered, total: recentlyViewed.length, filtered: filtered.length };
+        }
+
+        function applyRecentSort() {
+            recentSortType = document.getElementById('recentSortSelect').value;
+            renderRecentPanel();
+        }
+
+        function applyRecentFilter(rarity) {
+            recentFilterRarity = rarity;
+            
+            // Update filter pill styles
+            document.querySelectorAll('.recent-filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.dataset.rarity === rarity) {
+                    pill.classList.add('active');
+                }
+            });
+            
+            renderRecentPanel();
+        }
+
+        function updateRecentCountDisplay(total, filtered) {
+            const countDisplay = document.getElementById('recentCountDisplay');
+            if (total === 0) {
+                countDisplay.textContent = '';
+            } else if (filtered < total) {
+                countDisplay.textContent = `显示 ${filtered} / ${total} 个`;
+            } else {
+                countDisplay.textContent = `共 ${total} 个浏览记录`;
+            }
+        }
+
+        function exportRecent(format) {
+            const recentAgentsData = recentlyViewed.map(agent => {
+                return allAgentsData.find(a => a.id === agent.id) || agentsData.find(a => a.id === agent.id) || agent;
+            });
+
+            if (recentAgentsData.length === 0) {
+                showToast('浏览记录为空，无法导出');
+                return;
+            }
+
+            const stats = getRecentStats();
+            let content, filename, mimeType;
+
+            if (format === 'json') {
+                const exportData = {
+                    exportTime: new Date().toISOString(),
+                    totalCount: recentAgentsData.length,
+                    stats: {
+                        ssr: stats.ssr,
+                        sr: stats.sr,
+                        r: stats.r,
+                        avgScore: stats.avgScore,
+                        totalScore: stats.totalScore
+                    },
+                    agents: recentAgentsData.map((a, i) => ({
+                        id: a.id,
+                        name: a.name,
+                        rarity: a.rarity,
+                        fashion_score: a.fashion_score || 0,
+                        category: a.category || '',
+                        description: a.description || '',
+                        viewedAt: recentlyViewed[i]?.viewedAt || null
+                    }))
+                };
+                content = JSON.stringify(exportData, null, 2);
+                filename = `agent-street-recent-${new Date().toISOString().slice(0,10)}.json`;
+                mimeType = 'application/json';
+            } else if (format === 'markdown') {
+                const lines = [
+                    '# 🕐 Agent Street 最近浏览',
+                    '',
+                    `> 导出时间：${new Date().toLocaleString('zh-CN')}`,
+                    '',
+                    '## 📊 浏览统计',
+                    '',
+                    `| 稀有度 | 数量 |`,
+                    `|--------|------|`,
+                    `| 🟡 SSR | ${stats.ssr} |`,
+                    `| ⚪ SR  | ${stats.sr} |`,
+                    `| 🟤 R   | ${stats.r} |`,
+                    '',
+                    `**总时尚值：** ${stats.totalScore}  |  **平均时尚值：** ${stats.avgScore}`,
+                    '',
+                    '## 🔍 浏览列表',
+                    '',
+                ];
+                
+                recentAgentsData.forEach((a, i) => {
+                    const rarityIcon = a.rarity === 'ssr' ? '🟡' : a.rarity === 'sr' ? '⚪' : '🟤';
+                    const viewedAt = recentlyViewed[i]?.viewedAt ? new Date(recentlyViewed[i].viewedAt).toLocaleString('zh-CN') : '未知';
+                    lines.push(`${i + 1}. ${rarityIcon} **${a.name}** - 时尚值: ${a.fashion_score || 0}`);
+                    lines.push(`   - 浏览时间: ${viewedAt}`);
+                    if (a.category) lines.push(`   - 分类: ${a.category}`);
+                    if (a.description) lines.push(`   - ${a.description.substring(0, 50)}...`);
+                    lines.push('');
+                });
+                
+                content = lines.join('\n');
+                filename = `agent-street-recent-${new Date().toISOString().slice(0,10)}.md`;
+                mimeType = 'text/markdown';
+            }
+
+            // Create download
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast(`📥 已导出为 ${format.toUpperCase()}`);
         }
 
         function toggleFavoritePanel() {
