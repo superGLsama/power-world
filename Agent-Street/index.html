@@ -4723,6 +4723,175 @@
             background: rgba(255, 107, 107, 0.3);
         }
 
+        /* Quick Favorite Button (Day 44) */
+        .recent-card-favorite {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 50%;
+            color: #6B5CE7;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 0.3rem;
+        }
+
+        .recent-card-favorite:hover {
+            background: rgba(107, 92, 231, 0.3);
+            transform: scale(1.1);
+        }
+
+        .recent-card-favorite.favorited {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b8a;
+        }
+
+        .recent-card-favorite.favorited:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        /* Clear Confirm Modal (Day 44) */
+        .clear-confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .clear-confirm-modal.active {
+            display: flex;
+        }
+
+        .clear-confirm-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .clear-confirm-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .clear-confirm-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .clear-confirm-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .clear-confirm-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .clear-confirm-btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .clear-confirm-btn.cancel {
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .clear-confirm-btn.cancel:hover {
+            background: rgba(107, 92, 231, 0.3);
+        }
+
+        .clear-confirm-btn.confirm {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b8a;
+        }
+
+        .clear-confirm-btn.confirm:hover {
+            background: rgba(255, 107, 107, 0.4);
+        }
+
+        /* Batch Favorite Button (Day 44) */
+        .recent-batch-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-default);
+        }
+
+        .recent-batch-btn {
+            flex: 1;
+            padding: 0.7rem;
+            border: 1px solid var(--border-default);
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .recent-batch-btn:hover {
+            background: rgba(107, 92, 231, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .recent-batch-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .recent-batch-btn .count {
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
         /* Mobile Recent Panel */
         @media (max-width: 480px) {
             .recent-panel {
@@ -5711,6 +5880,25 @@
         </div>
         <div class="recent-panel-body" id="recentPanelBody">
             <!-- Recent items will be populated -->
+        </div>
+        <!-- Batch Actions (Day 44) -->
+        <div class="recent-batch-actions" id="recentBatchActions">
+            <button class="recent-batch-btn" id="batchFavoriteBtn" onclick="batchFavoriteFromRecent()">
+                ⭐ 一键收藏未收藏 <span class="count" id="batchFavoriteCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Clear Confirm Modal (Day 44) -->
+    <div class="clear-confirm-modal" id="clearConfirmModal">
+        <div class="clear-confirm-content">
+            <div class="clear-confirm-icon">🗑️</div>
+            <div class="clear-confirm-title">确认清空浏览记录？</div>
+            <div class="clear-confirm-desc">清空后将无法恢复，建议先导出备份</div>
+            <div class="clear-confirm-actions">
+                <button class="clear-confirm-btn cancel" onclick="closeClearConfirm()">取消</button>
+                <button class="clear-confirm-btn confirm" onclick="confirmClearRecent()">确认清空</button>
+            </div>
         </div>
     </div>
 
@@ -6865,6 +7053,9 @@
             // Update stats and count display
             updateRecentStats();
             updateRecentCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
+            
+            // Update batch favorite count (Day 44)
+            updateBatchFavoriteCount();
 
             if (recentListData.length === 0) {
                 body.innerHTML = `
@@ -6879,6 +7070,8 @@
 
             const recentList = recentListData.map(agent => {
                 const rarityClass = `rarity-${agent.rarity.toLowerCase()}`;
+                const isFavorited = favorites.some(f => f.id === agent.id);
+                const favoriteIcon = isFavorited ? '❤️' : '🤍';
                 return `
                     <div class="recent-card" onclick="openModal('${agent.id}')">
                         <div class="recent-card-avatar ${rarityClass}" data-rarity="${agent.rarity}">
@@ -6890,6 +7083,7 @@
                                 <span class="rarity-badge ${rarityClass}">${agent.rarity}</span>
                             </div>
                         </div>
+                        <button class="recent-card-favorite ${isFavorited ? 'favorited' : ''}" onclick="event.stopPropagation(); quickFavoriteFromRecent('${agent.id}', this)">${favoriteIcon}</button>
                         <button class="recent-card-remove" onclick="event.stopPropagation(); removeFromRecentlyViewed('${agent.id}')">✕</button>
                     </div>
                 `;
@@ -6938,11 +7132,118 @@
         function clearRecentlyViewed() {
             if (recentlyViewed.length === 0) return;
             
+            // Show confirm modal (Day 44)
+            document.getElementById('clearConfirmModal').classList.add('active');
+        }
+        
+        function closeClearConfirm() {
+            document.getElementById('clearConfirmModal').classList.remove('active');
+        }
+        
+        function confirmClearRecent() {
+            // Actually clear the data
             recentlyViewed = [];
             localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
             updateRecentBadge();
             renderRecentPanel();
             updateRecentStats();
+            updateBatchFavoriteCount();
+            closeClearConfirm();
+            
+            // Show notification
+            showNotification('浏览记录已清空', 'info');
+        }
+
+        // ========== Quick Favorite from Recent (Day 44) ==========
+        
+        function quickFavoriteFromRecent(agentId, btnElement) {
+            const agent = allAgentsData.find(a => a.id === agentId) || agentsData.find(a => a.id === agentId);
+            if (!agent) return;
+            
+            const isFavorited = favorites.some(f => f.id === agentId);
+            
+            if (isFavorited) {
+                // Remove from favorites
+                favorites = favorites.filter(f => f.id !== agentId);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                btnElement.classList.remove('favorited');
+                btnElement.textContent = '🤍';
+                updateFavoriteBadge();
+                updateBatchFavoriteCount();
+                showNotification(`已取消收藏 ${agent.name}`, 'info');
+            } else {
+                // Add to favorites
+                favorites.unshift({
+                    id: agent.id,
+                    name: agent.name,
+                    avatar: agent.avatar,
+                    rarity: agent.rarity,
+                    addedAt: new Date().toISOString()
+                });
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                btnElement.classList.add('favorited');
+                btnElement.textContent = '❤️';
+                updateFavoriteBadge();
+                updateBatchFavoriteCount();
+                
+                // Add animation feedback
+                btnElement.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    btnElement.style.transform = 'scale(1.1)';
+                }, 150);
+                
+                showNotification(`已收藏 ${agent.name}`, 'success');
+            }
+            
+            // Update favorite count in modal if open
+            updateFavoriteButton(agentId);
+        }
+        
+        function updateBatchFavoriteCount() {
+            const unFavoritedCount = recentlyViewed.filter(r => 
+                !favorites.some(f => f.id === r.id)
+            ).length;
+            
+            const countEl = document.getElementById('batchFavoriteCount');
+            const btnEl = document.getElementById('batchFavoriteBtn');
+            
+            if (countEl) {
+                countEl.textContent = unFavoritedCount;
+            }
+            if (btnEl) {
+                btnEl.disabled = unFavoritedCount === 0;
+            }
+        }
+        
+        function batchFavoriteFromRecent() {
+            const unFavoritedAgents = recentlyViewed.filter(r => 
+                !favorites.some(f => f.id === r.id)
+            );
+            
+            if (unFavoritedAgents.length === 0) {
+                showNotification('浏览记录都已收藏', 'info');
+                return;
+            }
+            
+            let addedCount = 0;
+            unFavoritedAgents.forEach(recent => {
+                const agent = allAgentsData.find(a => a.id === recent.id) || agentsData.find(a => a.id === recent.id);
+                if (agent && !favorites.some(f => f.id === agent.id)) {
+                    favorites.unshift({
+                        id: agent.id,
+                        name: agent.name,
+                        avatar: agent.avatar,
+                        rarity: agent.rarity,
+                        addedAt: new Date().toISOString()
+                    });
+                    addedCount++;
+                }
+            });
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoriteBadge();
+            renderRecentPanel();
+            showNotification(`已收藏 ${addedCount} 个Agent`, 'success');
         }
 
         // ========== Recent View Stats & Export (Day 43) ==========
