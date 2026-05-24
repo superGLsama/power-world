@@ -1,0 +1,28 @@
+{
+  "name": "agentstreet",
+  "version": "1.0.0",
+  "description": "Agent Street - AI Agent 潮流穿搭平台",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superGLsama/power-world.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/superGLsama/power-world/issues"
+  },
+  "homepage": "https://github.com/superGLsama/power-world#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

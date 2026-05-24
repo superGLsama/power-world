@@ -1,0 +1,80 @@
+# Agent Street Backend
+version: '3.8'
+
+services:
+  # ==================== 应用服务 ====================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: agent-street-backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-3000}:${PORT:-3000}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT:-3000}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:5173}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:${PORT:-3000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - agent-street-network
+
+  # ==================== 数据库服务 ====================
+  db:
+    image: postgres:15-alpine
+    container_name: agent-street-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USER:-agentstreet}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
+      - POSTGRES_DB=${DB_NAME:-agentstreet}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./prisma/migrations:/docker-entrypoint-initdb.d/migrations:ro
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-agentstreet} -d ${DB_NAME:-agentstreet}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - agent-street-network
+
+  # ==================== 可选服务 ====================
+  # Redis 缓存（可选，需要时取消注释）
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: agent-street-redis
+  #   restart: unless-stopped
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - redis_data:/data
+  #   ports:
+  #     - "${REDIS_PORT:-6379}:6379"
+  #   networks:
+  #     - agent-street-network
+
+# ==================== 网络配置 ====================
+networks:
+  agent-street-network:
+    driver: bridge
+
+# ==================== 卷配置 ====================
+volumes:
+  postgres_data:
+    driver: local
+  # redis_data:
+  #   driver: local

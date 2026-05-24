@@ -1,0 +1,30 @@
+# Agent Street Backend Dockerfile (Development)
+# 带热重载的开发环境
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# 安装依赖
+RUN apk add --no-cache wget
+
+# 复制 package 文件
+COPY package*.json ./
+
+# 安装所有依赖
+RUN npm install
+
+# 复制 Prisma
+COPY prisma ./prisma
+
+# 生成 Prisma Client
+RUN npx prisma generate
+
+# 复制源代码
+COPY src ./src
+
+# 暴露端口
+EXPOSE ${PORT:-3000}
+
+# 启动命令（带 --watch 热重载）
+CMD ["node", "--watch", "src/index.js"]

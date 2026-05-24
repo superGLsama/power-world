@@ -1,0 +1,71 @@
+# Agent Street Backend
+version: '3.8'
+
+services:
+  # ==================== 开发环境 ====================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: agent-street-backend-dev
+    restart: "no"
+    ports:
+      - "${BACKEND_PORT:-3000}:${PORT:-3000}"
+    environment:
+      - NODE_ENV=development
+      - PORT=${PORT:-3000}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://agentstreet:changeme@db:5432/agentstreet}
+      - JWT_SECRET=${JWT_SECRET:-dev-secret-change-in-production}
+      - CORS_ORIGIN=http://localhost:5173
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src:ro
+      - ./prisma:/app/prisma:ro
+    command: node --watch src/index.js
+    networks:
+      - agent-street-network
+
+  # ==================== 开发数据库 ====================
+  db:
+    image: postgres:15-alpine
+    container_name: agent-street-db-dev
+    restart: "no"
+    environment:
+      - POSTGRES_USER=agentstreet
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_DB=agentstreet
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentstreet -d agentstreet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - agent-street-network
+
+  # ==================== 开发工具 ====================
+  adminer:
+    image: adminer:latest
+    container_name: agent-street-adminer
+    restart: "no"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - agent-street-network
+
+networks:
+  agent-street-network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+    driver: local
