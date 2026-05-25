@@ -502,6 +502,26 @@ AgentCardTemplate.innerHTML = `
             .card-name { font-size: 0.9rem; }
             .card-stats { grid-template-columns: repeat(2, 1fr); }
         }
+        
+        /* Day 51: 无障碍动画偏好支持 */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+            
+            /* 禁用装饰性动画 */
+            .card-particles { display: none !important; }
+            
+            /* 保持功能但禁用动画 */
+            .card { transition: none !important; }
+            .card:hover { transform: none !important; box-shadow: inherit; }
+            .card:hover .card-avatar { transform: none !important; }
+            
+            /* 重试按钮禁用悬停效果 */
+            .retry-btn:hover { transform: none !important; }
+        }
     </style>
     
     <!-- 主卡片 -->

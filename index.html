@@ -40,6 +40,57 @@
             /* Transitions */
             --transition-fast: 0.2s;
             --transition-normal: 0.3s;
+            
+            /* Day 51: Animation Control - 无障碍动画偏好支持 */
+            --animation-enabled: 1;  /* 1 = 正常动画, 0 = 禁用动画 */
+            --transition-duration-multiplier: 1;  /* 动画时长倍数 */
+        }
+        
+        /* Day 51: 无障碍动画偏好支持 - 尊重用户选择 */
+        @media (prefers-reduced-motion: reduce) {
+            :root {
+                --animation-enabled: 0;
+                --transition-duration-multiplier: 0.001;  /* 极短过渡，保持功能可用 */
+            }
+            
+            /* 禁用所有动画 */
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+            
+            /* 保留功能性过渡（可选） */
+            .scroll-reveal,
+            .scroll-reveal-left,
+            .scroll-reveal-right,
+            .scroll-reveal-scale {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            /* 禁用装饰性动画但保持信息可见 */
+            .particles-container,
+            .card-3d-glare,
+            .particle {
+                display: none !important;
+            }
+            
+            /* 卡片立即显示 */
+            .agent-card {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            /* Modal 立即显示 */
+            .modal-content,
+            .compare-panel,
+            .recent-panel,
+            .settings-panel {
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
 
         /* Light Theme */
