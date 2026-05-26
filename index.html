@@ -4266,6 +4266,224 @@
             gap: 1rem;
         }
 
+        /* ========== Import Preview Modal (Day 52) ========== */
+        .import-preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .import-preview-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .import-preview-content {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .import-preview-modal.active .import-preview-content {
+            transform: scale(1);
+        }
+
+        .import-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .import-preview-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .import-preview-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .import-preview-close:hover {
+            color: var(--text-primary);
+        }
+
+        .import-preview-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .import-preview-info strong {
+            color: var(--accent-secondary);
+        }
+
+        .import-data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .import-data-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 10px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .import-data-item:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .import-data-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .import-data-item-content {
+            flex: 1;
+        }
+
+        .import-data-item-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .import-data-item-stats {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .import-data-item-change {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .import-data-item-change.increase {
+            background: rgba(0, 255, 209, 0.2);
+            color: var(--accent-secondary);
+        }
+
+        .import-data-item-change.decrease {
+            background: rgba(255, 107, 138, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .import-data-item-change.same {
+            background: rgba(136, 136, 136, 0.2);
+            color: var(--text-muted);
+        }
+
+        .import-strategy-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .import-strategy-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .import-strategy-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .import-strategy-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .import-strategy-option:hover {
+            border-color: var(--accent-primary);
+            background: rgba(107, 92, 231, 0.1);
+        }
+
+        .import-strategy-option.selected {
+            border-color: var(--accent-primary);
+            background: rgba(107, 92, 231, 0.2);
+        }
+
+        .import-strategy-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .import-strategy-option-content {
+            flex: 1;
+        }
+
+        .import-strategy-option-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .import-strategy-option-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .import-preview-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .import-preview-buttons .settings-action-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
         /* Mobile Settings Panel */
         @media (max-width: 480px) {
             .settings-panel {
@@ -7051,7 +7269,54 @@
 
             <!-- 使用说明 -->
             <div class="settings-info-box">
-                <p>💡 <strong>备份建议</strong>：定期导出数据可防止数据丢失。导入数据时会覆盖现有数据，请谨慎操作。</p>
+                <p>💡 <strong>备份建议</strong>：定期导出数据可防止数据丢失。导入时会显示预览，支持选择性导入和智能合并，不用担心覆盖现有数据。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Preview Modal (Day 52) -->
+    <div class="import-preview-modal" id="importPreviewModal">
+        <div class="import-preview-content">
+            <div class="import-preview-header">
+                <div class="import-preview-title">
+                    <span>📥</span> 导入预览
+                </div>
+                <button class="import-preview-close" onclick="hideImportPreview()">✕</button>
+            </div>
+            
+            <div class="import-preview-info" id="importPreviewInfo">
+                备份时间：<strong>--</strong>
+            </div>
+            
+            <div class="import-data-list" id="importDataList">
+                <!-- 动态生成 -->
+            </div>
+            
+            <div class="import-strategy-section" id="importStrategySection">
+                <div class="import-strategy-title">导入策略</div>
+                <div class="import-strategy-options">
+                    <label class="import-strategy-option selected" data-strategy="merge">
+                        <input type="radio" name="importStrategy" value="merge" checked>
+                        <div class="import-strategy-option-content">
+                            <div class="import-strategy-option-name">🔄 智能合并</div>
+                            <div class="import-strategy-option-desc">合并数据，保留现有数据，新增内容追加</div>
+                        </div>
+                    </label>
+                    <label class="import-strategy-option" data-strategy="replace">
+                        <input type="radio" name="importStrategy" value="replace">
+                        <div class="import-strategy-option-content">
+                            <div class="import-strategy-option-name">⚡ 全部覆盖</div>
+                            <div class="import-strategy-option-desc">用备份数据完全替换现有数据（谨慎使用）</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="import-preview-buttons">
+                <button class="settings-action-btn secondary" onclick="hideImportPreview()">取消</button>
+                <button class="settings-action-btn primary" onclick="confirmImport()">
+                    <span>✅</span> 确认导入
+                </button>
             </div>
         </div>
     </div>
@@ -12226,6 +12491,10 @@
             showToast('✅ 数据导出成功！');
         }
 
+        // ========== Import Preview State (Day 52) ==========
+        let pendingImportData = null;  // 待导入的备份数据
+        let selectedImportKeys = ['likedAgents', 'followedAgents', 'favoriteAgents', 'recentlyViewed', 'userStats', 'unlockedAchievements'];
+        
         function importUserData(input) {
             const file = input.files[0];
             if (!file) return;
@@ -12240,42 +12509,12 @@
                         throw new Error('无效的备份文件格式');
                     }
 
-                    // 导入数据
-                    if (data.theme) localStorage.setItem('theme', data.theme);
-                    if (data.likedAgents) {
-                        likedAgents = data.likedAgents;
-                        localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
-                    }
-                    if (data.followedAgents) {
-                        followedAgents = data.followedAgents;
-                        localStorage.setItem('followedAgents', JSON.stringify(followedAgents));
-                    }
-                    if (data.favoriteAgents) {
-                        favoriteAgents = data.favoriteAgents;
-                        localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
-                    }
-                    if (data.recentlyViewed) {
-                        recentlyViewed = data.recentlyViewed;
-                        localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
-                    }
-                    if (data.userStats) {
-                        userStats = data.userStats;
-                        localStorage.setItem('userStats', JSON.stringify(userStats));
-                    }
-                    if (data.unlockedAchievements) {
-                        unlockedAchievements = data.unlockedAchievements;
-                        localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
-                    }
-
-                    // 更新UI
-                    initTheme();
-                    updateFavoriteBadge();
-                    updateRecentBadge();
-                    updateAchievementBadge();
-                    updateSettingsStats();
-                    loadTabData(currentTab);
-
-                    showToast('✅ 数据导入成功！');
+                    // 保存待导入数据
+                    pendingImportData = data;
+                    
+                    // 显示导入预览
+                    showImportPreview(data);
+                    
                 } catch (err) {
                     showToast('❌ 导入失败：' + err.message);
                     console.error('Import error:', err);
@@ -12285,6 +12524,203 @@
             
             // 清空input以允许重复选择同一文件
             input.value = '';
+        }
+
+        // Day 52: 显示导入预览 Modal
+        function showImportPreview(data) {
+            // 更新备份信息
+            const exportDate = new Date(data.exportTime);
+            const formattedDate = exportDate.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('importPreviewInfo').innerHTML = 
+                `备份时间：<strong>${formattedDate}</strong>（版本 ${data.version}）`;
+            
+            // 生成数据列表
+            const dataList = document.getElementById('importDataList');
+            const dataTypes = [
+                { key: 'likedAgents', name: '❤️ 点赞记录', icon: '❤️' },
+                { key: 'followedAgents', name: '👁️ 关注记录', icon: '👁️' },
+                { key: 'favoriteAgents', name: '⭐ 收藏记录', icon: '⭐' },
+                { key: 'recentlyViewed', name: '📜 浏览历史', icon: '📜' },
+                { key: 'unlockedAchievements', name: '🏆 已解锁成就', icon: '🏆' },
+                { key: 'userStats', name: '📊 用户统计', icon: '📊' }
+            ];
+
+            dataList.innerHTML = dataTypes.map(item => {
+                const importCount = data[item.key] ? data[item.key].length : 0;
+                const currentCount = item.key === 'userStats' ? 1 : 
+                    (item.key === 'likedAgents' ? likedAgents.length :
+                     item.key === 'followedAgents' ? followedAgents.length :
+                     item.key === 'favoriteAgents' ? favoriteAgents.length :
+                     item.key === 'recentlyViewed' ? recentlyViewed.length :
+                     item.key === 'unlockedAchievements' ? unlockedAchievements.length : 0);
+                
+                const change = importCount - currentCount;
+                const changeClass = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'same';
+                const changeText = change > 0 ? `+${change}` : change < 0 ? `${change}` : '无变化';
+                const hasData = data[item.key] && importCount > 0;
+                
+                return `
+                    <div class="import-data-item">
+                        <input type="checkbox" id="import_${item.key}" 
+                               value="${item.key}" 
+                               ${hasData ? 'checked' : 'disabled'}
+                               onchange="updateSelectedImportKeys()">
+                        <div class="import-data-item-content">
+                            <div class="import-data-item-name">${item.name}</div>
+                            <div class="import-data-item-stats">
+                                备份: ${importCount} 条${currentCount > 0 ? `，当前: ${currentCount} 条` : ''}
+                            </div>
+                        </div>
+                        <div class="import-data-item-change ${changeClass}">${changeText}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // 重置策略选择
+            selectedImportKeys = ['likedAgents', 'followedAgents', 'favoriteAgents', 'recentlyViewed', 'unlockedAchievements', 'userStats'];
+            document.querySelectorAll('input[name="importStrategy"]').forEach(radio => {
+                radio.checked = radio.value === 'merge';
+                radio.closest('.import-strategy-option').classList.toggle('selected', radio.value === 'merge');
+            });
+
+            // 绑定策略切换事件
+            document.querySelectorAll('input[name="importStrategy"]').forEach(radio => {
+                radio.onchange = function() {
+                    document.querySelectorAll('.import-strategy-option').forEach(opt => {
+                        opt.classList.toggle('selected', opt.dataset.strategy === this.value);
+                    });
+                };
+            });
+
+            // 显示 Modal
+            document.getElementById('importPreviewModal').classList.add('active');
+        }
+
+        // Day 52: 更新选中的导入数据类型
+        function updateSelectedImportKeys() {
+            const checkboxes = document.querySelectorAll('#importDataList input[type="checkbox"]:not(:disabled)');
+            selectedImportKeys = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+        }
+
+        // Day 52: 隐藏导入预览
+        function hideImportPreview() {
+            document.getElementById('importPreviewModal').classList.remove('active');
+            pendingImportData = null;
+        }
+
+        // Day 52: 确认导入
+        function confirmImport() {
+            if (!pendingImportData) return;
+            
+            const strategy = document.querySelector('input[name="importStrategy"]:checked').value;
+            const data = pendingImportData;
+
+            try {
+                // 应用选择的数据类型
+                const keysToImport = selectedImportKeys.filter(key => data[key]);
+
+                keysToImport.forEach(key => {
+                    if (strategy === 'merge') {
+                        // 智能合并
+                        if (key === 'userStats') {
+                            // 用户统计直接覆盖
+                            userStats = data.userStats;
+                            localStorage.setItem('userStats', JSON.stringify(userStats));
+                        } else {
+                            // 其他数据合并去重
+                            const existing = key === 'likedAgents' ? likedAgents :
+                                            key === 'followedAgents' ? followedAgents :
+                                            key === 'favoriteAgents' ? favoriteAgents :
+                                            key === 'recentlyViewed' ? recentlyViewed :
+                                            key === 'unlockedAchievements' ? unlockedAchievements : [];
+                            
+                            // 根据数据结构类型选择合并方式
+                            const imported = data[key];
+                            let merged = [...existing];
+                            
+                            if (imported.length > 0) {
+                                // 检查是否为对象数组（带 id 字段）
+                                if (typeof imported[0] === 'object' && 'id' in imported[0]) {
+                                    // 对象数组：去重合并
+                                    const existingIds = existing.map(item => item.id);
+                                    merged = [...existing, ...imported.filter(item => !existingIds.includes(item.id))];
+                                } else {
+                                    // 普通数组：去重合并
+                                    merged = [...new Set([...existing, ...imported])];
+                                }
+                            }
+                            
+                            // 更新对应的全局变量和存储
+                            if (key === 'likedAgents') {
+                                likedAgents = merged;
+                                localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
+                            } else if (key === 'followedAgents') {
+                                followedAgents = merged;
+                                localStorage.setItem('followedAgents', JSON.stringify(followedAgents));
+                            } else if (key === 'favoriteAgents') {
+                                favoriteAgents = merged;
+                                localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
+                            } else if (key === 'recentlyViewed') {
+                                recentlyViewed = merged;
+                                localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+                            } else if (key === 'unlockedAchievements') {
+                                unlockedAchievements = merged;
+                                localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                            }
+                        }
+                    } else {
+                        // 全部覆盖
+                        if (key === 'userStats') {
+                            userStats = data.userStats;
+                            localStorage.setItem('userStats', JSON.stringify(userStats));
+                        } else if (key === 'likedAgents') {
+                            likedAgents = data.likedAgents;
+                            localStorage.setItem('likedAgents', JSON.stringify(likedAgents));
+                        } else if (key === 'followedAgents') {
+                            followedAgents = data.followedAgents;
+                            localStorage.setItem('followedAgents', JSON.stringify(followedAgents));
+                        } else if (key === 'favoriteAgents') {
+                            favoriteAgents = data.favoriteAgents;
+                            localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
+                        } else if (key === 'recentlyViewed') {
+                            recentlyViewed = data.recentlyViewed;
+                            localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+                        } else if (key === 'unlockedAchievements') {
+                            unlockedAchievements = data.unlockedAchievements;
+                            localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                        }
+                    }
+                });
+
+                // 应用主题
+                if (data.theme) {
+                    localStorage.setItem('theme', data.theme);
+                    initTheme();
+                }
+
+                // 更新UI
+                updateFavoriteBadge();
+                updateRecentBadge();
+                updateAchievementBadge();
+                updateSettingsStats();
+                loadTabData(currentTab);
+
+                // 关闭预览
+                hideImportPreview();
+
+                showToast(`✅ 成功导入 ${keysToImport.length} 类数据！`);
+            } catch (err) {
+                showToast('❌ 导入失败：' + err.message);
+                console.error('Import error:', err);
+            }
         }
 
         function showResetConfirm() {
