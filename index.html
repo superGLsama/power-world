@@ -2341,7 +2341,7 @@
 
         .search-input {
             width: 100%;
-            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            padding: 0.6rem 5rem 0.6rem 2.5rem;  /* 右侧padding给键盘提示留空间 */
             background: rgba(107, 92, 231, 0.1);
             border: 1px solid var(--border-default);
             border-radius: 20px;
@@ -2502,6 +2502,52 @@
         .suggestion-item .delete-icon:hover {
             opacity: 1;
             color: var(--accent-danger);
+        }
+
+        /* Day 53: 搜索建议键盘导航 - 选中状态样式 */
+        .suggestion-item.selected {
+            background: rgba(107, 92, 231, 0.35) !important;
+            border-color: var(--accent-primary) !important;
+            color: var(--text-primary) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 0 0 2px rgba(107, 92, 231, 0.3);
+        }
+
+        .suggestion-item.history.selected {
+            background: rgba(0, 255, 209, 0.25) !important;
+            border-color: var(--accent-secondary) !important;
+            box-shadow: 0 0 0 2px rgba(0, 255, 209, 0.3);
+        }
+
+        .suggestion-item.hot.selected {
+            background: rgba(255, 107, 138, 0.25) !important;
+            border-color: var(--accent-danger) !important;
+            box-shadow: 0 0 0 2px rgba(255, 107, 138, 0.3);
+        }
+
+        /* 键盘导航提示 - 默认隐藏，获得焦点时显示 */
+        .search-keyboard-hint {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: none;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .search-box:focus-within .search-keyboard-hint {
+            display: flex;
+        }
+
+        .search-keyboard-hint kbd {
+            background: rgba(107, 92, 231, 0.15);
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            border: 1px solid rgba(107, 92, 231, 0.3);
         }
 
         .empty-history {
@@ -7459,6 +7505,12 @@
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="searchInput" placeholder="搜索Agent名称..." autocomplete="off">
+                    <!-- Day 53: 搜索键盘导航提示 -->
+                    <div class="search-keyboard-hint">
+                        <span><kbd>↑↓</kbd> 选择</span>
+                        <span><kbd>Tab</kbd> 跳转</span>
+                        <span><kbd>Enter</kbd> 确认</span>
+                    </div>
                     <div class="search-suggestions" id="searchSuggestions">
                         <div class="suggestion-section" id="historySection" style="display: none;">
                             <div class="suggestion-header">
@@ -10457,6 +10509,50 @@
             const suggestions = document.getElementById('searchSuggestions');
             let isMouseInSuggestions = false;
 
+            // Day 53: 搜索建议键盘导航 - 状态变量
+            let selectedSuggestionIndex = -1;
+            let suggestionItems = [];
+
+            // Day 53: 获取所有建议项
+            function updateSuggestionItems() {
+                suggestionItems = Array.from(suggestions.querySelectorAll('.suggestion-item:not(.suggestion-clear)'));
+            }
+
+            // Day 53: 更新选中状态
+            function updateSelection() {
+                suggestionItems.forEach((item, index) => {
+                    if (index === selectedSuggestionIndex) {
+                        item.classList.add('selected');
+                        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    } else {
+                        item.classList.remove('selected');
+                    }
+                });
+            }
+
+            // Day 53: 选中建议项
+            function selectSuggestion(index) {
+                if (suggestionItems.length === 0) return;
+                
+                // 循环选择
+                if (index < 0) index = suggestionItems.length - 1;
+                if (index >= suggestionItems.length) index = 0;
+                
+                selectedSuggestionIndex = index;
+                updateSelection();
+            }
+
+            // Day 53: 执行选中建议的搜索
+            function executeSelectedSuggestion() {
+                if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestionItems.length) {
+                    const selectedItem = suggestionItems[selectedSuggestionIndex];
+                    const keyword = selectedItem.querySelector('span:last-child')?.textContent || selectedItem.textContent;
+                    if (keyword && !keyword.includes('✕')) {
+                        searchWithKeyword(keyword.trim());
+                    }
+                }
+            }
+
             // Day 7: 使用抽取的 debounce 工具函数（替代内联写法）
             const debouncedSearch = debounce((value) => {
                 currentSearch = value;
@@ -10466,6 +10562,11 @@
             searchInput.addEventListener('input', (e) => {
                 const value = e.target.value.trim();
                 debouncedSearch(value);
+                
+                // 重置选中状态
+                selectedSuggestionIndex = -1;
+                updateSuggestionItems();
+                suggestionItems.forEach(item => item.classList.remove('selected'));
                 
                 // 显示/隐藏搜索建议
                 if (value.length === 0) {
@@ -10478,19 +10579,55 @@
             searchInput.addEventListener('focus', () => {
                 if (searchInput.value.trim().length === 0) {
                     showSearchSuggestions();
+                    updateSuggestionItems();
+                    selectedSuggestionIndex = -1;
                 }
             });
 
+            // Day 53: 增强键盘导航支持
             searchInput.addEventListener('keydown', (e) => {
+                // 更新建议项列表
+                updateSuggestionItems();
+                
                 if (e.key === 'Escape') {
                     clearFilters();
                     hideSearchSuggestions();
                     searchInput.blur();
+                    selectedSuggestionIndex = -1;
                 } else if (e.key === 'Enter') {
-                    const value = searchInput.value.trim();
-                    if (value) {
-                        addSearchHistory(value);
-                        hideSearchSuggestions();
+                    // 如果有选中的建议，执行它；否则保存当前输入
+                    if (selectedSuggestionIndex >= 0) {
+                        executeSelectedSuggestion();
+                    } else {
+                        const value = searchInput.value.trim();
+                        if (value) {
+                            addSearchHistory(value);
+                        }
+                    }
+                    hideSearchSuggestions();
+                    selectedSuggestionIndex = -1;
+                } else if (e.key === 'ArrowDown') {
+                    // 向下导航
+                    e.preventDefault();
+                    if (suggestions.classList.contains('active') || searchInput.value.trim().length === 0) {
+                        selectSuggestion(selectedSuggestionIndex + 1);
+                        if (!suggestions.classList.contains('active')) {
+                            showSearchSuggestions();
+                        }
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    // 向上导航
+                    e.preventDefault();
+                    selectSuggestion(selectedSuggestionIndex - 1);
+                    if (!suggestions.classList.contains('active')) {
+                        showSearchSuggestions();
+                    }
+                } else if (e.key === 'Tab') {
+                    // Tab键选择下一个建议
+                    e.preventDefault();
+                    selectSuggestion(selectedSuggestionIndex + 1);
+                    if (!suggestions.classList.contains('active')) {
+                        showSearchSuggestions();
                     }
                 }
             });
