@@ -3244,6 +3244,183 @@
             }
         }
 
+        /* ========== Day 55: Modal Keyboard Navigation ========== */
+        /* Modal Navigation Arrows */
+        .modal-nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(107, 92, 231, 0.3);
+            border: 1px solid rgba(107, 92, 231, 0.5);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-overlay.active .modal-nav-arrow {
+            opacity: 0.7;
+            pointer-events: auto;
+        }
+
+        .modal-nav-arrow:hover {
+            opacity: 1;
+            background: rgba(107, 92, 231, 0.6);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 20px rgba(107, 92, 231, 0.5);
+        }
+
+        .modal-nav-arrow:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .modal-nav-arrow.prev {
+            left: -60px;
+        }
+
+        .modal-nav-arrow.next {
+            right: -60px;
+        }
+
+        /* Navigation arrow disabled state */
+        .modal-nav-arrow.disabled {
+            opacity: 0.3 !important;
+            cursor: not-allowed;
+            pointer-events: none !important;
+        }
+
+        /* Mobile navigation arrows */
+        @media (max-width: 768px) {
+            .modal-nav-arrow {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+                opacity: 0.8;
+            }
+
+            .modal-nav-arrow.prev {
+                left: 10px;
+            }
+
+            .modal-nav-arrow.next {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-nav-arrow {
+                top: auto;
+                bottom: 100px;
+                transform: none;
+            }
+
+            .modal-nav-arrow.prev {
+                left: 20px;
+                bottom: 90px;
+            }
+
+            .modal-nav-arrow.next {
+                right: 20px;
+                bottom: 90px;
+            }
+
+            .modal-nav-arrow:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Modal Navigation Hint */
+        .modal-nav-hint {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #B8B5FF;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-nav-hint {
+            opacity: 1;
+        }
+
+        .modal-nav-hint kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 20px;
+            padding: 0 6px;
+            background: rgba(107, 92, 231, 0.3);
+            border: 1px solid rgba(107, 92, 231, 0.5);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.7rem;
+        }
+
+        /* Modal Position Indicator */
+        .modal-position-indicator {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(107, 92, 231, 0.2);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 15px;
+            font-size: 0.7rem;
+            color: #B8B5FF;
+            display: none;
+        }
+
+        .modal-overlay.active .modal-position-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .modal-position-indicator .current {
+            color: #00FFD1;
+            font-weight: 600;
+        }
+
+        /* Modal Switch Animation */
+        @keyframes modalSwitchLeft {
+            0% { opacity: 1; transform: scale(1) translateX(0); }
+            50% { opacity: 0.5; transform: scale(0.95) translateX(-20px); }
+            100% { opacity: 1; transform: scale(1) translateX(0); }
+        }
+
+        @keyframes modalSwitchRight {
+            0% { opacity: 1; transform: scale(1) translateX(0); }
+            50% { opacity: 0.5; transform: scale(0.95) translateX(20px); }
+            100% { opacity: 1; transform: scale(1) translateX(0); }
+        }
+
+        .modal-content.switching-left {
+            animation: modalSwitchLeft 0.3s ease;
+        }
+
+        .modal-content.switching-right {
+            animation: modalSwitchRight 0.3s ease;
+        }
+
         /* Card clickable cursor */
         .outfit-card {
             cursor: pointer;
@@ -7380,18 +7557,20 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35, Day 55) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div class="hint-section-title">🔍 导航</div>
         <div><kbd>J</kbd>/<kbd>↓</kbd> 下一卡片</div>
         <div><kbd>K</kbd>/<kbd>↑</kbd> 上一卡片</div>
         <div><kbd>Enter</kbd> 打开详情</div>
+        <div class="hint-section-title">📱 详情弹窗</div>
+        <div><kbd>←</kbd>/<kbd>→</kbd> 切换 Agent</div>
         <div class="hint-section-title">⚡ 操作</div>
         <div><kbd>/</kbd> 搜索</div>
         <div><kbd>F</kbd> 收藏</div>
         <div><kbd>C</kbd> 对比</div>
-        <div class="hint-section-title">📱 面板</div>
+        <div class="hint-section-title">📋 面板</div>
         <div><kbd>L</kbd> 收藏夹</div>
         <div><kbd>I</kbd> 成就</div>
         <div><kbd>R</kbd> 历史</div>
@@ -7613,7 +7792,18 @@
     </div>
 
     <div id="agent-modal" class="modal-overlay">
+        <!-- Day 55: Modal Navigation -->
+        <button class="modal-nav-arrow prev" id="modalPrevBtn" onclick="navigateModal('prev')">‹</button>
+        <button class="modal-nav-arrow next" id="modalNextBtn" onclick="navigateModal('next')">›</button>
+        
         <div class="modal-content">
+            <!-- Day 55: Position Indicator -->
+            <div class="modal-position-indicator" id="modalPositionIndicator">
+                <span class="current" id="modalPositionCurrent">1</span>
+                <span>/</span>
+                <span class="total" id="modalPositionTotal">10</span>
+            </div>
+            
             <div class="modal-header">
                 <button class="modal-close" onclick="closeModal()">✕</button>
                 <div class="modal-avatar" id="modal-avatar">🤖</div>
@@ -7708,6 +7898,12 @@
                     <button class="modal-btn modal-btn-secondary" onclick="shareAgent()">
                         <span>📤</span> 分享
                     </button>
+                </div>
+                
+                <!-- Day 55: Modal Keyboard Navigation Hint -->
+                <div class="modal-nav-hint">
+                    <span><kbd>←</kbd><kbd>→</kbd> 切换 Agent</span>
+                    <span><kbd>Esc</kbd> 关闭</span>
                 </div>
             </div>
         </div>
@@ -10920,9 +11116,135 @@
             // 加载评论 (Day 18)
             loadAgentReviews(agent.id);
 
+            // Day 55: 更新导航状态
+            updateModalNavigationState();
+
             // 显示弹窗
             modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        // ========== Day 55: Modal Keyboard Navigation Functions ==========
+        let currentModalIndex = -1; // 当前在列表中的索引
+
+        function updateModalNavigationState() {
+            if (!currentModalAgent) return;
+            
+            // 找到当前Agent在可见列表中的索引
+            const visibleAgents = getVisibleAgents();
+            currentModalIndex = visibleAgents.findIndex(a => a.id === currentModalAgent.id);
+            
+            // 更新位置指示器
+            const positionIndicator = document.getElementById('modalPositionIndicator');
+            const positionCurrent = document.getElementById('modalPositionCurrent');
+            const positionTotal = document.getElementById('modalPositionTotal');
+            
+            if (visibleAgents.length > 1) {
+                positionIndicator.style.display = 'flex';
+                positionCurrent.textContent = currentModalIndex + 1;
+                positionTotal.textContent = visibleAgents.length;
+            } else {
+                positionIndicator.style.display = 'none';
+            }
+            
+            // 更新导航按钮状态
+            const prevBtn = document.getElementById('modalPrevBtn');
+            const nextBtn = document.getElementById('modalNextBtn');
+            
+            prevBtn.classList.toggle('disabled', currentModalIndex <= 0);
+            nextBtn.classList.toggle('disabled', currentModalIndex >= visibleAgents.length - 1);
+        }
+
+        function getVisibleAgents() {
+            // 获取当前可见的Agent列表（考虑筛选和搜索条件）
+            let agents = [...agentsData];
+            
+            // 应用搜索筛选
+            if (currentSearch) {
+                const search = currentSearch.toLowerCase();
+                agents = agents.filter(a => a.name.toLowerCase().includes(search));
+            }
+            
+            // 应用稀有度筛选
+            if (currentRarity !== 'all') {
+                agents = agents.filter(a => a.rarity === currentRarity);
+            }
+            
+            // 应用标签筛选 (Day 7)
+            if (currentTags.length > 0) {
+                agents = agents.filter(a => 
+                    currentTags.every(tag => a.tags && a.tags.includes(tag))
+                );
+            }
+            
+            return agents;
+        }
+
+        function navigateModal(direction) {
+            const visibleAgents = getVisibleAgents();
+            if (visibleAgents.length <= 1) return;
+            
+            let newIndex = currentModalIndex;
+            
+            if (direction === 'prev') {
+                newIndex = Math.max(0, currentModalIndex - 1);
+            } else {
+                newIndex = Math.min(visibleAgents.length - 1, currentModalIndex + 1);
+            }
+            
+            if (newIndex === currentModalIndex) return;
+            
+            // 添加切换动画
+            const modalContent = document.querySelector('#agent-modal .modal-content');
+            modalContent.classList.remove('switching-left', 'switching-right');
+            // 触发重排以重新播放动画
+            void modalContent.offsetWidth;
+            modalContent.classList.add(direction === 'prev' ? 'switching-left' : 'switching-right');
+            
+            // 打开新的Agent详情
+            const newAgent = visibleAgents[newIndex];
+            currentModalAgent = newAgent;
+            
+            // 更新弹窗内容
+            document.getElementById('modal-avatar').textContent = newAgent.avatar;
+            document.getElementById('modal-avatar').dataset.rarity = newAgent.rarity;
+            document.getElementById('modal-name').textContent = newAgent.name;
+            
+            const rarityBadge = document.getElementById('modal-rarity');
+            rarityBadge.textContent = newAgent.rarity === 'ssr' ? 'SSR' : newAgent.rarity === 'sr' ? 'SR' : 'R';
+            rarityBadge.className = `modal-rarity-badge ${newAgent.rarity}`;
+
+            document.getElementById('modal-score').textContent = newAgent.score;
+            document.getElementById('modal-likes').textContent = newAgent.likes;
+            document.getElementById('modal-items-count').textContent = newAgent.items.length;
+
+            // 填充装备
+            const itemsContainer = document.getElementById('modal-items');
+            itemsContainer.innerHTML = newAgent.items.map(item => `
+                <div class="modal-item" title="${item}">${item}</div>
+            `).join('');
+
+            // 填充标签
+            const tagsContainer = document.getElementById('modal-tags');
+            tagsContainer.innerHTML = newAgent.tags.map(tag => `
+                <span class="modal-tag">${tag}</span>
+            `).join('');
+
+            // 更新按钮状态
+            updateFollowButton(newAgent.id);
+            updateFavoriteButton(newAgent.id);
+            loadAgentReviews(newAgent.id);
+
+            // 添加到最近浏览
+            addToRecentlyViewed(newAgent);
+
+            // 更新位置指示器
+            updateModalNavigationState();
+            
+            // 动画结束后移除类
+            setTimeout(() => {
+                modalContent.classList.remove('switching-left', 'switching-right');
+            }, 300);
         }
 
         // ========== Review Functions (Day 18) ==========
@@ -11506,6 +11828,22 @@
                 if (e.key === '?') {
                     showKeyboardHint();
                     return;
+                }
+
+                // ========== Day 55: Modal Keyboard Navigation ==========
+                // ← / → - 在详情弹窗中切换 Agent
+                const modal = document.getElementById('agent-modal');
+                if (modal.classList.contains('active')) {
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        navigateModal('prev');
+                        return;
+                    }
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        navigateModal('next');
+                        return;
+                    }
                 }
 
                 // 'Escape' - 关闭弹窗/面板
