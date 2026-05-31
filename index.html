@@ -5522,6 +5522,166 @@
             transform: scale(1.1);
         }
 
+        /* ========== Favorite Batch Selection (Day 56) ========== */
+        .favorite-panel-header {
+            position: relative;
+        }
+
+        .favorite-batch-toolbar {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.95), rgba(255, 107, 138, 0.9));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            z-index: 10;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .favorite-batch-toolbar.active {
+            display: flex;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .favorite-batch-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .favorite-batch-info .count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .favorite-batch-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .favorite-batch-btn {
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .favorite-batch-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .favorite-batch-btn.delete:hover {
+            background: rgba(255, 107, 107, 0.4);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+
+        .favorite-batch-btn.select-all {
+            background: rgba(0, 255, 209, 0.2);
+            border-color: rgba(0, 255, 209, 0.3);
+        }
+
+        .favorite-batch-btn.select-all:hover {
+            background: rgba(0, 255, 209, 0.3);
+        }
+
+        .favorite-batch-btn.cancel {
+            background: rgba(107, 92, 231, 0.3);
+        }
+
+        /* Favorite card batch selection mode */
+        .favorite-card-batch-mode .favorite-card {
+            cursor: pointer;
+        }
+
+        .favorite-card-checkbox {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(107, 92, 231, 0.5);
+            border-radius: 6px;
+            background: rgba(26, 26, 46, 0.5);
+            cursor: pointer;
+            display: none;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .favorite-card-batch-mode .favorite-card-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .favorite-card-checkbox:hover {
+            border-color: rgba(107, 92, 231, 0.8);
+            background: rgba(107, 92, 231, 0.2);
+        }
+
+        .favorite-card-checkbox.checked {
+            background: linear-gradient(135deg, #6B5CE7, #00FFD1);
+            border-color: transparent;
+        }
+
+        .favorite-card-checkbox.checked::after {
+            content: '✓';
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .favorite-card.selected {
+            background: rgba(107, 92, 231, 0.15) !important;
+            border-color: rgba(107, 92, 231, 0.5) !important;
+            box-shadow: 0 0 15px rgba(107, 92, 231, 0.2);
+        }
+
+        /* Mobile batch toolbar */
+        @media (max-width: 480px) {
+            .favorite-batch-toolbar {
+                flex-wrap: wrap;
+                padding: 0.6rem;
+            }
+
+            .favorite-batch-actions {
+                flex-wrap: wrap;
+            }
+
+            .favorite-batch-btn {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.75rem;
+            }
+        }
+
         /* Mobile favorite panel */
         @media (max-width: 480px) {
             .favorite-panel {
@@ -7050,13 +7210,30 @@
         </div>
     </div>
 
-    <!-- Favorite Panel (Day 6, Day 41) -->
+    <!-- Favorite Panel (Day 6, Day 41, Day 56) -->
     <div class="favorite-panel" id="favoritePanel">
         <div class="favorite-panel-header">
             <div class="favorite-panel-title">
                 <span>❤️</span> 我的收藏
             </div>
-            <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
+            <div class="favorite-panel-actions">
+                <!-- Day 56: Batch selection button -->
+                <button class="favorite-panel-close" id="favoriteBatchModeBtn" onclick="toggleFavoriteBatchMode()" style="margin-right: 0.5rem; display: none;">☑</button>
+                <button class="favorite-panel-close" onclick="toggleFavoritePanel()">✕</button>
+            </div>
+            <!-- Day 56: Batch toolbar -->
+            <div class="favorite-batch-toolbar" id="favoriteBatchToolbar">
+                <div class="favorite-batch-info">
+                    <span>已选择</span>
+                    <span class="count" id="favoriteBatchCount">0</span>
+                    <span>项</span>
+                </div>
+                <div class="favorite-batch-actions">
+                    <button class="favorite-batch-btn select-all" onclick="favoriteSelectAll()">全选</button>
+                    <button class="favorite-batch-btn cancel" onclick="favoriteSelectNone()">取消</button>
+                    <button class="favorite-batch-btn delete" onclick="favoriteBatchDelete()">🗑️ 删除</button>
+                </div>
+            </div>
         </div>
         <!-- Favorite Sort & Filter Controls (Day 41) -->
         <div class="favorite-controls" id="favoriteControls">
@@ -7117,6 +7294,7 @@
                 📄 Markdown
             </button>
         </div>
+        <!-- Day 56: Favorite panel batch mode toggle -->
         <div class="favorite-panel-body" id="favoritePanelBody">
             <!-- Favorite items will be populated -->
         </div>
@@ -7557,7 +7735,7 @@
         </div>
     </div>
 
-    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35, Day 55) -->
+    <!-- Keyboard Hint (Day 6, Day 8, Day 9, Day 10, Day 19, Day 21, Day 35, Day 55, Day 56) -->
     <div class="keyboard-hint" id="keyboardHint">
         <div class="hint-title">⌨️ 快捷键</div>
         <div class="hint-section-title">🔍 导航</div>
@@ -7579,6 +7757,10 @@
         <div><kbd>K</kbd> 榜单</div>
         <div><kbd>S</kbd> 设置</div>
         <div><kbd>⇧D</kbd> 状态</div>
+        <div class="hint-section-title">📦 收藏夹批量操作 (Day 56)</div>
+        <div><kbd>B</kbd> 进入批量选择模式</div>
+        <div><kbd>Ctrl+A</kbd> 全选</div>
+        <div><kbd>Del</kbd> 删除选中</div>
         <div class="hint-section-title">🔚 其他</div>
         <div><kbd>Esc</kbd> 关闭</div>
         <div><kbd>?</kbd> 帮助</div>
@@ -9247,6 +9429,9 @@
             // 更新计数显示
             updateFavoriteCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
             
+            // Day 56: Update batch mode button visibility
+            updateFavoriteBatchButton();
+            
             const body = document.getElementById('favoritePanelBody');
             
             if (favoriteAgents.length === 0) {
@@ -9271,11 +9456,28 @@
                 return;
             }
 
+            // Day 56: Add batch mode class
+            if (favoriteBatchMode) {
+                body.classList.add('favorite-card-batch-mode');
+            } else {
+                body.classList.remove('favorite-card-batch-mode');
+            }
+
             let html = '<div class="favorite-list">';
             favoriteList.forEach(agent => {
                 const rarityLabel = agent.rarity === 'ssr' ? 'SSR' : agent.rarity === 'sr' ? 'SR' : 'R';
+                const isSelected = favoriteBatchSelected.has(agent.id);
+                const selectedClass = isSelected ? 'selected' : '';
+                const checkedClass = isSelected ? 'checked' : '';
+                
+                // Day 56: Modify click behavior based on batch mode
+                const clickHandler = favoriteBatchMode 
+                    ? `onclick="toggleFavoriteBatchItem('${agent.id}')"`
+                    : `onclick="openAgentDetail('${agent.id}')"`;
+                
                 html += `
-                    <div class="favorite-card" onclick="openAgentDetail('${agent.id}')">
+                    <div class="favorite-card ${selectedClass}" ${clickHandler} style="position: relative;">
+                        ${favoriteBatchMode ? `<div class="favorite-card-checkbox ${checkedClass}" onclick="event.stopPropagation(); toggleFavoriteBatchItem('${agent.id}')"></div>` : ''}
                         <div class="favorite-card-avatar" data-rarity="${agent.rarity}">${agent.avatar || '🤖'}</div>
                         <div class="favorite-card-info">
                             <div class="favorite-card-name">${agent.name}</div>
@@ -9285,7 +9487,7 @@
                                 <span>时尚值</span>
                             </div>
                         </div>
-                        <button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>
+                        ${favoriteBatchMode ? '' : `<button class="favorite-card-remove" onclick="event.stopPropagation(); removeFavorite('${agent.id}')">✕</button>`}
                     </div>
                 `;
             });
@@ -9294,6 +9496,158 @@
             // Day 46: Add fade-in animation
             body.classList.add('panel-body-fade');
             setTimeout(() => body.classList.remove('panel-body-fade'), 300);
+        }
+
+        // ========== Favorite Batch Selection (Day 56) ==========
+        let favoriteBatchMode = false;
+        let favoriteBatchSelected = new Set();
+
+        function toggleFavoriteBatchMode() {
+            favoriteBatchMode = !favoriteBatchMode;
+            const toolbar = document.getElementById('favoriteBatchToolbar');
+            const body = document.getElementById('favoritePanelBody');
+            const batchBtn = document.getElementById('favoriteBatchModeBtn');
+            
+            if (favoriteBatchMode) {
+                toolbar.classList.add('active');
+                body.classList.add('favorite-card-batch-mode');
+                batchBtn.style.display = 'flex';
+                batchBtn.style.background = 'rgba(107, 92, 231, 0.4)';
+                favoriteBatchSelected.clear();
+                updateFavoriteBatchCount();
+            } else {
+                toolbar.classList.remove('active');
+                body.classList.remove('favorite-card-batch-mode');
+                batchBtn.style.background = '';
+                favoriteBatchSelected.clear();
+                renderFavoritePanel();
+            }
+        }
+
+        function updateFavoriteBatchButton() {
+            const batchBtn = document.getElementById('favoriteBatchModeBtn');
+            if (favoriteAgents.length > 0) {
+                batchBtn.style.display = 'flex';
+            } else {
+                batchBtn.style.display = 'none';
+            }
+        }
+
+        function toggleFavoriteBatchItem(agentId) {
+            if (favoriteBatchSelected.has(agentId)) {
+                favoriteBatchSelected.delete(agentId);
+            } else {
+                favoriteBatchSelected.add(agentId);
+            }
+            
+            // Update checkbox and card visual state
+            const cards = document.querySelectorAll('.favorite-card');
+            cards.forEach(card => {
+                const onclick = card.getAttribute('onclick') || '';
+                if (onclick.includes(agentId)) {
+                    if (favoriteBatchSelected.has(agentId)) {
+                        card.classList.add('selected');
+                        const checkbox = card.querySelector('.favorite-card-checkbox');
+                        if (checkbox) checkbox.classList.add('checked');
+                    } else {
+                        card.classList.remove('selected');
+                        const checkbox = card.querySelector('.favorite-card-checkbox');
+                        if (checkbox) checkbox.classList.remove('checked');
+                    }
+                }
+            });
+            
+            updateFavoriteBatchCount();
+        }
+
+        function updateFavoriteBatchCount() {
+            document.getElementById('favoriteBatchCount').textContent = favoriteBatchSelected.size;
+        }
+
+        function favoriteSelectAll() {
+            const sortedFiltered = getSortedFilteredFavorites();
+            sortedFiltered.agents.forEach(agent => {
+                favoriteBatchSelected.add(agent.id);
+            });
+            
+            // Update all checkboxes
+            document.querySelectorAll('.favorite-card').forEach(card => {
+                card.classList.add('selected');
+                const checkbox = card.querySelector('.favorite-card-checkbox');
+                if (checkbox) checkbox.classList.add('checked');
+            });
+            
+            updateFavoriteBatchCount();
+            showToast(`已选择 ${favoriteBatchSelected.size} 项`);
+        }
+
+        function favoriteSelectNone() {
+            favoriteBatchSelected.clear();
+            
+            document.querySelectorAll('.favorite-card').forEach(card => {
+                card.classList.remove('selected');
+                const checkbox = card.querySelector('.favorite-card-checkbox');
+                if (checkbox) checkbox.classList.remove('checked');
+            });
+            
+            updateFavoriteBatchCount();
+        }
+
+        function favoriteBatchDelete() {
+            if (favoriteBatchSelected.size === 0) {
+                showToast('请先选择要删除的收藏');
+                return;
+            }
+            
+            const count = favoriteBatchSelected.size;
+            
+            // Create confirm modal
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 320px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗑️</div>
+                    <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">确认删除</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">确定要删除选中的 ${count} 个收藏吗？</p>
+                    <div style="display: flex; gap: 0.75rem; justify-content: center;">
+                        <button class="btn-secondary" onclick="this.closest('.modal-overlay').remove()" style="flex: 1; padding: 0.75rem; background: rgba(107, 92, 231, 0.2); border: 1px solid rgba(107, 92, 231, 0.3); border-radius: 12px; color: #fff; cursor: pointer;">取消</button>
+                        <button class="btn-primary" onclick="confirmFavoriteBatchDelete()" style="flex: 1; padding: 0.75rem; background: linear-gradient(135deg, #ff6b8a, #ff4757); border: none; border-radius: 12px; color: #fff; cursor: pointer; font-weight: 600;">确认删除</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Store count for confirm function
+            modal.dataset.count = count;
+            
+            // Close on overlay click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        function confirmFavoriteBatchDelete() {
+            const modal = document.querySelector('.modal-overlay.active');
+            if (modal) modal.remove();
+            
+            // Remove all selected favorites
+            favoriteBatchSelected.forEach(agentId => {
+                removeFavorite(agentId, true); // true = silent mode
+            });
+            
+            // Update localStorage
+            localStorage.setItem('favoriteAgents', JSON.stringify(favoriteAgents));
+            
+            // Reset batch mode
+            const count = favoriteBatchSelected.size;
+            favoriteBatchSelected.clear();
+            toggleFavoriteBatchMode();
+            
+            // Refresh panel
+            renderFavoritePanel();
+            updateFavoriteStats();
+            
+            showToast(`已删除 ${count} 个收藏`);
         }
 
         // ========== Favorite Sort & Filter Functions (Day 41) ==========
@@ -9526,14 +9880,17 @@
             checkAchievements();
         }
 
-        function removeFavorite(agentId) {
+        function removeFavorite(agentId, silent = false) {
             const index = favoriteAgents.indexOf(agentId);
             if (index > -1) {
                 favoriteAgents.splice(index, 1);
                 saveFavoriteAgents();
                 updateFavoriteBadge();
-                renderFavoritePanel();
-                showToast('已取消收藏');
+                // Day 56: Silent mode for batch operations
+                if (!silent) {
+                    renderFavoritePanel();
+                    showToast('已取消收藏');
+                }
                 
                 // 如果在详情弹窗中，更新按钮状态
                 if (currentModalAgent?.id === agentId) {
@@ -11830,6 +12187,36 @@
                     return;
                 }
 
+                // ========== Day 56: Favorite Batch Mode Shortcuts ==========
+                // 'b' or 'B' - Toggle favorite batch mode (when favorite panel is open)
+                if (e.key === 'b' || e.key === 'B') {
+                    const favoritePanel = document.getElementById('favoritePanel');
+                    if (favoritePanel.classList.contains('active')) {
+                        toggleFavoriteBatchMode();
+                        return;
+                    }
+                }
+
+                // 'Ctrl+A' - Select all favorites (when in batch mode)
+                if (e.ctrlKey && e.key === 'a') {
+                    const favoritePanel = document.getElementById('favoritePanel');
+                    if (favoritePanel.classList.contains('active') && favoriteBatchMode) {
+                        e.preventDefault();
+                        favoriteSelectAll();
+                        return;
+                    }
+                }
+
+                // 'Delete' or 'Del' - Delete selected favorites (when in batch mode)
+                if (e.key === 'Delete' || e.key === 'Del') {
+                    const favoritePanel = document.getElementById('favoritePanel');
+                    if (favoritePanel.classList.contains('active') && favoriteBatchMode && favoriteBatchSelected.size > 0) {
+                        e.preventDefault();
+                        favoriteBatchDelete();
+                        return;
+                    }
+                }
+
                 // ========== Day 55: Modal Keyboard Navigation ==========
                 // ← / → - 在详情弹窗中切换 Agent
                 const modal = document.getElementById('agent-modal');
@@ -11940,6 +12327,9 @@
                 toggleComparePanel();
             } else if (systemStatusPanel && systemStatusPanel.classList.contains('active')) { // Day 21
                 toggleSystemStatusPanel();
+            // Day 56: Exit batch mode first if active
+            } else if (favoritePanel.classList.contains('active') && favoriteBatchMode) {
+                toggleFavoriteBatchMode();
             } else if (favoritePanel.classList.contains('active')) {
                 toggleFavoritePanel();
             } else if (recentPanel.classList.contains('active')) { // Day 9
