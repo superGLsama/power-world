@@ -5015,6 +5015,129 @@
         .favorite-rarity-bar .bar-segment.sr { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
         .favorite-rarity-bar .bar-segment.r { background: linear-gradient(90deg, #CD7F32, #8B4513); }
 
+        /* ========== Favorite Tag Analysis (Day 57) ========== */
+        .favorite-tag-analysis {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 138, 0.1));
+            border: 1px solid rgba(107, 92, 231, 0.25);
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag-analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .tag-analysis-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #B8B5FF;
+        }
+
+        .tag-analysis-hint {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .tag-cloud-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .tag-cloud-item {
+            padding: 0.25rem 0.6rem;
+            background: rgba(107, 92, 231, 0.2);
+            border: 1px solid rgba(107, 92, 231, 0.3);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #B8B5FF;
+            transition: all 0.2s;
+            cursor: default;
+        }
+
+        .tag-cloud-item:hover {
+            background: rgba(107, 92, 231, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .tag-cloud-item.size-xl {
+            font-size: 0.9rem;
+            padding: 0.35rem 0.8rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.4), rgba(255, 107, 138, 0.3));
+            border-color: rgba(107, 92, 231, 0.5);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .tag-cloud-item.size-lg {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(107, 92, 231, 0.3);
+            border-color: rgba(107, 92, 231, 0.4);
+            color: #E0E0FF;
+        }
+
+        .tag-cloud-item.size-sm {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .tag-cloud-empty {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+
+        .tag-insights {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed rgba(107, 92, 231, 0.15);
+        }
+
+        .tag-insight-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 0.3rem;
+        }
+
+        .tag-insight-icon {
+            font-size: 0.9rem;
+        }
+
+        .tag-insight-text {
+            flex: 1;
+        }
+
+        .tag-insight-value {
+            color: #00FFD1;
+            font-weight: 600;
+        }
+
+        .tag-diversity-bar {
+            height: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            margin-top: 0.4rem;
+            overflow: hidden;
+        }
+
+        .tag-diversity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6B5CE7, #00FFD1);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
         /* ========== Recent Viewed Panel (Day 9) ========== */
         .recent-panel {
             position: fixed;
@@ -7286,6 +7409,19 @@
             <div class="bar-segment sr" id="rarityBarSr" style="width: 0%"></div>
             <div class="bar-segment r" id="rarityBarR" style="width: 0%"></div>
         </div>
+        <!-- Day 57: Favorite Tag Analysis Panel -->
+        <div class="favorite-tag-analysis" id="favoriteTagAnalysis">
+            <div class="tag-analysis-header">
+                <span class="tag-analysis-title">🏷️ 标签分析</span>
+                <span class="tag-analysis-hint" id="tagAnalysisHint">你的收藏偏好</span>
+            </div>
+            <div class="tag-cloud-container" id="tagCloudContainer">
+                <!-- Tag pills will be dynamically generated -->
+            </div>
+            <div class="tag-insights" id="tagInsights">
+                <!-- Dynamic insights based on favorite tags -->
+            </div>
+        </div>
         <div class="favorite-export-actions">
             <button class="favorite-export-btn" onclick="exportFavorites('json')">
                 📥 JSON
@@ -9425,6 +9561,8 @@
             
             // 更新统计显示 (Day 42)
             updateFavoriteStats();
+            // Day 57: Update tag analysis
+            updateFavoriteTagAnalysis();
             
             // 更新计数显示
             updateFavoriteCountDisplay(sortedFiltered.total, sortedFiltered.filtered);
@@ -9646,6 +9784,8 @@
             // Refresh panel
             renderFavoritePanel();
             updateFavoriteStats();
+            // Day 57: Update tag analysis after batch delete
+            updateFavoriteTagAnalysis();
             
             showToast(`已删除 ${count} 个收藏`);
         }
@@ -9751,6 +9891,117 @@
                 document.getElementById('rarityBarSsr').style.width = '0%';
                 document.getElementById('rarityBarSr').style.width = '0%';
                 document.getElementById('rarityBarR').style.width = '0%';
+            }
+        }
+
+        // ========== Favorite Tag Analysis (Day 57) ==========
+        function updateFavoriteTagAnalysis() {
+            const container = document.getElementById('tagCloudContainer');
+            const insightsContainer = document.getElementById('tagInsights');
+            const hintEl = document.getElementById('tagAnalysisHint');
+            
+            // 获取收藏的 Agent 数据
+            const favoriteAgentsData = favoriteAgents.map(id => {
+                return allAgentsData.find(a => a.id === id) || agentsData.find(a => a.id === id);
+            }).filter(Boolean);
+            
+            if (favoriteAgentsData.length === 0) {
+                container.innerHTML = '<div class="tag-cloud-empty">收藏 Agent 后查看标签分析</div>';
+                insightsContainer.innerHTML = '';
+                return;
+            }
+            
+            // 统计标签出现次数
+            const tagCounts = {};
+            const tagEmojis = {
+                '街头': '🛹', '科技': '🤖', '可爱': '🎀', '时尚': '✨',
+                '音乐': '🎵', '艺术': '🎨', '游戏': '🎮', '运动': '⚽',
+                '美食': '🍜', '旅行': '✈️', '自然': '🌿', '商务': '💼',
+                '教育': '📚', '娱乐': '🎭', '生活': '🏠', '创意': '💡'
+            };
+            
+            favoriteAgentsData.forEach(agent => {
+                const tags = agent.tags || [];
+                tags.forEach(tag => {
+                    if (!tagCounts[tag]) {
+                        tagCounts[tag] = { count: 0, emoji: tagEmojis[tag] || '🏷️' };
+                    }
+                    tagCounts[tag].count++;
+                });
+            });
+            
+            // 转换为数组并排序
+            const sortedTags = Object.entries(tagCounts)
+                .map(([tag, data]) => ({ tag, ...data }))
+                .sort((a, b) => b.count - a.count);
+            
+            if (sortedTags.length === 0) {
+                container.innerHTML = '<div class="tag-cloud-empty">暂无标签数据</div>';
+                insightsContainer.innerHTML = '';
+                return;
+            }
+            
+            // 计算大小等级
+            const maxCount = sortedTags[0].count;
+            const minCount = sortedTags[sortedTags.length - 1].count;
+            const countRange = maxCount - minCount || 1;
+            
+            // 渲染标签云
+            container.innerHTML = sortedTags.map(({ tag, count, emoji }) => {
+                const ratio = (count - minCount) / countRange;
+                let sizeClass = 'size-sm';
+                if (ratio > 0.66) sizeClass = 'size-xl';
+                else if (ratio > 0.33) sizeClass = 'size-lg';
+                
+                return `<span class="tag-cloud-item ${sizeClass}" title="${tag}: ${count}个">${emoji} ${tag}</span>`;
+            }).join('');
+            
+            // 生成洞察
+            const insights = [];
+            const uniqueTagCount = sortedTags.length;
+            const totalTags = favoriteAgentsData.reduce((sum, a) => sum + (a.tags?.length || 0), 0);
+            const diversityRatio = uniqueTagCount / (totalTags || 1);
+            
+            // Top 标签
+            if (sortedTags.length > 0) {
+                const topTag = sortedTags[0];
+                insights.push(`<div class="tag-insight-item">
+                    <span class="tag-insight-icon">⭐</span>
+                    <span class="tag-insight-text">最爱风格: </span>
+                    <span class="tag-insight-value">${topTag.emoji} ${topTag.tag} (${topTag.count}个)</span>
+                </div>`);
+            }
+            
+            // 多样性
+            let diversityLabel = '单一';
+            let diversityPercent = Math.round(diversityRatio * 100);
+            if (diversityRatio > 0.7) { diversityLabel = '非常多样'; diversityPercent = 85 + Math.round(diversityRatio * 15); }
+            else if (diversityRatio > 0.5) { diversityLabel = '多样'; diversityPercent = 60 + Math.round(diversityRatio * 25); }
+            else if (diversityRatio > 0.3) { diversityLabel = '一般'; diversityPercent = 30 + Math.round(diversityRatio * 30); }
+            
+            insights.push(`<div class="tag-insight-item">
+                <span class="tag-insight-icon">📊</span>
+                <span class="tag-insight-text">风格多样性: </span>
+                <span class="tag-insight-value">${diversityLabel}</span>
+            </div>
+            <div class="tag-diversity-bar">
+                <div class="tag-diversity-fill" style="width: ${diversityPercent}%"></div>
+            </div>`);
+            
+            // 标签总数
+            insights.push(`<div class="tag-insight-item">
+                <span class="tag-insight-icon">🏷️</span>
+                <span class="tag-insight-text">覆盖风格: </span>
+                <span class="tag-insight-value">${uniqueTagCount} 种</span>
+            </div>`);
+            
+            insightsContainer.innerHTML = insights.join('');
+            
+            // 更新提示
+            if (hintEl) {
+                if (uniqueTagCount >= 5) hintEl.textContent = '品味广泛 ✨';
+                else if (uniqueTagCount >= 2) hintEl.textContent = '偏好明确 🎯';
+                else hintEl.textContent = '专注少量 🏆';
             }
         }
 
@@ -9873,6 +10124,9 @@
             saveFavoriteAgents();
             updateFavoriteBadge();
             updateFavoriteButton(agentId);
+            
+            // Day 57: Update tag analysis when favorite changes
+            updateFavoriteTagAnalysis();
             
             // 更新成就统计
             userStats.favoriteCount = favoriteAgents.length;
