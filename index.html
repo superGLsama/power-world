@@ -333,6 +333,33 @@
             transform: scale(1.1);
         }
 
+        /* ========== Activity Heatmap Button (Day 58) ========== */
+        .activity-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 209, 0.15);
+            border: 1px solid rgba(0, 255, 209, 0.25);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .activity-btn:hover {
+            background: rgba(0, 255, 209, 0.25);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 255, 209, 0.3);
+        }
+
+        .activity-btn.active {
+            background: rgba(0, 255, 209, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 209, 0.4);
+        }
+
         /* Settings Button (Day 10) */
         .settings-btn {
             position: relative;
@@ -3907,6 +3934,321 @@
             font-size: 0.9rem;
         }
 
+        /* ========== Activity Heatmap Panel (Day 58) ========== */
+        .activity-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border-left: 1px solid rgba(0, 255, 209, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .activity-panel.active {
+            transform: translateX(0);
+        }
+
+        .activity-panel-header {
+            padding: 1.5rem;
+            background: rgba(0, 255, 209, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 209, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00FFD1;
+        }
+
+        .activity-panel-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(0, 255, 209, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-panel-close:hover {
+            background: rgba(0, 255, 209, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .activity-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        /* Activity Summary */
+        .activity-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-summary-card {
+            background: rgba(0, 255, 209, 0.08);
+            border: 1px solid rgba(0, 255, 209, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .activity-summary-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-summary-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00FFD1;
+        }
+
+        .activity-summary-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.2rem;
+        }
+
+        /* Heatmap Section */
+        .heatmap-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .heatmap-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #00FFD1;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .heatmap-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .heatmap-months {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-left: 2rem;
+        }
+
+        .heatmap-month {
+            flex: 1;
+            font-size: 0.65rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .heatmap-grid {
+            display: flex;
+        }
+
+        .heatmap-days-labels {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 0.5rem;
+        }
+
+        .heatmap-day-label {
+            font-size: 0.6rem;
+            color: #666;
+            height: 12px;
+            line-height: 12px;
+        }
+
+        .heatmap-cells {
+            display: flex;
+            gap: 3px;
+            flex: 1;
+        }
+
+        .heatmap-week {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .heatmap-cell {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            background: rgba(107, 92, 231, 0.15);
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.3);
+            z-index: 1;
+        }
+
+        .heatmap-cell.level-1 {
+            background: rgba(0, 255, 209, 0.2);
+        }
+
+        .heatmap-cell.level-2 {
+            background: rgba(0, 255, 209, 0.4);
+        }
+
+        .heatmap-cell.level-3 {
+            background: rgba(0, 255, 209, 0.6);
+        }
+
+        .heatmap-cell.level-4 {
+            background: rgba(0, 255, 209, 0.85);
+            box-shadow: 0 0 6px rgba(0, 255, 209, 0.5);
+        }
+
+        .heatmap-cell.empty {
+            background: rgba(107, 92, 231, 0.08);
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .heatmap-legend-cell {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        /* Activity Type Breakdown */
+        .activity-breakdown {
+            margin-bottom: 1.5rem;
+        }
+
+        .breakdown-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #00FFD1;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breakdown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .breakdown-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 0.75rem;
+        }
+
+        .breakdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .breakdown-icon {
+            font-size: 1rem;
+        }
+
+        .breakdown-count {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            color: #00FFD1;
+        }
+
+        .breakdown-bar {
+            height: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .breakdown-fill.view { background: linear-gradient(90deg, #64b5f6, #1976D2); }
+        .breakdown-fill.like { background: linear-gradient(90deg, #ff6b8a, #D32F2F); }
+        .breakdown-fill.favorite { background: linear-gradient(90deg, #FFD700, #FFA000); }
+        .breakdown-fill.follow { background: linear-gradient(90deg, #9c88ff, #7C4DFF); }
+
+        /* Activity Tooltip */
+        .heatmap-tooltip {
+            position: fixed;
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid rgba(0, 255, 209, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            color: #fff;
+            pointer-events: none;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.15s;
+            white-space: nowrap;
+        }
+
+        .heatmap-tooltip.visible {
+            opacity: 1;
+        }
+
+        .heatmap-tooltip-date {
+            font-weight: 600;
+            color: #00FFD1;
+            margin-bottom: 0.2rem;
+        }
+
+        .heatmap-tooltip-count {
+            color: #888;
+        }
+
         /* ========== Settings Panel (Day 10) ========== */
         .settings-panel {
             position: fixed;
@@ -7248,6 +7590,10 @@
                 <span>📡</span>
                 <span class="network-status-dot online" id="networkStatusDot"></span>
             </button>
+            <!-- Activity Heatmap Button (Day 58) -->
+            <button class="activity-btn" id="activityBtn" onclick="toggleActivityPanel()" title="活动热力图">
+                📈
+            </button>
             <button class="settings-btn" id="settingsBtn" onclick="toggleSettingsPanel()">
                 📦
             </button>
@@ -7736,6 +8082,25 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Activity Heatmap Panel (Day 58) -->
+    <div class="activity-panel" id="activityPanel">
+        <div class="activity-panel-header">
+            <div class="activity-panel-title">
+                <span>📈</span> 活动热力图
+            </div>
+            <button class="activity-panel-close" onclick="toggleActivityPanel()">✕</button>
+        </div>
+        <div class="activity-panel-body" id="activityPanelBody">
+            <!-- Activity content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Heatmap Tooltip (Day 58) -->
+    <div class="heatmap-tooltip" id="heatmapTooltip">
+        <div class="heatmap-tooltip-date" id="heatmapTooltipDate"></div>
+        <div class="heatmap-tooltip-count" id="heatmapTooltipCount"></div>
     </div>
 
     <!-- Settings Panel (Day 10) -->
@@ -10116,6 +10481,9 @@
                 favoriteAgents.push(agentId);
                 showToast('已添加到收藏');
                 
+                // Day 58: 记录收藏活动
+                recordActivity('favorite');
+                
                 // Day 11: 添加收藏通知
                 if (agent) {
                     addNotification('favorite', '你收藏了', `将 ${agent.name} 加入了精选收藏`, agentId);
@@ -11283,6 +11651,9 @@
                 saveUserStats();
                 checkAchievements();
                 
+                // Day 58: 记录点赞活动
+                recordActivity('like');
+                
                 // Day 11: 添加点赞通知
                 if (agent) {
                     addNotification('like', '你点赞了', `欣赏 ${agent.name} 的穿搭`, agentId);
@@ -11688,6 +12059,9 @@
             }
             saveUserStats();
             checkAchievements();
+            
+            // Day 58: 记录浏览活动
+            recordActivity('view');
 
             // 添加到最近浏览 (Day 9)
             addToRecentlyViewed(agent);
@@ -12077,6 +12451,9 @@
                 // 关注
                 followedAgents.push(agentId);
                 showToast('已关注 ' + currentModalAgent.name);
+                
+                // Day 58: 记录关注活动
+                recordActivity('follow');
                 
                 // 更新成就统计
                 userStats.followedCount = followedAgents.length;
@@ -12660,6 +13037,7 @@
             const notificationPanel = document.getElementById('notificationPanel');
             const leaderboardPanel = document.getElementById('leaderboardPanel');
             const systemStatusPanel = document.getElementById('systemStatusPanel');
+            const activityPanel = document.getElementById('activityPanel');
             const overlay = document.getElementById('panelOverlay');
             const achievementBtn = document.getElementById('achievementBtn');
             const favoriteBtn = document.getElementById('favoriteBtn');
@@ -12668,6 +13046,7 @@
             const notificationBtn = document.getElementById('notificationBtn');
             const leaderboardBtn = document.getElementById('leaderboardBtn');
             const systemStatusBtn = document.getElementById('systemStatusBtn');
+            const activityBtn = document.getElementById('activityBtn');
 
             achievementPanel.classList.remove('active');
             favoritePanel.classList.remove('active');
@@ -12676,6 +13055,7 @@
             notificationPanel.classList.remove('active');
             leaderboardPanel.classList.remove('active');
             systemStatusPanel.classList.remove('active');
+            if (activityPanel) activityPanel.classList.remove('active');
             overlay.classList.remove('active');
             
             achievementBtn.classList.remove('active');
@@ -12685,6 +13065,7 @@
             notificationBtn.classList.remove('active');
             leaderboardBtn.classList.remove('active');
             systemStatusBtn.classList.remove('active');
+            if (activityBtn) activityBtn.classList.remove('active');
             
             // Network Status Panel (Day 45)
             const networkStatusPanel = document.getElementById('networkStatusPanel');
@@ -12693,6 +13074,324 @@
             if (networkStatusBtn) networkStatusBtn.classList.remove('active');
         }
 
+        // ========== Activity Heatmap Panel Functions (Day 58) ==========
+        // 灵感来自 Istio 可观测性 - Metrics 数据收集与可视化
+        
+        // 活动数据存储结构: { "2026-06-02": { view: 5, like: 2, favorite: 1, follow: 0 } }
+        let activityData = JSON.parse(localStorage.getItem('activityData') || '{}');
+        
+        function getTodayKey() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+        
+        function recordActivity(type) {
+            const today = getTodayKey();
+            if (!activityData[today]) {
+                activityData[today] = { view: 0, like: 0, favorite: 0, follow: 0 };
+            }
+            activityData[today][type] = (activityData[today][type] || 0) + 1;
+            localStorage.setItem('activityData', JSON.stringify(activityData));
+        }
+        
+        function toggleActivityPanel() {
+            const panel = document.getElementById('activityPanel');
+            const overlay = document.getElementById('panelOverlay');
+            const btn = document.getElementById('activityBtn');
+            const isActive = panel.classList.contains('active');
+            
+            closeAllPanels();
+            
+            if (!isActive) {
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                btn.classList.add('active');
+                renderActivityPanel();
+            }
+        }
+        
+        function renderActivityPanel() {
+            const body = document.getElementById('activityPanelBody');
+            if (!body) return;
+            
+            const stats = getActivityStats();
+            
+            body.innerHTML = `
+                <!-- Activity Summary -->
+                <div class="activity-summary">
+                    <div class="activity-summary-card">
+                        <div class="activity-summary-icon">🔥</div>
+                        <div class="activity-summary-value">${stats.totalDays}</div>
+                        <div class="activity-summary-label">活跃天数</div>
+                    </div>
+                    <div class="activity-summary-card">
+                        <div class="activity-summary-icon">⚡</div>
+                        <div class="activity-summary-value">${stats.totalActions}</div>
+                        <div class="activity-summary-label">总活动量</div>
+                    </div>
+                    <div class="activity-summary-card">
+                        <div class="activity-summary-icon">📅</div>
+                        <div class="activity-summary-value">${stats.currentStreak}</div>
+                        <div class="activity-summary-label">当前连续</div>
+                    </div>
+                    <div class="activity-summary-card">
+                        <div class="activity-summary-icon">🏆</div>
+                        <div class="activity-summary-value">${stats.maxStreak}</div>
+                        <div class="activity-summary-label">最长连续</div>
+                    </div>
+                </div>
+                
+                <!-- Heatmap Section -->
+                <div class="heatmap-section">
+                    <div class="heatmap-title">📅 最近90天活动热力图</div>
+                    <div class="heatmap-container">
+                        ${renderHeatmap()}
+                    </div>
+                </div>
+                
+                <!-- Activity Type Breakdown -->
+                <div class="activity-breakdown">
+                    <div class="breakdown-title">📊 活动类型分布</div>
+                    <div class="breakdown-list">
+                        ${renderBreakdownList(stats)}
+                    </div>
+                </div>
+            `;
+            
+            initHeatmapTooltips();
+        }
+        
+        function getActivityStats() {
+            const today = getTodayKey();
+            let totalDays = 0;
+            let totalActions = 0;
+            let viewCount = 0;
+            let likeCount = 0;
+            let favoriteCount = 0;
+            let followCount = 0;
+            
+            // 计算统计数据
+            for (const date in activityData) {
+                const dayData = activityData[date];
+                const actions = (dayData.view || 0) + (dayData.like || 0) + (dayData.favorite || 0) + (dayData.follow || 0);
+                if (actions > 0) {
+                    totalDays++;
+                    totalActions += actions;
+                    viewCount += dayData.view || 0;
+                    likeCount += dayData.like || 0;
+                    favoriteCount += dayData.favorite || 0;
+                    followCount += dayData.follow || 0;
+                }
+            }
+            
+            // 计算当前连续天数
+            let currentStreak = 0;
+            let maxStreak = 0;
+            let tempStreak = 0;
+            const todayDate = new Date();
+            
+            for (let i = 0; i < 365; i++) {
+                const checkDate = new Date(todayDate);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateKey = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+                const dayData = activityData[dateKey];
+                const actions = dayData ? ((dayData.view || 0) + (dayData.like || 0) + (dayData.favorite || 0) + (dayData.follow || 0)) : 0;
+                
+                if (actions > 0) {
+                    tempStreak++;
+                    if (i === 0 || (currentStreak > 0)) {
+                        currentStreak = tempStreak;
+                    }
+                } else {
+                    if (i === 0) currentStreak = 0; // 今天没有活动
+                    maxStreak = Math.max(maxStreak, tempStreak);
+                    tempStreak = 0;
+                }
+            }
+            maxStreak = Math.max(maxStreak, tempStreak);
+            
+            return {
+                totalDays,
+                totalActions,
+                currentStreak,
+                maxStreak,
+                viewCount,
+                likeCount,
+                favoriteCount,
+                followCount
+            };
+        }
+        
+        function renderHeatmap() {
+            const weeks = [];
+            const today = new Date();
+            const months = [];
+            let lastMonth = -1;
+            
+            // 生成90天的数据
+            for (let i = 89; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                const dayData = activityData[dateKey] || {};
+                const actions = (dayData.view || 0) + (dayData.like || 0) + (dayData.favorite || 0) + (dayData.follow || 0);
+                
+                // 记录月份变化
+                if (date.getMonth() !== lastMonth) {
+                    months.push({
+                        name: date.toLocaleDateString('zh-CN', { month: 'short' }),
+                        weekIndex: Math.floor((89 - i) / 7)
+                    });
+                    lastMonth = date.getMonth();
+                }
+                
+                // 确定热力图等级
+                let level = 0;
+                if (actions > 0) level = 1;
+                if (actions >= 5) level = 2;
+                if (actions >= 10) level = 3;
+                if (actions >= 20) level = 4;
+                
+                weeks.push({
+                    date: dateKey,
+                    dayOfWeek: date.getDay(),
+                    level,
+                    actions,
+                    isToday: i === 0
+                });
+            }
+            
+            // 按周分组
+            const weekGroups = [];
+            let currentWeek = [];
+            weeks.forEach((day, index) => {
+                if (day.dayOfWeek === 0 && currentWeek.length > 0) {
+                    weekGroups.push(currentWeek);
+                    currentWeek = [];
+                }
+                currentWeek.push(day);
+            });
+            if (currentWeek.length > 0) {
+                weekGroups.push(currentWeek);
+            }
+            
+            // 渲染月份标签
+            const monthsHtml = months.length > 0 ? `
+                <div class="heatmap-months">
+                    ${weekGroups.map((_, wi) => {
+                        const month = months.find(m => m.weekIndex === wi);
+                        return month ? `<span class="heatmap-month">${month.name}</span>` : '';
+                    }).join('')}
+                </div>
+            ` : '';
+            
+            // 渲染热力图网格
+            const gridHtml = `
+                <div class="heatmap-grid">
+                    <div class="heatmap-days-labels">
+                        <span class="heatmap-day-label">一</span>
+                        <span class="heatmap-day-label"></span>
+                        <span class="heatmap-day-label">三</span>
+                        <span class="heatmap-day-label"></span>
+                        <span class="heatmap-day-label">五</span>
+                        <span class="heatmap-day-label"></span>
+                        <span class="heatmap-day-label">日</span>
+                    </div>
+                    <div class="heatmap-cells">
+                        ${weekGroups.map(week => `
+                            <div class="heatmap-week">
+                                ${[0,1,2,3,4,5,6].map(dow => {
+                                    const day = week.find(d => d.dayOfWeek === dow);
+                                    if (day) {
+                                        return `<div class="heatmap-cell level-${day.level} ${day.isToday ? 'today' : ''}" 
+                                            data-date="${day.date}" 
+                                            data-actions="${day.actions}"
+                                            data-view="${activityData[day.date]?.view || 0}"
+                                            data-like="${activityData[day.date]?.like || 0}"
+                                            data-favorite="${activityData[day.date]?.favorite || 0}"
+                                            data-follow="${activityData[day.date]?.follow || 0}"></div>`;
+                                    }
+                                    return '<div class="heatmap-cell empty"></div>';
+                                }).join('')}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="heatmap-legend">
+                    <span>少</span>
+                    <div class="heatmap-legend-cell" style="background: rgba(107, 92, 231, 0.15);"></div>
+                    <div class="heatmap-legend-cell" style="background: rgba(0, 255, 209, 0.2);"></div>
+                    <div class="heatmap-legend-cell" style="background: rgba(0, 255, 209, 0.4);"></div>
+                    <div class="heatmap-legend-cell" style="background: rgba(0, 255, 209, 0.6);"></div>
+                    <div class="heatmap-legend-cell" style="background: rgba(0, 255, 209, 0.85);"></div>
+                    <span>多</span>
+                </div>
+            `;
+            
+            return monthsHtml + gridHtml;
+        }
+        
+        function renderBreakdownList(stats) {
+            const maxCount = Math.max(stats.viewCount, stats.likeCount, stats.favoriteCount, stats.followCount, 1);
+            const items = [
+                { type: 'view', icon: '👁️', label: '浏览', count: stats.viewCount, color: 'view' },
+                { type: 'like', icon: '❤️', label: '点赞', count: stats.likeCount, color: 'like' },
+                { type: 'favorite', icon: '⭐', label: '收藏', count: stats.favoriteCount, color: 'favorite' },
+                { type: 'follow', icon: '🤝', label: '关注', count: stats.followCount, color: 'follow' }
+            ];
+            
+            return items.map(item => `
+                <div class="breakdown-item">
+                    <div class="breakdown-header">
+                        <div class="breakdown-label">
+                            <span class="breakdown-icon">${item.icon}</span>
+                            <span>${item.label}</span>
+                        </div>
+                        <span class="breakdown-count">${item.count}</span>
+                    </div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill ${item.color}" style="width: ${(item.count / maxCount) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function initHeatmapTooltips() {
+            const tooltip = document.getElementById('heatmapTooltip');
+            const tooltipDate = document.getElementById('heatmapTooltipDate');
+            const tooltipCount = document.getElementById('heatmapTooltipCount');
+            const cells = document.querySelectorAll('.heatmap-cell[data-date]');
+            
+            cells.forEach(cell => {
+                cell.addEventListener('mouseenter', (e) => {
+                    const date = cell.dataset.date;
+                    const view = cell.dataset.view || 0;
+                    const like = cell.dataset.like || 0;
+                    const favorite = cell.dataset.favorite || 0;
+                    const follow = cell.dataset.follow || 0;
+                    const total = parseInt(view) + parseInt(like) + parseInt(favorite) + parseInt(follow);
+                    
+                    const dateObj = new Date(date);
+                    const formattedDate = dateObj.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+                    
+                    tooltipDate.textContent = formattedDate;
+                    tooltipCount.textContent = total > 0 
+                        ? `${total} 次活动 (浏览${view} | 点赞${like} | 收藏${favorite} | 关注${follow})`
+                        : '暂无活动';
+                    
+                    tooltip.classList.add('visible');
+                    
+                    const rect = cell.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+                    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 8}px`;
+                });
+                
+                cell.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('visible');
+                });
+            });
+        }
+        
         // ========== System Status Panel Functions (Day 21 - K8s Style) ==========
         let systemStartTime = Date.now();
         let systemStatusInterval = null;
