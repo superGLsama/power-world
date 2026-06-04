@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Street - AI Agent潮流穿搭平台</title>
+    
+    <!-- Day 59: Security Headers - 基于Day60微服务安全学习 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.coze.cn https://lf-cdn.coze.cn https://lf-studio-resource.coze.cn https://www.google.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://lf-cdn.coze.cn https://lf-studio-resource.coze.cn https://p1.coze.cn https://p2.coze.cn; connect-src 'self' https://api.coze.cn wss://api.coze.cn https://cdn.coze.cn https://lf-cdn.coze.cn; frame-src 'self' https://www.youtube.com;">
+    <meta name="permissions-policy" content="accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=()">
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -4794,36 +4803,57 @@
             visibility: visible;
         }
 
+        /* Day 59: 增强危险操作确认弹窗样式 */
         .confirm-modal-content {
             background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            border: 1px solid var(--accent-danger);
+            border: 2px solid var(--accent-danger);
             border-radius: 20px;
             padding: 2rem;
             max-width: 350px;
             text-align: center;
             transform: scale(0.9);
             transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(255, 107, 138, 0.3);
+            animation: dangerPulse 2s infinite;
+        }
+        
+        @keyframes dangerPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 138, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 138, 0.5); }
         }
 
         .confirm-modal.active .confirm-modal-content {
             transform: scale(1);
         }
 
+        /* Day 59: 增强警告图标样式 */
         .confirm-modal-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            animation: shakeWarning 0.5s ease-in-out;
+        }
+        
+        @keyframes shakeWarning {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
         }
 
         .confirm-modal-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
+            color: var(--accent-danger);
         }
 
         .confirm-modal-desc {
             font-size: 0.9rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: rgba(255, 107, 138, 0.1);
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 107, 138, 0.3);
         }
 
         .confirm-modal-buttons {
@@ -6505,7 +6535,41 @@
         .review-input::placeholder {
             color: var(--text-muted);
         }
-
+        
+        /* Day 59: 评论字数统计样式 */
+        .review-char-count {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            padding: 0 0.25rem;
+        }
+        
+        .review-char-count.warning {
+            color: var(--accent-warning);
+        }
+        
+        .review-char-count.danger {
+            color: var(--accent-danger);
+        }
+        
+        .review-xss-hint {
+            display: none;
+            font-size: 0.7rem;
+            color: var(--accent-danger);
+            margin-top: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 107, 138, 0.1);
+            border-radius: 6px;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .review-xss-hint.active {
+            display: flex;
+        }
+        
         .review-submit-btn {
             margin-top: 0.5rem;
             padding: 0.5rem 1rem;
@@ -8558,6 +8622,12 @@
                         <div class="review-input-wrapper">
                             <textarea class="review-input" id="reviewInput" placeholder="说说你对这个Agent的看法..." maxlength="200"></textarea>
                         </div>
+                        <!-- Day 59: 评论字数统计和XSS检测 -->
+                        <div class="review-char-count" id="reviewCharCount"><span id="reviewCharUsed">0</span>/200</div>
+                        <div class="review-xss-hint" id="reviewXssHint">
+                            <span>⚠️</span>
+                            <span id="reviewXssMessage">检测到特殊字符，可能无法正常显示</span>
+                        </div>
                         <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
                             发表评价
                         </button>
@@ -9280,13 +9350,23 @@
             }
         }
 
-        // 初始化评论输入框监听 (Day 18)
+        // 初始化评论输入框监听 (Day 18, Updated Day 59)
         document.addEventListener('DOMContentLoaded', () => {
             const reviewInput = document.getElementById('reviewInput');
             if (reviewInput) {
                 reviewInput.addEventListener('input', (e) => {
                     const btn = document.getElementById('reviewSubmitBtn');
-                    if (currentReviewRating > 0 && e.target.value.trim()) {
+                    const value = e.target.value;
+                    const length = value.length;
+                    
+                    // Day 59: 更新字数统计
+                    updateReviewCharCount(length);
+                    
+                    // Day 59: XSS风险检测
+                    const xssRisk = detectXSSRisk(value);
+                    updateXSSHint(xssRisk);
+                    
+                    if (currentReviewRating > 0 && value.trim()) {
                         btn.classList.add('active');
                     } else if (currentReviewRating > 0) {
                         btn.classList.add('active'); // 有评分就可以提交
@@ -9296,6 +9376,66 @@
                 });
             }
         });
+        
+        // Day 59: 更新评论字数统计显示
+        function updateReviewCharCount(length) {
+            const charCount = document.getElementById('reviewCharCount');
+            const charUsed = document.getElementById('reviewCharUsed');
+            if (charUsed) charUsed.textContent = length;
+            
+            if (charCount) {
+                charCount.classList.remove('warning', 'danger');
+                if (length >= 180) {
+                    charCount.classList.add('danger');
+                } else if (length >= 150) {
+                    charCount.classList.add('warning');
+                }
+            }
+        }
+        
+        // Day 59: XSS风险检测（基于Day60安全学习）
+        function detectXSSRisk(text) {
+            if (!text) return { hasRisk: false, message: '' };
+            
+            // 潜在XSS模式
+            const patterns = [
+                { regex: /<script/i, message: '检测到<script>标签' },
+                { regex: /javascript:/i, message: '检测到javascript:协议' },
+                { regex: /on\w+\s*=/i, message: '检测到事件处理器属性' },
+                { regex: /<iframe/i, message: '检测到<iframe>标签' },
+                { regex: /<img[^>]*src\s*=\s*["']?data:/i, message: '检测到data:协议' },
+                { regex: /<svg/i, message: '检测到<svg>标签' },
+                { regex: /expression\s*\(/i, message: '检测到CSS表达式' },
+            ];
+            
+            for (const pattern of patterns) {
+                if (pattern.regex.test(text)) {
+                    return { hasRisk: true, message: pattern.message };
+                }
+            }
+            
+            // 检查HTML特殊字符使用情况（用户可能想用但会转义）
+            const htmlChars = /[<>"'&]/.test(text);
+            if (htmlChars) {
+                return { hasRisk: true, message: '检测到HTML特殊字符，将自动转义' };
+            }
+            
+            return { hasRisk: false, message: '' };
+        }
+        
+        // Day 59: 更新XSS风险提示显示
+        function updateXSSHint(risk) {
+            const hint = document.getElementById('reviewXssHint');
+            const message = document.getElementById('reviewXssMessage');
+            if (hint && message) {
+                if (risk.hasRisk) {
+                    hint.classList.add('active');
+                    message.textContent = risk.message;
+                } else {
+                    hint.classList.remove('active');
+                }
+            }
+        }
 
         // ========== Compare System (Day 15) ==========
         let compareList = []; // 对比列表
