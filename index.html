@@ -7599,9 +7599,234 @@
         .input-enhanced:focus-within::after {
             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
         }
+        
+        /* Day 62: PWA Offline Support Styles */
+        
+        /* Install Banner */
+        .pwa-install-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.95), rgba(0, 255, 209, 0.9));
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 10000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .pwa-install-banner.show {
+            display: flex;
+        }
+
+        .pwa-install-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #fff;
+        }
+
+        .pwa-install-icon {
+            font-size: 2rem;
+        }
+
+        .pwa-install-text h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .pwa-install-text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .pwa-install-btn {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .pwa-install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .pwa-install-close {
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .pwa-install-close:hover {
+            opacity: 1;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, #ff6b8a, #ff8e53);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 138, 0.4);
+        }
+
+        .offline-indicator.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .offline-indicator svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Update Available Toast */
+        .update-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.95), rgba(0, 255, 209, 0.9));
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 9998;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .update-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .update-toast-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .update-toast-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* PWA Install Prompt Animation */
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Offline Page Styling */
+        .offline-notice {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .offline-notice-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 480px) {
+            .pwa-install-banner {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .pwa-install-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
+    
+    <!-- Day 62: PWA Web App Manifest - 基于Day61 Serverless学习 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6B5CE7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Agent Street">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230D0D1A' width='180' height='180' rx='40'/><text x='90' y='125' font-size='80' text-anchor='middle' fill='%236B5CE7'>🤖</text></svg>">
 </head>
 <body>
+    <!-- Day 62: PWA Install Banner - 基于Day61 Serverless学习 -->
+    <div class="pwa-install-banner" id="pwaInstallBanner">
+        <div class="pwa-install-content">
+            <span class="pwa-install-icon">📱</span>
+            <div class="pwa-install-text">
+                <h4>安装 Agent Street</h4>
+                <p>添加到主屏幕，随时访问</p>
+            </div>
+        </div>
+        <button class="pwa-install-btn" id="pwaInstallBtn">安装</button>
+        <button class="pwa-install-close" id="pwaInstallClose" title="稍后再说">✕</button>
+    </div>
+    
+    <!-- Day 62: Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+        </svg>
+        <span>离线模式 - 显示缓存数据</span>
+    </div>
+    
+    <!-- Day 62: Update Available Toast -->
+    <div class="update-toast" id="updateToast">
+        <span>🎉 发现新版本！</span>
+        <button class="update-toast-btn" id="updateBtn">立即更新</button>
+    </div>
+    
     <!-- Day 47: Page Loader -->
     <div class="page-loader" id="pageLoader"></div>
     
@@ -15204,6 +15429,349 @@
                 initWebComponentDemo();
             }, 200);
         };
+        
+        // ========== Day 62: PWA & Service Worker 管理 - 基于Day61 Serverless学习 ==========
+        
+        // PWA 状态管理
+        const PWAManager = {
+            deferredPrompt: null,
+            serviceWorker: null,
+            isOnline: navigator.onLine,
+            
+            // 初始化
+            init() {
+                this.registerServiceWorker();
+                this.setupNetworkListeners();
+                this.setupInstallPrompt();
+                this.checkForUpdates();
+                console.log('[PWA] Agent Street PWA initialized');
+            },
+            
+            // 注册 Service Worker
+            async registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        this.serviceWorker = await navigator.serviceWorker.register('./sw.js');
+                        console.log('[PWA] Service Worker registered:', this.serviceWorker.scope);
+                        
+                        // 监听更新
+                        this.serviceWorker.addEventListener('updatefound', () => {
+                            console.log('[PWA] New version available');
+                            this.showUpdateToast();
+                        });
+                        
+                        // 监听控制器变化（强制刷新后）
+                        navigator.serviceWorker.addEventListener('controllerchange', () => {
+                            console.log('[PWA] Controller changed, reloading...');
+                            window.location.reload();
+                        });
+                        
+                        // 检查是否从缓存加载
+                        if (navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.addEventListener('message', (event) => {
+                                if (event.data && event.data.type === 'X-Offline-Mode') {
+                                    this.showOfflineNotice();
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        console.error('[PWA] Service Worker registration failed:', error);
+                    }
+                } else {
+                    console.warn('[PWA] Service Worker not supported');
+                }
+            },
+            
+            // 设置网络状态监听
+            setupNetworkListeners() {
+                window.addEventListener('online', () => {
+                    this.isOnline = true;
+                    this.hideOfflineIndicator();
+                    showToast('🌐 网络已恢复', 'success');
+                });
+                
+                window.addEventListener('offline', () => {
+                    this.isOnline = false;
+                    this.showOfflineIndicator();
+                    showToast('📴 已切换到离线模式', 'info');
+                });
+                
+                // 初始检查
+                if (!navigator.onLine) {
+                    this.showOfflineIndicator();
+                }
+            },
+            
+            // 设置安装提示
+            setupInstallPrompt() {
+                // 监听 beforeinstallprompt 事件
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    console.log('[PWA] Install prompt available');
+                    
+                    // 检查是否已经安装过
+                    const installDismissed = localStorage.getItem('pwa-install-dismissed');
+                    if (!installDismissed) {
+                        setTimeout(() => {
+                            this.showInstallBanner();
+                        }, 3000); // 3秒后显示
+                    }
+                });
+                
+                // 监听 appinstalled 事件
+                window.addEventListener('appinstalled', () => {
+                    console.log('[PWA] App installed');
+                    this.deferredPrompt = null;
+                    this.hideInstallBanner();
+                    showToast('🎉 Agent Street 已成功安装！', 'success');
+                });
+                
+                // 安装按钮点击
+                document.getElementById('pwaInstallBtn')?.addEventListener('click', () => {
+                    this.promptInstall();
+                });
+                
+                // 关闭按钮点击
+                document.getElementById('pwaInstallClose')?.addEventListener('click', () => {
+                    this.dismissInstallBanner();
+                });
+                
+                // 更新按钮点击
+                document.getElementById('updateBtn')?.addEventListener('click', () => {
+                    this.applyUpdate();
+                });
+            },
+            
+            // 显示安装横幅
+            showInstallBanner() {
+                const banner = document.getElementById('pwaInstallBanner');
+                if (banner) {
+                    banner.classList.add('show');
+                }
+            },
+            
+            // 隐藏安装横幅
+            hideInstallBanner() {
+                const banner = document.getElementById('pwaInstallBanner');
+                if (banner) {
+                    banner.classList.remove('show');
+                }
+            },
+            
+            // 关闭安装横幅（稍后再说）
+            dismissInstallBanner() {
+                this.hideInstallBanner();
+                localStorage.setItem('pwa-install-dismissed', Date.now().toString());
+            },
+            
+            // 触发安装提示
+            async promptInstall() {
+                if (!this.deferredPrompt) {
+                    showToast('安装功能暂不可用', 'warning');
+                    return;
+                }
+                
+                // 显示安装提示
+                this.deferredPrompt.prompt();
+                
+                // 等待用户选择
+                const { outcome } = await this.deferredPrompt.userChoice;
+                console.log('[PWA] Install prompt outcome:', outcome);
+                
+                if (outcome === 'accepted') {
+                    console.log('[PWA] User accepted install');
+                } else {
+                    console.log('[PWA] User dismissed install');
+                    this.dismissInstallBanner();
+                }
+                
+                this.deferredPrompt = null;
+            },
+            
+            // 显示离线指示器
+            showOfflineIndicator() {
+                const indicator = document.getElementById('offlineIndicator');
+                if (indicator) {
+                    indicator.classList.add('show');
+                }
+            },
+            
+            // 隐藏离线指示器
+            hideOfflineIndicator() {
+                const indicator = document.getElementById('offlineIndicator');
+                if (indicator) {
+                    indicator.classList.remove('show');
+                }
+            },
+            
+            // 显示更新提示
+            showUpdateToast() {
+                const toast = document.getElementById('updateToast');
+                if (toast) {
+                    toast.classList.add('show');
+                }
+            },
+            
+            // 应用更新
+            applyUpdate() {
+                if (this.serviceWorker && this.serviceWorker.waiting) {
+                    // 发送消息通知 SW 跳过等待
+                    this.serviceWorker.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    
+                    const toast = document.getElementById('updateToast');
+                    if (toast) {
+                        toast.classList.remove('show');
+                    }
+                    
+                    showToast('🔄 正在更新...', 'info');
+                    
+                    // 延迟刷新
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }
+            },
+            
+            // 检查更新
+            async checkForUpdates() {
+                if (this.serviceWorker) {
+                    try {
+                        await this.serviceWorker.update();
+                    } catch (error) {
+                        console.error('[PWA] Update check failed:', error);
+                    }
+                }
+            },
+            
+            // 清除缓存
+            async clearCache() {
+                if ('caches' in window) {
+                    try {
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(key => caches.delete(key)));
+                        showToast('🧹 缓存已清除', 'success');
+                        return true;
+                    } catch (error) {
+                        console.error('[PWA] Cache clear failed:', error);
+                        showToast('缓存清除失败', 'error');
+                        return false;
+                    }
+                }
+                return false;
+            },
+            
+            // 获取缓存大小（估算）
+            async getCacheSize() {
+                if ('storage' in navigator && 'estimate' in navigator.storage) {
+                    try {
+                        const estimate = await navigator.storage.estimate();
+                        const usedMB = (estimate.usage / (1024 * 1024)).toFixed(2);
+                        return usedMB;
+                    } catch (error) {
+                        return null;
+                    }
+                }
+                return null;
+            },
+            
+            // 显示离线提示
+            showOfflineNotice() {
+                showToast('📴 当前显示缓存数据，请检查网络连接', 'info', 5000);
+            }
+        };
+        
+        // 在 DOM 加载完成后初始化 PWA
+        document.addEventListener('DOMContentLoaded', () => {
+            // 延迟初始化，等待其他脚本完成
+            setTimeout(() => {
+                PWAManager.init();
+            }, 100);
+        });
+        
+        // ========== Day 62: 在设置面板添加缓存管理选项 ==========
+        
+        // 扩展 SettingsManager 添加缓存管理
+        const originalRenderSettings = renderSettings || function() {};
+        renderSettings = function() {
+            originalRenderSettings();
+            
+            // 添加缓存管理按钮
+            setTimeout(() => {
+                const settingsContent = document.querySelector('.settings-content');
+                if (!settingsContent) return;
+                
+                // 检查是否已添加
+                if (document.getElementById('cacheManagementSection')) return;
+                
+                // 创建缓存管理区块
+                const cacheSection = document.createElement('div');
+                cacheSection.id = 'cacheManagementSection';
+                cacheSection.className = 'settings-section';
+                cacheSection.innerHTML = `
+                    <div class="settings-section-header">
+                        <span class="section-icon">💾</span>
+                        <span class="section-title">离线缓存</span>
+                    </div>
+                    <div class="settings-item" style="padding: 0.8rem 0;">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">缓存状态</span>
+                            <span class="settings-item-value" id="cacheStatusText">检查中...</span>
+                        </div>
+                    </div>
+                    <div class="settings-item" style="padding: 0.8rem 0;">
+                        <button class="settings-action-btn" id="clearCacheBtn" style="width: 100%;">
+                            🗑️ 清除缓存
+                        </button>
+                    </div>
+                `;
+                
+                settingsContent.appendChild(cacheSection);
+                
+                // 绑定清除缓存按钮
+                document.getElementById('clearCacheBtn')?.addEventListener('click', async () => {
+                    if (confirm('确定要清除所有缓存吗？这将删除离线数据。')) {
+                        const success = await PWAManager.clearCache();
+                        if (success) {
+                            // 重新注册 SW
+                            if ('serviceWorker' in navigator) {
+                                const registrations = await navigator.serviceWorker.getRegistrations();
+                                for (const reg of registrations) {
+                                    await reg.unregister();
+                                }
+                                showToast('🔄 请刷新页面以重新加载', 'info');
+                            }
+                        }
+                    }
+                });
+                
+                // 更新缓存状态
+                PWAManager.getCacheSize().then(size => {
+                    const statusText = document.getElementById('cacheStatusText');
+                    if (statusText) {
+                        if (size !== null) {
+                            statusText.textContent = `${size} MB`;
+                        } else {
+                            statusText.textContent = navigator.onLine ? '在线' : '离线';
+                        }
+                    }
+                });
+            }, 100);
+        };
+        
+        // ========== Day 62: API 请求增强 - 添加网络状态检查 ==========
+        
+        // 包装 fetch 函数添加网络检查
+        const originalFetch = window.fetch;
+        window.fetch = async function(...args) {
+            if (!navigator.onLine) {
+                console.warn('[Network] Offline, request queued');
+                // 可以在这里实现请求队列
+            }
+            return originalFetch.apply(this, args);
+        };
+        
+        console.log('[App] Agent Street Day 62: PWA Offline Support loaded - 基于Day61 Serverless学习');
     </script>
 </body>
 </html>
